@@ -692,9 +692,9 @@ tr:last-child td{border-bottom:none;}
           <select class="filter-select" id="sortSelect" aria-label="Sort validators">
             <option value="score">Sort: Score</option>
             <option value="stake">Sort: Total Stake</option>
-            <option value="uptime">Sort: Uptime</option>
+            <option value="apy">Sort: APY</option>
             <option value="commission">Sort: Commission</option>
-            <option value="delegators">Sort: Delegators</option>
+            <option value="networkShare">Sort: Network Share</option>
           </select>
         </div>
       </div>
@@ -716,7 +716,8 @@ tr:last-child td{border-bottom:none;}
           <select class="filter-select" id="lbSort" aria-label="Sort leaderboard">
             <option value="score">Sort: Score</option>
             <option value="stake">Sort: Stake</option>
-            <option value="uptime">Sort: Uptime</option>
+            <option value="apy">Sort: APY</option>
+            <option value="commission">Sort: Commission</option>
           </select>
         </div>
       </div>
@@ -873,90 +874,30 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
     <div class="tab-content" id="tc-proposals">
-      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">◎</span><span>Governance on-chain — Proposals will appear here once the governance module is live</span></div>
-      <div style="max-width:720px;margin:1.5rem auto;display:flex;flex-direction:column;gap:0.75rem;">
-        <div class="analytics-card" style="cursor:default;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
-                <span style="background:var(--teal-glow);color:var(--teal);font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">VOTING</span>
-                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#003</span>
-              </div>
-              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Increase max validator set to 120</h3>
-              <p style="font-size:0.78rem;color:var(--g300);">Proposal to expand the active validator set from 100 to 120 to improve decentralization.</p>
-            </div>
-            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ends in 3d 12h</span>
-          </div>
-          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
-            <div style="width:68%;background:var(--teal);"></div>
-            <div style="width:12%;background:#ef4444;"></div>
-            <div style="width:20%;background:var(--g600);"></div>
-          </div>
-          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
-            <span><span style="color:var(--teal);">●</span> Yes 68%</span>
-            <span><span style="color:#ef4444;">●</span> No 12%</span>
-            <span><span style="color:var(--g500);">●</span> Abstain 20%</span>
-          </div>
-        </div>
-
-        <div class="analytics-card" style="cursor:default;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
-                <span style="background:rgba(16,185,129,0.1);color:#10b981;font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">PASSED</span>
-                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#002</span>
-              </div>
-              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Reduce unbonding period to 14 days</h3>
-              <p style="font-size:0.78rem;color:var(--g300);">Community proposal to reduce the unbonding period from 21 to 14 days for improved capital efficiency.</p>
-            </div>
-            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ended Feb 10</span>
-          </div>
-          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
-            <div style="width:82%;background:#10b981;"></div>
-            <div style="width:8%;background:#ef4444;"></div>
-            <div style="width:10%;background:var(--g600);"></div>
-          </div>
-          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
-            <span><span style="color:#10b981;">●</span> Yes 82%</span>
-            <span><span style="color:#ef4444;">●</span> No 8%</span>
-            <span><span style="color:var(--g500);">●</span> Abstain 10%</span>
-          </div>
-        </div>
-
-        <div class="analytics-card" style="cursor:default;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
-                <span style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">REJECTED</span>
-                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#001</span>
-              </div>
-              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Increase minimum commission to 5%</h3>
-              <p style="font-size:0.78rem;color:var(--g300);">Proposal to set a network-wide minimum commission of 5% to ensure validator sustainability.</p>
-            </div>
-            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ended Jan 28</span>
-          </div>
-          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
-            <div style="width:35%;background:var(--teal);"></div>
-            <div style="width:52%;background:#ef4444;"></div>
-            <div style="width:13%;background:var(--g600);"></div>
-          </div>
-          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
-            <span><span style="color:var(--teal);">●</span> Yes 35%</span>
-            <span><span style="color:#ef4444;">●</span> No 52%</span>
-            <span><span style="color:var(--g500);">●</span> Abstain 13%</span>
-          </div>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:0.75rem;text-align:center;padding:2rem">
+        <span style="font-size:2.5rem">🗳️</span>
+        <span style="font-size:1rem;font-weight:700;color:var(--white)">Governance Proposals — Coming Soon</span>
+        <span style="font-size:0.82rem;color:var(--g300);line-height:1.7;max-width:440px">
+          On-chain governance is not yet active on Aster Chain.<br>
+          Proposals will appear here automatically once the governance module goes live.
+        </span>
+        <span style="font-size:0.7rem;color:var(--g500);margin-top:0.25rem">⚠ Previous proposals shown here were hardcoded — removed for transparency</span>
       </div>
     </div>
 
     <!-- ═══════ TAB: BLOCK EXPLORER ═══════ -->
     <div class="tab-content" id="tc-explorer">
-      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">⊞</span><span>Block data sourced from Aster Chain — See full explorer at <a href="https://explorer.asterdex.com" target="_blank" rel="noopener" style="color:var(--teal)">explorer.asterdex.com →</a></span></div>
-      <div style="max-width:800px;margin:1.5rem auto;">
-        <div class="analytics-card">
-          <h3 style="margin-bottom:1rem;">⊞ Recent Blocks</h3>
-          <div id="explorerBlocks" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:0.75rem;text-align:center;padding:2rem">
+        <span style="font-size:2.5rem">⊞</span>
+        <span style="font-size:1rem;font-weight:700;color:var(--white)">Block Explorer — Coming Soon</span>
+        <span style="font-size:0.82rem;color:var(--g300);line-height:1.7;max-width:440px">
+          Real-time block data (TX counts, proposers) is not available via public API yet.<br>
+          In the meantime, use the official Aster Chain block explorer.
+        </span>
+        <a href="https://explorer.asterdex.com" target="_blank" rel="noopener" class="btn-connect" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;margin-top:0.5rem">
+          Open Official Explorer →
+        </a>
+        <span style="font-size:0.7rem;color:var(--g500);margin-top:0.25rem">⚠ Previous block list was simulated — removed for transparency</span>
       </div>
     </div>
 
@@ -1309,19 +1250,25 @@ function ubHTML(b){return`<div class="uptime-bar">${b.map(x=>`<div class="uptime
 
 function renderTable(cid,data,clickable=true){
   document.getElementById(cid).innerHTML=`<table>
-<thead><tr><th style="width:40px">#</th><th>Validator</th><th class="sorted" title="Score A: APY (50%) + Network Share (30%) + Stake (20%) — real on-chain data only">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">A</span></th><th>Status</th><th>Total Stake</th><th>Commission</th><th>Uptime 30d <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated — not available from API">Est.</span></th><th>Missed <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Delegators <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Performance</th><th>24h</th></tr></thead>
+<thead><tr>
+  <th style="width:40px">#</th>
+  <th>Validator</th>
+  <th class="sorted" title="Score A: APY 50% + Network Share 30% + Stake 20% — real on-chain data only">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Status</th>
+  <th>Total Stake <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Commission <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Network Share <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+</tr></thead>
 <tbody>${data.map(v=>`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
 <td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
 <td><div class="cell-score"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
 <td>${stHTML(v.status)}</td>
-<td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})}</td>
+<td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})} ASTER</td>
+<td class="cell-mono" style="color:var(--teal)">${v.estimatedApy}%</td>
 <td class="cell-mono ${v.commission>10?'':'dim'}" ${v.commission>10?'style="color:var(--amber)"':''}>${v.commission}%</td>
-<td><div class="cell-uptime">${ubHTML(v.uptimeBlocks)}<span class="cell-mono" style="margin-left:3px;font-size:0.7rem">${v.uptime}%</span></div></td>
-<td class="cell-mono dim">${v.missedBlocks}</td>
-<td class="cell-mono">${v.delegators.toLocaleString()}</td>
-<td>${spSVG(v.sparkData,v.score>=80?'#00ddb8':v.score>=60?'#f0a830':'#ef4444')}</td>
-<td class="cell-change ${v.change24h>=0?'up':'down'}">${v.change24h>=0?'+':''}${v.change24h.toFixed(1)}%</td>
+<td class="cell-mono">${v.networkShare}%</td>
 </tr>`).join('')}</tbody></table>`;}
 
 // ─── DETAIL PANEL ───
@@ -1525,7 +1472,13 @@ document.querySelectorAll('.nav-item[data-tab]').forEach(n=>n.addEventListener('
 // ─── SORTING ───
 function sortAndRender(key,tableId='validatorTable',clickable=true){
   const s=[...validators];
-  switch(key){case'score':s.sort((a,b)=>b.score-a.score);break;case'stake':s.sort((a,b)=>b.totalStake-a.totalStake);break;case'uptime':s.sort((a,b)=>b.uptime-a.uptime);break;case'commission':s.sort((a,b)=>a.commission-b.commission);break;case'delegators':s.sort((a,b)=>b.delegators-a.delegators);break;}
+  switch(key){
+    case'score':s.sort((a,b)=>b.score-a.score);break;
+    case'stake':s.sort((a,b)=>b.totalStake-a.totalStake);break;
+    case'apy':s.sort((a,b)=>b.estimatedApy-a.estimatedApy);break;
+    case'commission':s.sort((a,b)=>a.commission-b.commission);break;
+    case'networkShare':s.sort((a,b)=>b.networkShare-a.networkShare);break;
+  }
   s.forEach((v,i)=>v.rank=i+1);renderTable(tableId,s,clickable);
 }
 document.getElementById('sortSelect').addEventListener('change',function(){sortAndRender(this.value);});
