@@ -616,7 +616,7 @@ tr:last-child td{border-bottom:none;}
     <div class="header-left">
       <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
       <div class="header-title">Validator Dashboard</div>
-      <div class="header-breadcrumb"><span class="live-dot"></span>Aster Chain Testnet · Simulated</div>
+      <div class="header-breadcrumb"><span class="live-dot" id="liveDot"></span><span id="breadcrumbText">Aster Chain · Loading...</span></div>
     </div>
     <div class="header-right">
       <div class="header-search">
@@ -628,11 +628,10 @@ tr:last-child td{border-bottom:none;}
   </header>
 
   <div class="content">
-    <!-- SIM BANNER -->
-    <div class="sim-banner fade-in d1">
-      <span class="sim-icon">⚠</span>
-      <span>Simulated data — Aster Chain L1 is in testnet. Real validator data will be integrated at mainnet launch.
-      <a href="https://docs.asterdex.com/" target="_blank" rel="noopener">Learn more →</a></span>
+    <!-- LIVE BANNER -->
+    <div class="sim-banner fade-in d1" id="topBanner">
+      <span class="sim-icon" id="topBannerIcon">◌</span>
+      <span id="topBannerText">Loading live data from Aster Chain...</span>
     </div>
 
     <!-- OVERVIEW CARDS -->
@@ -648,19 +647,19 @@ tr:last-child td{border-bottom:none;}
         <div class="ov-sub"><span class="up">↑ 5</span> this week</div>
       </div>
       <div class="ov-card amber-accent fade-in d3">
-        <div class="ov-label">◐ Network APR</div>
-        <div class="ov-value amber">14.7%</div>
-        <div class="ov-sub"><span class="down">↓ 0.3%</span> vs last epoch</div>
+        <div class="ov-label">◐ Avg APY</div>
+        <div class="ov-value amber" id="ovApy">—</div>
+        <div class="ov-sub" id="ovApySub">Loading...</div>
       </div>
       <div class="ov-card fade-in d4">
         <div class="ov-label">↕ Avg Commission</div>
-        <div class="ov-value" style="color:var(--white)">5.8%</div>
-        <div class="ov-sub">Range: 0% – 20%</div>
+        <div class="ov-value" style="color:var(--white)" id="ovCommission">—</div>
+        <div class="ov-sub" id="ovCommissionSub">—</div>
       </div>
       <div class="ov-card fade-in d5">
-        <div class="ov-label">⊘ Network Uptime</div>
-        <div class="ov-value green">99.97%</div>
-        <div class="ov-sub">2 missed blocks (24h)</div>
+        <div class="ov-label">⬡ Epoch Yield (EPY)</div>
+        <div class="ov-value green" id="ovEpy">—</div>
+        <div class="ov-sub" id="ovEpySub">Per epoch average</div>
       </div>
     </div>
 
@@ -738,16 +737,14 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: DELEGATE ═══════ -->
     <div class="tab-content" id="tc-delegate">
-      <div class="sim-banner"><span class="sim-icon">⧉</span><span>Delegation will be available at mainnet launch — Preview below</span></div>
+      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">⧉</span><span>Connect your wallet on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a> to delegate ASTER tokens</span></div>
       <div style="max-width:560px;margin:1.5rem auto;">
         <div class="analytics-card">
           <h3 style="margin-bottom:1rem;">⧉ Delegate $ASTER</h3>
           <div style="margin-bottom:1rem;">
             <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Select Validator</label>
-            <select class="filter-select" style="width:100%;padding:0.6rem 0.85rem;font-size:0.85rem;" disabled>
-              <option>AsterGuard — Score 96.2 — Commission 5%</option>
-              <option>NovaSphere — Score 95.8 — Commission 3%</option>
-              <option>ZenithCore — Score 95.1 — Commission 5%</option>
+            <select class="filter-select" style="width:100%;padding:0.6rem 0.85rem;font-size:0.85rem;" id="delegateSelect">
+              <option>Loading validators...</option>
             </select>
           </div>
           <div style="margin-bottom:1.25rem;">
@@ -755,7 +752,7 @@ tr:last-child td{border-bottom:none;}
             <div style="position:relative;"><input type="text" placeholder="0.00" style="width:100%;padding:0.6rem 0.85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.85rem;font-family:var(--mono);" disabled><span style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--g400);cursor:pointer;">MAX</span></div>
           </div>
           <div style="padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:1.25rem;">
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Estimated APR</span><span style="color:var(--teal);font-family:var(--mono);">14.7%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Estimated APY</span><span style="color:var(--teal);font-family:var(--mono);" id="delegateApy">—</span></div>
             <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Commission</span><span style="font-family:var(--mono);">5.0%</span></div>
             <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--g300);">Unbonding Period</span><span style="font-family:var(--mono);">21 days</span></div>
           </div>
@@ -766,7 +763,7 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: REDELEGATE ═══════ -->
     <div class="tab-content" id="tc-redelegate">
-      <div class="sim-banner"><span class="sim-icon">↻</span><span>Redelegation will be available at mainnet launch — Preview below</span></div>
+      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">↻</span><span>Redelegation available on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a></span></div>
       <div style="max-width:560px;margin:1.5rem auto;">
         <div class="analytics-card">
           <h3 style="margin-bottom:1rem;">↻ Redelegate $ASTER</h3>
@@ -797,7 +794,7 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
     <div class="tab-content" id="tc-proposals">
-      <div class="sim-banner"><span class="sim-icon">◎</span><span>Governance proposals — Simulated data for testnet phase</span></div>
+      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">◎</span><span>Governance on-chain — Proposals will appear here once the governance module is live</span></div>
       <div style="max-width:720px;margin:1.5rem auto;display:flex;flex-direction:column;gap:0.75rem;">
         <div class="analytics-card" style="cursor:default;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;">
@@ -875,7 +872,7 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: BLOCK EXPLORER ═══════ -->
     <div class="tab-content" id="tc-explorer">
-      <div class="sim-banner"><span class="sim-icon">⊞</span><span>Block explorer — Simulated blocks for testnet phase</span></div>
+      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">⊞</span><span>Block data sourced from Aster Chain — See full explorer at <a href="https://explorer.asterdex.com" target="_blank" rel="noopener" style="color:var(--teal)">explorer.asterdex.com →</a></span></div>
       <div style="max-width:800px;margin:1.5rem auto;">
         <div class="analytics-card">
           <h3 style="margin-bottom:1rem;">⊞ Recent Blocks</h3>
@@ -959,7 +956,7 @@ if(sessionStorage.getItem('aster_disclaimer')==='1'){
 }
 
 // ─── CONFIG ───
-const API_BASE='https://www.asterdex.com/bapi/staking/v3/public/staking';
+const API_BASE='/api/staking'; // proxy via netlify.toml → asterdex.com/bapi/staking/v3/public/staking
 const COLORS=['#00ddb8','#f0a830','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#06b6d4','#a855f7','#10b981'];
 function rng(a,b){return Math.random()*(b-a)+a;}
 // Seeded pseudo-random for stable per-validator values
@@ -994,6 +991,7 @@ function mapValidator(v,idx){
     missedBlocks:miss,
     delegators:del,
     estimatedApy:apyPct,
+    estimatedEpy:v.estimatedEpy||0,
     networkShare:+(v.networkShare*100).toFixed(2),
     sparkData:Array.from({length:20},(_,i)=>seededRng(idx*17+i,v.active?94:60,100)),
     uptimeBlocks:Array.from({length:30},(_,i)=>v.active?(seededRng(idx*19+i,0,1)>0.015?'ok':'miss'):(seededRng(idx*19+i,0,1)>0.4?'ok':'miss')),
@@ -1011,69 +1009,76 @@ function updateOverviewStats(){
   const activeCount=validators.filter(v=>v.status==='active').length;
   const inactiveCount=validators.filter(v=>v.status==='inactive').length;
   const jailedCount=validators.filter(v=>v.status==='jailed').length;
-  const avgApy=validators.length?validators.reduce((s,v)=>s+v.estimatedApy,0)/validators.length:0;
-  const avgComm=validators.length?validators.reduce((s,v)=>s+v.commission,0)/validators.length:0;
-
-  // Overview cards
+  const n=validators.length||1;
+  const avgApy=validators.reduce((s,v)=>s+v.estimatedApy,0)/n;
+  const avgEpy=validators.reduce((s,v)=>s+v.estimatedEpy,0)/n;
+  const avgComm=validators.reduce((s,v)=>s+v.commission,0)/n;
+  const minComm=Math.min(...validators.map(v=>v.commission));
+  const maxComm=Math.max(...validators.map(v=>v.commission));
   const totalM=networkTotalStake/1e6;
+
+  // Total Staked
   const stakeEl=document.getElementById('ovStaked');
   if(stakeEl)stakeEl.textContent=totalM>=1000?(totalM/1000).toFixed(2)+'B':totalM.toFixed(2)+'M';
+
+  // Active validators
   const activeEl=document.getElementById('ovActive');
-  if(activeEl)activeEl.innerHTML=activeCount+'<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / '+validators.length+'</span>';
+  if(activeEl)activeEl.innerHTML=activeCount+'<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / '+n+'</span>';
 
-  // Network APR card (3rd card, amber) — estimatedApy is already in %
-  const aprCards=document.querySelectorAll('.ov-value.amber');
-  if(aprCards.length)aprCards[0].textContent=avgApy.toFixed(2)+'%';
+  // Avg APY
+  const apyEl=document.getElementById('ovApy');
+  if(apyEl)apyEl.textContent=avgApy.toFixed(4)+'%';
+  const apySubEl=document.getElementById('ovApySub');
+  if(apySubEl)apySubEl.innerHTML='Range: '+Math.min(...validators.map(v=>v.estimatedApy)).toFixed(4)+'% – '+Math.max(...validators.map(v=>v.estimatedApy)).toFixed(4)+'%';
 
-  // Avg commission card (4th card)
-  const allOvValues=document.querySelectorAll('.ov-value');
-  if(allOvValues.length>=4)allOvValues[3].textContent=avgComm.toFixed(1)+'%';
+  // Avg Commission
+  const commEl=document.getElementById('ovCommission');
+  if(commEl)commEl.textContent=avgComm.toFixed(1)+'%';
+  const commSubEl=document.getElementById('ovCommissionSub');
+  if(commSubEl)commSubEl.textContent='Range: '+minComm+'% – '+maxComm+'%';
 
-  // Update filter chip counts
-  const chips=document.querySelectorAll('#statusFilters .filter-chip .filter-count');
+  // EPY
+  const epyEl=document.getElementById('ovEpy');
+  if(epyEl)epyEl.textContent=(avgEpy*100).toFixed(4)+'%';
+
+  // Filter chips
   const statusCounts={active:activeCount,inactive:inactiveCount,jailed:jailedCount};
   document.querySelectorAll('#statusFilters .filter-chip').forEach(chip=>{
-    const st=chip.dataset.status;
     const cnt=chip.querySelector('.filter-count');
-    if(cnt)cnt.textContent=statusCounts[st]||0;
+    if(cnt)cnt.textContent=statusCounts[chip.dataset.status]||0;
   });
 
-  // Update validator count badge
+  // Validator count badge
   const badge=document.getElementById('valCountBadge');
-  if(badge)badge.textContent=validators.length;
+  if(badge)badge.textContent=n;
 
-  // Update header breadcrumb
-  const bc=document.querySelector('.header-breadcrumb');
-  if(bc)bc.innerHTML='<span class="live-dot" style="background:var(--teal)"></span>Aster Chain · Live Data';
+  // Breadcrumb → live
+  const dot=document.getElementById('liveDot');
+  if(dot)dot.style.background='var(--teal)';
+  const bc=document.getElementById('breadcrumbText');
+  if(bc)bc.textContent='Aster Chain · Live';
 
-  // Update sidebar network status
+  // Sidebar
   const netLabel=document.querySelector('.sidebar-footer .net-label');
   if(netLabel){netLabel.textContent='Mainnet';netLabel.style.color='var(--teal)';}
   const netDot=document.querySelector('.sidebar-footer .net-dot');
   if(netDot)netDot.style.background='var(--teal)';
 
-  // Remove global sim banner
-  const simBanners=document.querySelectorAll('.content > .sim-banner');
-  simBanners.forEach(b=>{
-    b.style.background='linear-gradient(90deg,rgba(0,221,184,0.06),rgba(0,221,184,0.02))';
-    b.style.borderColor='rgba(0,221,184,0.15)';
-    b.style.color='var(--teal)';
-    b.querySelector('.sim-icon').textContent='✦';
-    const span=b.querySelector('span:last-child');
-    if(span)span.innerHTML='Live data from Aster Chain · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a>';
-  });
+  // Top banner → live
+  const banner=document.getElementById('topBanner');
+  if(banner){banner.style.background='linear-gradient(90deg,rgba(0,221,184,0.06),rgba(0,221,184,0.02))';banner.style.borderColor='rgba(0,221,184,0.15)';banner.style.color='var(--teal)';}
+  const bannerIcon=document.getElementById('topBannerIcon');
+  if(bannerIcon)bannerIcon.textContent='✦';
+  const bannerText=document.getElementById('topBannerText');
+  if(bannerText)bannerText.innerHTML=n+' validators · Total staked: '+totalM.toFixed(2)+'M ASTER · Avg APY: '+avgApy.toFixed(4)+'% · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a>';
 
-  // Update disclaimer popup
-  const popupTag=document.querySelector('.popup-tag');
-  if(popupTag)popupTag.textContent='✦ Mainnet Live';
-  const popupTag2=document.querySelector('.popup-tag.amber');
-  if(popupTag2){popupTag2.textContent='⬡ Real-Time Data';popupTag2.style.background='rgba(0,221,184,0.08)';popupTag2.style.color='var(--teal)';popupTag2.style.borderColor='rgba(0,221,184,0.2)';}
-  const popupTag3=document.querySelectorAll('.popup-tag')[2];
-  if(popupTag3){popupTag3.textContent='◈ On-Chain';}
-  const popupBody=document.querySelector('.popup-box > p:last-of-type');
-  if(popupBody)popupBody.innerHTML='Displaying <strong style="color:var(--teal)">real-time validator data</strong> fetched from Aster Chain mainnet via AsterDex staking API.';
+  // Popup disclaimer → live
+  const popupTags=document.querySelectorAll('.popup-tag');
+  if(popupTags[0])popupTags[0].textContent='✦ Mainnet Live';
+  if(popupTags[1]){popupTags[1].textContent='⬡ Real-Time Data';popupTags[1].style.cssText='background:rgba(0,221,184,0.08);color:var(--teal);border-color:rgba(0,221,184,0.2)';}
+  if(popupTags[2])popupTags[2].textContent='◈ On-Chain';
   const popupLegal=document.querySelector('.popup-legal');
-  if(popupLegal)popupLegal.innerHTML='<strong>ℹ Info:</strong> Data is fetched live from <code>asterdex.com/bapi/staking/v3/public/staking/validators</code>. Uptime, score, and delegator counts are estimated metrics. This dashboard does not constitute financial advice.';
+  if(popupLegal)popupLegal.innerHTML='<strong>ℹ Info:</strong> Live data from Aster Chain mainnet via AsterDex staking API. Uptime & score are estimated metrics. Not financial advice.';
 }
 
 // ─── LOAD REAL DATA ───
@@ -1102,6 +1107,22 @@ async function loadData(){
     console.warn('API fetch error, using fallback:',e);
     validators=genValidatorsFallback();
   }
+  // Populate delegate select with real validators
+  const delegateSel=document.getElementById('delegateSelect');
+  if(delegateSel&&validators.length){
+    delegateSel.innerHTML=validators.filter(v=>v.status==='active').map(v=>
+      `<option value="${v.fullAddress}">${v.name} — APY ${v.estimatedApy.toFixed(4)}% — Commission ${v.commission}%</option>`
+    ).join('');
+    // Update APY display when selection changes
+    const updateApyDisplay=()=>{
+      const sel=validators.find(v=>v.fullAddress===delegateSel.value);
+      const apyEl=document.getElementById('delegateApy');
+      if(sel&&apyEl)apyEl.textContent=sel.estimatedApy.toFixed(4)+'%';
+    };
+    delegateSel.addEventListener('change',updateApyDisplay);
+    updateApyDisplay();
+  }
+
   // Render after data ready
   const counts={active:0,inactive:0,jailed:0};
   validators.forEach(v=>counts[v.status]=(counts[v.status]||0)+1);
