@@ -400,6 +400,24 @@ tr:last-child td{border-bottom:none;}
 .score-val.s-high{color:var(--teal);}
 .score-val.s-mid{color:var(--amber);}
 .score-val.s-low{color:var(--red);}
+/* ═══════ SCORE TOOLTIP ═══════ */
+.score-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(0,221,184,0.15);color:var(--teal);font-size:9px;font-weight:700;cursor:help;vertical-align:middle;margin-left:4px;border:1px solid rgba(0,221,184,0.3);line-height:1;position:relative;}
+.score-info:hover .score-tooltip{opacity:1;pointer-events:auto;transform:translateY(0);}
+.score-tooltip{
+  position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);
+  background:var(--bg-card);border:1px solid var(--border-mid);border-radius:10px;
+  padding:0.85rem 1rem;min-width:230px;z-index:999;
+  opacity:0;pointer-events:none;transition:all 0.18s ease;
+  box-shadow:0 12px 32px rgba(0,0,0,0.5);text-align:left;
+}
+.score-tooltip::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:10px;height:10px;background:var(--bg-card);border-top:1px solid var(--border-mid);border-left:1px solid var(--border-mid);
+  transform:translateX(-50%) rotate(45deg);}
+.score-tooltip-title{font-size:0.72rem;font-weight:700;color:var(--white);margin-bottom:0.6rem;letter-spacing:0.3px;}
+.score-tooltip-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.35rem;font-size:0.7rem;}
+.score-tooltip-label{color:var(--g300);}
+.score-tooltip-val{font-family:var(--mono);font-weight:700;color:var(--teal);}
+.score-tooltip-note{font-size:0.62rem;color:var(--g500);margin-top:0.6rem;border-top:1px solid var(--border);padding-top:0.5rem;line-height:1.5;}
 .cell-status{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.7rem;font-weight:600;padding:0.18rem 0.55rem;border-radius:100px;}
 .status-active{background:var(--green-glow);color:var(--green);}
 .status-jailed{background:var(--red-glow);color:var(--red);}
@@ -1253,7 +1271,7 @@ function renderTable(cid,data,clickable=true){
 <thead><tr>
   <th style="width:40px">#</th>
   <th>Validator</th>
-  <th class="sorted" title="Score A: APY 50% + Network Share 30% + Stake 20% — real on-chain data only">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th class="sorted" style="white-space:nowrap">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span><span class="score-info">ⓘ<div class="score-tooltip"><div class="score-tooltip-title">⬡ Validator Score Formula</div><div class="score-tooltip-row"><span class="score-tooltip-label">APY (base yield)</span><span class="score-tooltip-val">50%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Network Share</span><span class="score-tooltip-val">30%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Total Stake</span><span class="score-tooltip-val">20%</span></div><div class="score-tooltip-note">Each component is normalized against the best validator in the set. Score = 10–99.<br>✦ 100% real on-chain data — no estimation.</div></div></span></th>
   <th>Status</th>
   <th>Total Stake <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
@@ -1263,7 +1281,7 @@ function renderTable(cid,data,clickable=true){
 <tbody>${data.map(v=>`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
 <td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
-<td><div class="cell-score"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
+<td><div class="cell-score" title="Score = APY×50% + Network Share×30% + Stake×20% (normalized, real data only)"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
 <td>${stHTML(v.status)}</td>
 <td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})} ASTER</td>
 <td class="cell-mono" style="color:var(--teal)">${v.estimatedApy}%</td>
