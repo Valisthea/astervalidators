@@ -1114,11 +1114,13 @@ function updateOverviewStats(){
   const inactiveCount=validators.filter(v=>v.status==='inactive').length;
   const jailedCount=validators.filter(v=>v.status==='jailed').length;
   const n=validators.length||1;
-  const avgApy=validators.reduce((s,v)=>s+v.estimatedApy,0)/n;
-  const avgEpy=validators.reduce((s,v)=>s+v.estimatedEpy,0)/n;
-  const avgComm=validators.reduce((s,v)=>s+v.commission,0)/n;
-  const minComm=Math.min(...validators.map(v=>v.commission));
-  const maxComm=Math.max(...validators.map(v=>v.commission));
+  const active=validators.filter(v=>v.status==='active');
+  const na=active.length||1;
+  const avgApy=active.reduce((s,v)=>s+v.estimatedApy,0)/na;
+  const avgEpy=active.reduce((s,v)=>s+v.estimatedEpy,0)/na;
+  const avgComm=active.reduce((s,v)=>s+v.commission,0)/na;
+  const minComm=active.length?Math.min(...active.map(v=>v.commission)):0;
+  const maxComm=active.length?Math.max(...active.map(v=>v.commission)):0;
   const totalM=networkTotalStake/1e6;
 
   // Total Staked
