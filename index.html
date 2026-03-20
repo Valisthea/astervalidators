@@ -1324,7 +1324,7 @@ function renderAnalyticsCharts(){
   }
 
   // Stake over time (placeholder, blurred)
-  const w=480,h=150;const d=Array.from({length:30},(_,i)=>2200+i*7+rng(-30,30));
+  const d=Array.from({length:30},(_,i)=>2200+i*7+rng(-30,30));
   const mn=Math.min(...d)-50,mx=Math.max(...d)+50;
   const pts=d.map((v,i)=>`${(i/29)*w},${h-((v-mn)/(mx-mn))*h}`);
   document.getElementById('stakeTimeChart').innerHTML=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/><line x1="0" y1="${h*.5}" x2="${w}" y2="${h*.5}" class="chart-grid-line"/><text x="0" y="${h+14}" class="chart-label">30d ago</text><text x="${w-30}" y="${h+14}" class="chart-label">Today</text><text x="${w+4}" y="8" class="chart-label">${(mx/1000).toFixed(1)}B</text><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${h} ${pts.join(' ')} ${w},${h}" fill="url(#g1)" opacity="0.15"/><polyline points="${pts.join(' ')}" class="chart-line" stroke="var(--teal)"/>`;
