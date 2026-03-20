@@ -532,27 +532,29 @@ tr:last-child td{border-bottom:none;}
         <line x1="29" y1="71" x2="40" y2="60" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
       </svg>
     </div>
-    <h2>Welcome to Aster Validators</h2>
-    <p>
-      The reference analytics dashboard for the Aster Chain validator ecosystem.
+    <h2>Aster Validators</h2>
+    <p style="font-size:0.95rem;font-weight:600;color:var(--white);margin-bottom:0.25rem;">
+      Community analytics dashboard for Aster Chain Genesis
     </p>
     <div class="popup-tags">
-      <span class="popup-tag">✦ Testnet Phase</span>
-      <span class="popup-tag amber">⏳ Mainnet Q1 2026</span>
-      <span class="popup-tag">◈ Simulated Data</span>
+      <span class="popup-tag" style="background:rgba(0,221,184,0.12);color:var(--teal);border-color:rgba(0,221,184,0.25)">✦ Mainnet Live</span>
+      <span class="popup-tag" style="background:rgba(0,221,184,0.12);color:var(--teal);border-color:rgba(0,221,184,0.25)">◈ Real-Time Data</span>
+      <span class="popup-tag" style="background:linear-gradient(135deg,rgba(0,221,184,0.15),rgba(59,130,246,0.15));color:#fff;border-color:rgba(0,221,184,0.2);font-weight:800;letter-spacing:1px">BETA</span>
     </div>
-    <p style="font-size:0.88rem;">
-      Aster Chain L1 is currently in <strong style="color:var(--amber)">public testnet</strong>.
-      All validator data, scores, staking metrics, and analytics displayed on this platform are
-      <strong style="color:var(--teal)">simulated for demonstration purposes</strong>.
+    <p style="font-size:0.85rem;color:var(--g200);line-height:1.65;">
+      Aster Chain launched its genesis block on <strong style="color:var(--teal)">March 17, 2026</strong>.<br>
+      This dashboard displays <strong style="color:var(--white)">live validator data</strong> fetched directly
+      from the Aster Chain staking API — 7 genesis validators, real stakes, real APY.
     </p>
-    <div class="popup-legal">
-      <strong>⚠ Disclaimer:</strong> This dashboard uses generated mock data to preview the full analytics experience.
-      Real-time chain data will be integrated upon Aster Chain mainnet launch. No real tokens are involved.
-      Nothing on this site constitutes financial advice. Validator metrics and scores are illustrative only.
+    <div class="popup-legal" style="text-align:left;">
+      <strong style="color:var(--amber)">ℹ Beta notice:</strong> Uptime, missed blocks and delegator counts
+      are <em>estimated</em> — on-chain indexing for these metrics is not yet publicly available.
+      Validator scores are computed from real APY, network share and stake data.
+      This dashboard is community-built and not affiliated with AsterDex.
+      Nothing here constitutes financial advice.
     </div>
     <button class="btn-enter" onclick="closeDisclaimer()">
-      I Understand — Enter Dashboard ✦
+      Enter Dashboard →
     </button>
   </div>
 </div>
