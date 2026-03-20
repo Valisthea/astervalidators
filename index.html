@@ -18,8 +18,8 @@
 <!-- ═══════════════════════════════════════════════ -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Aster Validators">
-<meta property="og:title" content="Aster Validators — The Reference Analytics Dashboard for Aster Chain">
-<meta property="og:description" content="Track 87+ validators in real-time. Validator scoring, uptime heatmaps, stake distribution, decentralization index, and one-click staking. Built for the Aster Chain ecosystem.">
+<meta property="og:title" content="Aster Validators — Live Analytics Dashboard · Aster Chain Genesis">
+<meta property="og:description" content="Community analytics dashboard for Aster Chain genesis validators. Live stake data, APY, scores, and decentralization metrics — directly from the AsterDex staking API. Aster Chain launched March 17, 2026.">
 <meta property="og:url" content="https://astervalidators.com/">
 <meta property="og:image" content="https://astervalidators.com/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -32,7 +32,7 @@
 <!-- ═══════════════════════════════════════════════ -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Aster Validators — Real-Time Analytics Dashboard">
-<meta name="twitter:description" content="The #1 validator analytics platform for Aster Chain. Scores, uptime, staking, decentralization metrics — all in one place.">
+<meta name="twitter:description" content="Live analytics for Aster Chain genesis validators. Real APY, stake, scores from the AsterDex API. Chain launched March 17, 2026 · BETA.">
 <meta name="twitter:image" content="https://astervalidators.com/og-image.png">
 <meta name="twitter:image:alt" content="Aster Validators Dashboard">
 <!-- <meta name="twitter:site" content="@AsterValidators"> -->
@@ -642,13 +642,13 @@ tr:last-child td{border-bottom:none;}
     <div class="overview-grid">
       <div class="ov-card fade-in d1">
         <div class="ov-label">⬡ Total Staked</div>
-        <div class="ov-value teal" id="ovStaked">2.41B</div>
-        <div class="ov-sub"><span class="up">↑ 3.2%</span> past 7d · $ASTER</div>
+        <div class="ov-value teal" id="ovStaked">—</div>
+        <div class="ov-sub">ASTER · Genesis mainnet</div>
       </div>
       <div class="ov-card fade-in d2">
         <div class="ov-label">◈ Active Validators</div>
-        <div class="ov-value" style="color:var(--white)" id="ovActive">87<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / 200</span></div>
-        <div class="ov-sub"><span class="up">↑ 5</span> this week</div>
+        <div class="ov-value" style="color:var(--white)" id="ovActive">—</div>
+        <div class="ov-sub" id="ovActiveSub">Genesis set</div>
       </div>
       <div class="ov-card amber-accent fade-in d3">
         <div class="ov-label">◐ Avg Base APY</div>
@@ -684,9 +684,9 @@ tr:last-child td{border-bottom:none;}
     <div class="tab-content active" id="tc-overview">
       <div class="toolbar fade-in d4">
         <div class="toolbar-left" id="statusFilters">
-          <div class="filter-chip active" data-status="active"><span class="chip-dot green"></span>Active (<span class="filter-count">82</span>)</div>
-          <div class="filter-chip" data-status="inactive"><span class="chip-dot amber"></span>Inactive (<span class="filter-count">3</span>)</div>
-          <div class="filter-chip" data-status="jailed"><span class="chip-dot red"></span>Jailed (<span class="filter-count">2</span>)</div>
+          <div class="filter-chip active" data-status="active"><span class="chip-dot green"></span>Active (<span class="filter-count">—</span>)</div>
+          <div class="filter-chip" data-status="inactive"><span class="chip-dot amber"></span>Inactive (<span class="filter-count">—</span>)</div>
+          <div class="filter-chip" data-status="jailed"><span class="chip-dot red"></span>Jailed (<span class="filter-count">—</span>)</div>
         </div>
         <div class="toolbar-right">
           <select class="filter-select" id="sortSelect" aria-label="Sort validators">
@@ -1022,6 +1022,27 @@ function rng(a,b){return Math.random()*(b-a)+a;}
 // Seeded pseudo-random for stable per-validator values
 function seededRng(seed,a,b){const x=Math.sin(seed+1)*10000;return a+(x-Math.floor(x))*(b-a);}
 
+// ─── VALIDATOR LOGOS (mapped by exact API name) ───
+const LOGOS={
+  'Aster Validator 1':'https://static.asterdexfx.com/cloud-futures/static/images/aster/logo.svg',
+  'Aster Validator 2':'https://static.asterdexfx.com/cloud-futures/static/images/aster/logo.svg',
+  'Trust Wallet':'https://raw.githubusercontent.com/trustwallet/assets/master/dapps/trust.logo.png',
+  'BNB Chain':'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/info/logo.png',
+  'WLFI':'https://static.worldlibertyfinancial.com/assets/brand/logomark-colored.svg',
+  'Pancake':'https://raw.githubusercontent.com/pancakeswap/pancake-frontend/refs/heads/develop/apps/web/public/logo.png',
+  'Lista':'https://tokens.pancakeswap.finance/images/0xFceB31A79F71AC9CBDCF853519c1b12D379EdC46.png',
+};
+// Avatar: logo if available, initials fallback on error
+function avatarHTML(v,lg=false){
+  const logo=LOGOS[v.name];
+  const sz=lg?46:28;const br=lg?12:7;const fs=lg?'1rem':'0.65rem';
+  const base=`width:${sz}px;height:${sz}px;border-radius:${br}px;flex-shrink:0;`;
+  if(logo){
+    return `<div style="${base}background:#0d1117;border:1px solid ${v.color}44;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="${logo}" alt="${v.name}" style="width:82%;height:82%;object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;background:${v.color}22;color:${v.color};font-weight:700;font-size:${fs}">${v.name.slice(0,2).toUpperCase()}</span></div>`;
+  }
+  return `<div class="val-avatar" style="${base}background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:${fs}">${v.name.slice(0,2).toUpperCase()}</div>`;
+}
+
 // ─── MAP API VALIDATOR → DISPLAY MODEL ───
 // estimatedApy is a decimal: 0.4528 = 45.28% APY (confirmed vs AsterDex UI)
 function mapValidator(v,idx){
@@ -1107,6 +1128,8 @@ function updateOverviewStats(){
   // Active validators
   const activeEl=document.getElementById('ovActive');
   if(activeEl)activeEl.innerHTML=activeCount+'<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / '+n+'</span>';
+  const activeSubEl=document.getElementById('ovActiveSub');
+  if(activeSubEl)activeSubEl.textContent=inactiveCount+' inactive · '+jailedCount+' jailed';
 
   // Avg APY
   const apyEl=document.getElementById('ovApy');
@@ -1257,7 +1280,7 @@ function renderTable(cid,data,clickable=true){
 <thead><tr><th style="width:40px">#</th><th>Validator</th><th class="sorted" title="Score A: APY (50%) + Network Share (30%) + Stake (20%) — real on-chain data only">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">A</span></th><th>Status</th><th>Total Stake</th><th>Commission</th><th>Uptime 30d <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated — not available from API">Est.</span></th><th>Missed <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Delegators <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Performance</th><th>24h</th></tr></thead>
 <tbody>${data.map(v=>`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
-<td><div class="cell-validator"><div class="val-avatar" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
+<td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
 <td><div class="cell-score"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
 <td>${stHTML(v.status)}</td>
 <td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})}</td>
@@ -1277,7 +1300,7 @@ function showDetail(id){
   const W=520,H=110,uMin=Math.min(...pd.map(d=>d.u))-1,sMin=Math.min(...pd.map(d=>d.s))-2,sMax=Math.max(...pd.map(d=>d.s))+2;
   const uPts=pd.map((d,i)=>`${(i/29)*W},${H-((d.u-uMin)/(100-uMin))*H}`);
   const sPts=pd.map((d,i)=>`${(i/29)*W},${H-((d.s-sMin)/(sMax-sMin))*H}`);
-  p.innerHTML=`<div class="detail-header"><div class="detail-header-left"><div class="detail-avatar-lg" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="detail-name">${v.name}</div><div class="detail-addr">${v.address}</div></div>${stHTML(v.status)}</div><button class="detail-close" onclick="closeDetail()">✕</button></div>
+  p.innerHTML=`<div class="detail-header"><div class="detail-header-left">${avatarHTML(v,true)}<div><div class="detail-name">${v.name}</div><div class="detail-addr">${v.address}</div></div>${stHTML(v.status)}</div><button class="detail-close" onclick="closeDetail()">✕</button></div>
 <div class="detail-stats">
 <div class="detail-stat"><div class="detail-stat-label">Validator Score</div><div class="detail-stat-value" style="color:${v.score>=80?'var(--teal)':v.score>=60?'var(--amber)':'var(--red)'}">${v.score}/100</div></div>
 <div class="detail-stat"><div class="detail-stat-label">Total Stake</div><div class="detail-stat-value" style="color:var(--white);font-size:0.9rem">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})} ASTER</div></div>
