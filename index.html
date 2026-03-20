@@ -651,9 +651,9 @@ tr:last-child td{border-bottom:none;}
         <div class="ov-sub"><span class="up">↑ 5</span> this week</div>
       </div>
       <div class="ov-card amber-accent fade-in d3">
-        <div class="ov-label">◐ Avg APY</div>
+        <div class="ov-label">◐ Avg Base APY</div>
         <div class="ov-value amber" id="ovApy">—</div>
-        <div class="ov-sub" id="ovApySub">Loading...</div>
+        <div class="ov-sub" id="ovApySub">Base only · <span style="color:var(--teal)">+Loyalty rewards</span></div>
       </div>
       <div class="ov-card fade-in d4">
         <div class="ov-label">↕ Avg Commission</div>
@@ -661,9 +661,14 @@ tr:last-child td{border-bottom:none;}
         <div class="ov-sub" id="ovCommissionSub">—</div>
       </div>
       <div class="ov-card fade-in d5">
-        <div class="ov-label">⬡ Epoch Yield (EPY)</div>
-        <div class="ov-value green" id="ovEpy">—</div>
-        <div class="ov-sub" id="ovEpySub">Per epoch average</div>
+        <div class="ov-label">⬡ Weekly Reward Pool</div>
+        <div class="ov-value green">450K</div>
+        <div class="ov-sub"><span style="color:var(--teal)">150K</span> Base · <span style="color:var(--amber)">300K</span> Loyalty · ASTER</div>
+      </div>
+      <div class="ov-card fade-in d6">
+        <div class="ov-label">◷ Current Epoch</div>
+        <div class="ov-value" style="color:var(--white);font-size:1rem;" id="ovEpoch">—</div>
+        <div class="ov-sub" id="ovEpochSub">Weekly · Mon→Sun UTC</div>
       </div>
     </div>
 
@@ -797,12 +802,21 @@ tr:last-child td{border-bottom:none;}
             <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Amount (ASTER)</label>
             <div style="position:relative;"><input type="text" placeholder="0.00" style="width:100%;padding:0.6rem 0.85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.85rem;font-family:var(--mono);" disabled><span style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--g400);cursor:pointer;">MAX</span></div>
           </div>
-          <div style="padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:1.25rem;">
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Estimated APY</span><span style="color:var(--teal);font-family:var(--mono);" id="delegateApy">—</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Commission</span><span style="font-family:var(--mono);">5.0%</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--g300);">Unbonding Period</span><span style="font-family:var(--mono);">21 days</span></div>
+          <div style="padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:1rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Base APY</span><span style="color:var(--teal);font-family:var(--mono);" id="delegateApy">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Commission</span><span style="font-family:var(--mono);" id="delegateComm">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Epoch</span><span style="font-family:var(--mono);">Weekly · Mon–Sun UTC</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--g300);">Max lock duration</span><span style="font-family:var(--mono);">208 weeks (4 years)</span></div>
           </div>
-          <button class="btn-connect" style="width:100%;justify-content:center;opacity:0.5;cursor:not-allowed;" disabled>Available at Mainnet Launch</button>
+          <div style="padding:0.75rem 1rem;background:rgba(240,168,48,0.06);border:1px solid rgba(240,168,48,0.15);border-radius:var(--radius-sm);margin-bottom:1rem;font-size:0.76rem;color:var(--amber);">
+            ⚠ <strong>Early exit penalty:</strong> 2%–60% of principal depending on remaining lock time.<br>
+            <span style="color:var(--g300);">Formula: penalty = amount × max(2%, min(60%, lock_left ÷ 4yr))</span>
+          </div>
+          <div style="padding:0.75rem 1rem;background:rgba(0,221,184,0.04);border:1px solid rgba(0,221,184,0.12);border-radius:var(--radius-sm);margin-bottom:1.25rem;font-size:0.76rem;color:var(--g200);">
+            ✦ <strong>Loyalty Rewards:</strong> additional 300K ASTER/week distributed via veASTER weight.<br>
+            Longer lock = higher veASTER = larger share of loyalty pool.
+          </div>
+          <button class="btn-connect" style="width:100%;justify-content:center;" onclick="window.open('https://www.asterdex.com/en/staking','_blank')">Stake on AsterDex →</button>
         </div>
       </div>
     </div>
@@ -831,9 +845,9 @@ tr:last-child td{border-bottom:none;}
             <input type="text" placeholder="0.00" style="width:100%;padding:0.6rem 0.85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.85rem;font-family:var(--mono);" disabled>
           </div>
           <div style="padding:0.85rem 1rem;background:rgba(240,168,48,0.06);border:1px solid rgba(240,168,48,0.15);border-radius:var(--radius-sm);margin-bottom:1.25rem;font-size:0.78rem;color:var(--amber);">
-            ⚠ Redelegation is instant, but you cannot redelegate again from the destination validator for 21 days.
+            ⚠ Validator switch takes effect at the <strong>next epoch</strong> (Mon 00:00 UTC). New deposits follow the unified lock period of your existing position.
           </div>
-          <button class="btn-connect" style="width:100%;justify-content:center;opacity:0.5;cursor:not-allowed;" disabled>Available at Mainnet Launch</button>
+          <button class="btn-connect" style="width:100%;justify-content:center;" onclick="window.open('https://www.asterdex.com/en/staking','_blank')">Redelegate on AsterDex →</button>
         </div>
       </div>
     </div>
@@ -1096,9 +1110,21 @@ function updateOverviewStats(){
 
   // Avg APY
   const apyEl=document.getElementById('ovApy');
-  if(apyEl)apyEl.textContent=avgApy.toFixed(4)+'%';
+  if(apyEl)apyEl.textContent=avgApy.toFixed(2)+'%';
   const apySubEl=document.getElementById('ovApySub');
-  if(apySubEl)apySubEl.innerHTML='Range: '+Math.min(...validators.map(v=>v.estimatedApy)).toFixed(4)+'% – '+Math.max(...validators.map(v=>v.estimatedApy)).toFixed(4)+'%';
+  if(apySubEl)apySubEl.innerHTML='Base only · <span style="color:var(--teal)">+Loyalty rewards</span>';
+
+  // Current epoch (Mon 00:00 UTC → Sun 00:00 UTC)
+  const now=new Date();
+  const dow=now.getUTCDay(); // 0=Sun,1=Mon...
+  const msSinceMon=(((dow===0?7:dow)-1)*86400+(now.getUTCHours()*3600+now.getUTCMinutes()*60+now.getUTCSeconds()))*1000;
+  const epochStart=new Date(now.getTime()-msSinceMon);
+  const epochEnd=new Date(epochStart.getTime()+7*86400*1000);
+  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+  const epEl=document.getElementById('ovEpoch');
+  if(epEl)epEl.textContent=fmt(epochStart)+' – '+fmt(epochEnd);
+  const epSubEl=document.getElementById('ovEpochSub');
+  if(epSubEl)epSubEl.textContent='Settles Sun 00:00 UTC · Weekly';
 
   // Avg Commission
   const commEl=document.getElementById('ovCommission');
@@ -1181,7 +1207,9 @@ async function loadData(){
     const updateApyDisplay=()=>{
       const sel=validators.find(v=>v.fullAddress===delegateSel.value);
       const apyEl=document.getElementById('delegateApy');
-      if(sel&&apyEl)apyEl.textContent=sel.estimatedApy.toFixed(4)+'%';
+      if(sel&&apyEl)apyEl.textContent=sel.estimatedApy.toFixed(2)+'%';
+      const commEl=document.getElementById('delegateComm');
+      if(sel&&commEl)commEl.textContent=sel.commission+'%';
     };
     delegateSel.addEventListener('change',updateApyDisplay);
     updateApyDisplay();
