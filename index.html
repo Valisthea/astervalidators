@@ -191,6 +191,7 @@ input,select,button{font-family:var(--font);}
   border-radius:16px;
   padding:2.5rem 3rem;
   max-width:540px;width:90%;
+  max-height:90vh;overflow-y:auto;
   text-align:center;
   position:relative;
   animation:popIn 0.5s cubic-bezier(0.16,1,0.3,1);
@@ -608,7 +609,7 @@ tr:last-child td{border-bottom:none;}
     </div>
   </nav>
   <div class="sidebar-footer">
-    <div class="net-status"><span class="net-dot"></span><span class="net-label">Testnet</span></div>
+    <div class="net-status"><span class="net-dot"></span><span class="net-label">Mainnet</span></div>
     <div id="blockInfo">Block #1,204,887 · 0.4s ago</div>
   </div>
 </aside>
@@ -1138,15 +1139,9 @@ function updateOverviewStats(){
   const bannerIcon=document.getElementById('topBannerIcon');
   if(bannerIcon)bannerIcon.textContent='✦';
   const bannerText=document.getElementById('topBannerText');
-  if(bannerText)bannerText.innerHTML=n+' validators · Total staked: '+totalM.toFixed(2)+'M ASTER · Avg APY: '+avgApy.toFixed(4)+'% · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a>';
+  lastRefresh=Date.now();
+  if(bannerText)bannerText.innerHTML=n+' validators · Total staked: '+totalM.toFixed(2)+'M ASTER · Avg APY: '+avgApy.toFixed(4)+'% · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a> · <span style="color:var(--g400)">Updated <span id="refreshAge">just now</span></span>';
 
-  // Popup disclaimer → live
-  const popupTags=document.querySelectorAll('.popup-tag');
-  if(popupTags[0])popupTags[0].textContent='✦ Mainnet Live';
-  if(popupTags[1]){popupTags[1].textContent='⬡ Real-Time Data';popupTags[1].style.cssText='background:rgba(0,221,184,0.08);color:var(--teal);border-color:rgba(0,221,184,0.2)';}
-  if(popupTags[2])popupTags[2].textContent='◈ On-Chain';
-  const popupLegal=document.querySelector('.popup-legal');
-  if(popupLegal)popupLegal.innerHTML='<strong>ℹ Info:</strong> Live data from Aster Chain mainnet via AsterDex staking API. Uptime & score are estimated metrics. Not financial advice.';
 }
 
 // ─── LOAD REAL DATA ───
@@ -1440,8 +1435,23 @@ function renderExplorerBlocks(){
   el.innerHTML=html;
 }
 
+// ─── AUTO-REFRESH ───
+let lastRefresh=null;
+function startAutoRefresh(){
+  setInterval(async()=>{
+    await loadData();
+  },30000);
+  setInterval(()=>{
+    if(!lastRefresh)return;
+    const sec=Math.round((Date.now()-lastRefresh)/1000);
+    const el=document.getElementById('refreshAge');
+    if(el)el.textContent=sec<5?'just now':sec+'s ago';
+  },1000);
+}
+
 // ─── INIT ───
 loadData();
+startAutoRefresh();
 </script>
 </body>
 </html>
