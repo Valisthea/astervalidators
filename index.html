@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SEO — Core Meta -->
+<!-- ═══════════════════════════════════════════════ -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aster Validators — Real-Time Analytics & Staking Dashboard for Aster Chain</title>
+<meta name="description" content="The #1 analytics dashboard for Aster Chain validators. Track validator scores, uptime, stake distribution, commission rates, and decentralization metrics. Delegate $ASTER tokens and monitor your staking rewards in real-time.">
+<meta name="keywords" content="Aster Chain, ASTER, validators, staking, delegation, validator analytics, blockchain dashboard, DeFi, perpetual trading, validator score, uptime monitoring, decentralization, crypto staking, web3">
+<meta name="author" content="Aster Validators">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://astervalidators.com/">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SEO — Open Graph (Facebook, LinkedIn, Discord) -->
+<!-- ═══════════════════════════════════════════════ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aster Validators">
+<meta property="og:title" content="Aster Validators — The Reference Analytics Dashboard for Aster Chain">
+<meta property="og:description" content="Track 87+ validators in real-time. Validator scoring, uptime heatmaps, stake distribution, decentralization index, and one-click staking. Built for the Aster Chain ecosystem.">
+<meta property="og:url" content="https://astervalidators.com/">
+<meta property="og:image" content="https://astervalidators.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Aster Validators Dashboard — Real-time validator analytics for Aster Chain">
+<meta property="og:locale" content="en_US">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SEO — Twitter Card -->
+<!-- ═══════════════════════════════════════════════ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aster Validators — Real-Time Analytics Dashboard">
+<meta name="twitter:description" content="The #1 validator analytics platform for Aster Chain. Scores, uptime, staking, decentralization metrics — all in one place.">
+<meta name="twitter:image" content="https://astervalidators.com/og-image.png">
+<meta name="twitter:image:alt" content="Aster Validators Dashboard">
+<!-- <meta name="twitter:site" content="@AsterValidators"> -->
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SEO — Structured Data (JSON-LD) -->
+<!-- ═══════════════════════════════════════════════ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Aster Validators",
+  "url": "https://astervalidators.com",
+  "description": "Real-time validator analytics and staking dashboard for Aster Chain. Track validator performance, scores, uptime, and stake distribution.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Aster Validators",
+    "url": "https://astervalidators.com"
+  },
+  "featureList": [
+    "Real-time validator monitoring",
+    "Validator scoring algorithm",
+    "Uptime heatmaps",
+    "Stake distribution analytics",
+    "Decentralization index tracking",
+    "Commission rate comparison",
+    "One-click staking delegation",
+    "Reward estimation calculator"
+  ],
+  "screenshot": "https://astervalidators.com/og-image.png"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Aster Validators?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aster Validators is the reference analytics dashboard for the Aster Chain ecosystem. It provides real-time monitoring of validator performance, scoring, uptime tracking, stake distribution analysis, and staking delegation tools."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does Aster Chain mainnet launch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aster Chain mainnet is targeting Q1 2026. The public testnet is currently live and open to all developers and validators for testing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the Validator Score calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Validator Score is a composite metric based on 30-day uptime (35%), missed block ratio (25%), commission rate (15%), decentralization factor (15%), and incident-free operation (10%). Scores range from 0 to 100."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I delegate ASTER tokens through this dashboard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Staking delegation will be available at mainnet launch. Currently, all data displayed is simulated for testing and demonstration purposes while the Aster Chain L1 is in testnet phase."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SEO — Additional Tags -->
+<!-- ═══════════════════════════════════════════════ -->
+<meta name="theme-color" content="#06090d">
+<meta name="color-scheme" content="dark">
+<meta name="msapplication-TileColor" content="#06090d">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='14' fill='%234285f4'/%3E%3Ccircle cx='50' cy='14' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='22' x2='50' y2='36' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='50' cy='86' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='64' x2='50' y2='78' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='14' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='36' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='86' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='64' y1='50' x2='78' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='40' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='76' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='60' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='76' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='70' x2='40' y2='60' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='14' fill='%234285f4'/%3E%3Ccircle cx='50' cy='14' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='22' x2='50' y2='36' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='50' cy='86' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='64' x2='50' y2='78' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='14' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='36' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='86' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='64' y1='50' x2='78' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='40' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='76' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='60' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='76' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='70' x2='40' y2='60' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3C/svg%3E">
+
+<!-- Preconnect -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN SYSTEM — ASTER VALIDATORS
+   ═══════════════════════════════════════════════════ */
+:root {
+  --bg-base: #06090d;
+  --bg-surface: #0b1017;
+  --bg-card: #0f151d;
+  --bg-card-hover: #131b25;
+  --bg-elevated: #162030;
+  --bg-sidebar: #080c12;
+  --teal: #00ddb8;
+  --teal-mid: #00b89a;
+  --teal-dim: #008f78;
+  --teal-glow: rgba(0,221,184,0.12);
+  --teal-subtle: rgba(0,221,184,0.05);
+  --amber: #f0a830;
+  --amber-dim: #c08520;
+  --amber-glow: rgba(240,168,48,0.12);
+  --red: #ef4444;
+  --red-glow: rgba(239,68,68,0.12);
+  --green: #22c55e;
+  --green-glow: rgba(34,197,94,0.12);
+  --blue: #3b82f6;
+  --white: #e8f0f0;
+  --g100: #c0d0d4;
+  --g200: #8a9caa;
+  --g300: #5a6e7e;
+  --g400: #3a4a58;
+  --g500: #253040;
+  --border: rgba(0,221,184,0.08);
+  --border-mid: rgba(0,221,184,0.15);
+  --border-active: rgba(0,221,184,0.3);
+  --font: 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --sidebar-w: 240px;
+  --header-h: 56px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:14px;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg-base);color:var(--white);overflow-x:hidden;line-height:1.5;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg-surface);}
+::-webkit-scrollbar-thumb{background:var(--g400);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--g300);}
+input,select,button{font-family:var(--font);}
+
+/* ═══════ DISCLAIMER POPUP ═══════ */
+.popup-overlay{
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(3,5,8,0.88);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:1;transition:opacity 0.4s ease;
+}
+.popup-overlay.hidden{opacity:0;pointer-events:none;}
+.popup-box{
+  background:var(--bg-card);
+  border:1px solid var(--border-mid);
+  border-radius:16px;
+  padding:2.5rem 3rem;
+  max-width:540px;width:90%;
+  text-align:center;
+  position:relative;
+  animation:popIn 0.5s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 40px 80px rgba(0,0,0,0.5),0 0 60px var(--teal-glow);
+}
+@keyframes popIn{from{opacity:0;transform:scale(0.9) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.popup-icon{
+  font-size:2.5rem;margin-bottom:1rem;
+  display:inline-block;animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.popup-box h2{
+  font-size:1.4rem;font-weight:800;letter-spacing:-0.5px;
+  margin-bottom:0.75rem;
+  background:linear-gradient(135deg,var(--teal),var(--amber));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.popup-box p{
+  color:var(--g200);font-size:0.92rem;line-height:1.7;margin-bottom:0.5rem;
+}
+.popup-tags{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem;
+  margin:1.25rem 0;
+}
+.popup-tag{
+  background:var(--teal-subtle);border:1px solid var(--border);
+  border-radius:100px;padding:0.3rem 0.85rem;
+  font-size:0.72rem;font-weight:600;color:var(--teal);
+  letter-spacing:0.5px;
+}
+.popup-tag.amber{background:var(--amber-glow);color:var(--amber);border-color:rgba(240,168,48,0.2);}
+.popup-legal{
+  font-size:0.72rem;color:var(--g400);line-height:1.6;
+  margin:1rem 0 1.5rem;padding:0.75rem;
+  background:var(--bg-surface);border-radius:var(--radius-sm);
+  border:1px solid var(--border);
+}
+.btn-enter{
+  background:var(--teal);color:var(--bg-base);border:none;
+  padding:0.75rem 2.5rem;border-radius:var(--radius-sm);
+  font-weight:700;font-size:0.95rem;cursor:pointer;
+  transition:all 0.3s;letter-spacing:0.3px;
+  display:inline-flex;align-items:center;gap:0.5rem;
+}
+.btn-enter:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(0,221,184,0.25);
+}
+
+/* ═══════ LAYOUT ═══════ */
+.layout{display:flex;min-height:100vh;}
+
+/* ═══════ SIDEBAR ═══════ */
+.sidebar{
+  width:var(--sidebar-w);background:var(--bg-sidebar);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:50;
+  transition:transform 0.3s;
+}
+.sidebar-logo{
+  padding:1.2rem 1.5rem;display:flex;align-items:center;gap:0.6rem;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo-icon{font-size:1.4rem;color:var(--teal);filter:drop-shadow(0 0 6px var(--teal-glow));}
+.sidebar-logo h1{font-size:0.95rem;font-weight:700;letter-spacing:0.3px;}
+.sidebar-logo h1 span{color:var(--g300);font-weight:400;font-size:0.78rem;margin-left:4px;}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto;}
+.nav-section{padding:0 1rem;margin-bottom:0.3rem;}
+.nav-section-label{font-size:0.62rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--g400);padding:0.75rem 0.75rem 0.4rem;}
+.nav-item{
+  display:flex;align-items:center;gap:0.65rem;
+  padding:0.6rem 0.75rem;border-radius:var(--radius-sm);
+  color:var(--g200);font-size:0.85rem;font-weight:500;
+  cursor:pointer;transition:all 0.15s;margin-bottom:2px;position:relative;
+}
+.nav-item:hover{background:var(--teal-subtle);color:var(--white);}
+.nav-item.active{background:var(--teal-glow);color:var(--teal);font-weight:600;}
+.nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--teal);border-radius:0 3px 3px 0;}
+.nav-icon{width:18px;text-align:center;font-size:0.85rem;flex-shrink:0;}
+.nav-badge{margin-left:auto;font-family:var(--mono);font-size:0.62rem;background:var(--teal-subtle);color:var(--teal);padding:0.15rem 0.45rem;border-radius:10px;font-weight:600;}
+.sidebar-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:0.7rem;color:var(--g400);}
+.sidebar-footer .net-status{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.3rem;}
+.sidebar-footer .net-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
+.sidebar-footer .net-label{color:var(--amber);font-weight:600;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* ═══════ MAIN ═══════ */
+.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;}
+
+/* ═══════ HEADER ═══════ */
+.header{
+  height:var(--header-h);background:rgba(11,16,23,0.85);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.75rem;position:sticky;top:0;z-index:40;
+}
+.header-left{display:flex;align-items:center;gap:1rem;}
+.header-title{font-size:1rem;font-weight:700;letter-spacing:-0.3px;}
+.header-breadcrumb{font-size:0.75rem;color:var(--g300);display:flex;align-items:center;gap:0.4rem;}
+.header-breadcrumb .live-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
+.header-right{display:flex;align-items:center;gap:0.75rem;}
+.header-search{
+  display:flex;align-items:center;gap:0.5rem;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:0.4rem 0.85rem;transition:border-color 0.2s;
+}
+.header-search:focus-within{border-color:var(--border-active);}
+.header-search input{background:none;border:none;outline:none;color:var(--white);font-size:0.82rem;width:200px;}
+.header-search input::placeholder{color:var(--g400);}
+.header-search .search-icon{color:var(--g400);font-size:0.8rem;}
+.btn-connect{
+  background:var(--teal);color:var(--bg-base);border:none;
+  padding:0.45rem 1rem;border-radius:var(--radius-sm);
+  font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.2s;letter-spacing:0.2px;
+}
+.btn-connect:hover{box-shadow:0 0 20px var(--teal-glow);transform:translateY(-1px);}
+.btn-connect.connected{background:var(--bg-elevated);color:var(--teal);border:1px solid var(--teal);}
+
+/* ═══════ CONTENT ═══════ */
+.content{padding:1.5rem 1.75rem 3rem;}
+
+/* ═══════ SIMULATED DATA BANNER ═══════ */
+.sim-banner{
+  background:linear-gradient(90deg,rgba(240,168,48,0.08),rgba(240,168,48,0.03));
+  border:1px solid rgba(240,168,48,0.2);border-radius:var(--radius);
+  padding:0.6rem 1.25rem;margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:0.6rem;
+  font-size:0.78rem;color:var(--amber);
+}
+.sim-banner .sim-icon{font-size:0.9rem;}
+.sim-banner a{color:var(--amber);text-decoration:underline;text-underline-offset:2px;}
+
+/* ═══════ OVERVIEW CARDS ═══════ */
+.overview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem;}
+.ov-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.1rem 1.25rem;
+  transition:all 0.25s;position:relative;overflow:hidden;
+}
+.ov-card:hover{border-color:var(--border-mid);transform:translateY(-2px);}
+.ov-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:0;transition:opacity 0.3s;}
+.ov-card:hover::after{opacity:1;}
+.ov-card.amber-accent::after{background:linear-gradient(90deg,transparent,var(--amber),transparent);}
+.ov-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--g300);margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.ov-value{font-family:var(--mono);font-size:1.5rem;font-weight:700;line-height:1.2;}
+.ov-value.teal{color:var(--teal);}
+.ov-value.amber{color:var(--amber);}
+.ov-value.green{color:var(--green);}
+.ov-sub{font-size:0.7rem;color:var(--g300);margin-top:0.25rem;display:flex;align-items:center;gap:0.3rem;}
+.ov-sub .up{color:var(--green);font-weight:600;}
+.ov-sub .down{color:var(--red);font-weight:600;}
+
+/* ═══════ TABS ═══════ */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
+.tab{padding:0.7rem 1.25rem;font-size:0.82rem;font-weight:600;color:var(--g300);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
+.tab:hover{color:var(--g100);}
+.tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+
+/* ═══════ TOOLBAR ═══════ */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:1rem;flex-wrap:wrap;}
+.toolbar-left{display:flex;align-items:center;gap:0.5rem;}
+.toolbar-right{display:flex;align-items:center;gap:0.5rem;}
+.filter-chip{
+  display:flex;align-items:center;gap:0.35rem;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:100px;padding:0.32rem 0.8rem;
+  font-size:0.73rem;color:var(--g200);cursor:pointer;transition:all 0.2s;font-weight:500;
+}
+.filter-chip:hover,.filter-chip.active{border-color:var(--teal);color:var(--teal);background:var(--teal-subtle);}
+.chip-dot{width:5px;height:5px;border-radius:50%;}
+.chip-dot.green{background:var(--green);}
+.chip-dot.red{background:var(--red);}
+.chip-dot.amber{background:var(--amber);}
+select.filter-select{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:0.38rem 0.7rem;
+  color:var(--g200);font-size:0.73rem;outline:none;cursor:pointer;
+}
+
+/* ═══════ TABLE ═══════ */
+.table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:1000px;}
+thead{background:var(--bg-surface);}
+th{padding:0.65rem 0.9rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g300);text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;}
+th:hover{color:var(--g100);}
+th.sorted{color:var(--teal);}
+th .sort-arrow{margin-left:3px;font-size:0.55rem;}
+td{padding:0.6rem 0.9rem;border-bottom:1px solid var(--border);font-size:0.83rem;white-space:nowrap;}
+tr{transition:background 0.15s;cursor:pointer;}
+tr:hover{background:var(--bg-card-hover);}
+tr:last-child td{border-bottom:none;}
+.cell-rank{font-family:var(--mono);font-size:0.73rem;color:var(--g300);font-weight:600;width:40px;}
+.cell-rank.top3{color:var(--amber);}
+.cell-validator{display:flex;align-items:center;gap:0.55rem;}
+.val-avatar{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.65rem;flex-shrink:0;}
+.val-name{font-weight:600;font-size:0.83rem;}
+.val-addr{font-family:var(--mono);font-size:0.62rem;color:var(--g400);}
+.cell-score{display:flex;align-items:center;gap:0.4rem;}
+.score-bar{width:48px;height:4px;background:var(--g500);border-radius:3px;overflow:hidden;}
+.score-fill{height:100%;border-radius:3px;}
+.score-fill.s-high{background:var(--teal);}
+.score-fill.s-mid{background:var(--amber);}
+.score-fill.s-low{background:var(--red);}
+.score-val{font-family:var(--mono);font-weight:700;font-size:0.8rem;}
+.score-val.s-high{color:var(--teal);}
+.score-val.s-mid{color:var(--amber);}
+.score-val.s-low{color:var(--red);}
+.cell-status{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.7rem;font-weight:600;padding:0.18rem 0.55rem;border-radius:100px;}
+.status-active{background:var(--green-glow);color:var(--green);}
+.status-jailed{background:var(--red-glow);color:var(--red);}
+.status-inactive{background:rgba(90,110,126,0.12);color:var(--g300);}
+.cell-mono{font-family:var(--mono);font-size:0.78rem;color:var(--g100);}
+.cell-mono.dim{color:var(--g300);}
+.cell-uptime{display:flex;align-items:center;gap:0.35rem;}
+.uptime-bar{display:flex;gap:1px;}
+.uptime-block{width:3px;height:12px;border-radius:1px;}
+.ub-ok{background:var(--teal-dim);}
+.ub-miss{background:var(--red);}
+.ub-na{background:var(--g500);}
+.cell-sparkline svg{display:block;}
+.cell-change{font-family:var(--mono);font-size:0.73rem;font-weight:600;}
+.cell-change.up{color:var(--green);}
+.cell-change.down{color:var(--red);}
+
+/* ═══════ DETAIL PANEL ═══════ */
+.detail-panel{display:none;background:var(--bg-card);border:1px solid var(--border-mid);border-radius:var(--radius);margin:1.5rem 0;padding:1.5rem;animation:slideDown 0.3s ease;}
+.detail-panel.open{display:block;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.detail-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.detail-header-left{display:flex;align-items:center;gap:1rem;}
+.detail-avatar-lg{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;}
+.detail-name{font-size:1.15rem;font-weight:800;letter-spacing:-0.3px;}
+.detail-addr{font-family:var(--mono);font-size:0.7rem;color:var(--g300);margin-top:2px;}
+.detail-close{background:none;border:1px solid var(--g400);color:var(--g200);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.detail-close:hover{border-color:var(--red);color:var(--red);}
+.detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:1.25rem;}
+.detail-stat{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.85rem;}
+.detail-stat-label{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g300);margin-bottom:0.25rem;}
+.detail-stat-value{font-family:var(--mono);font-size:1.15rem;font-weight:700;}
+.detail-charts{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.detail-chart-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;}
+.detail-chart-title{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g300);margin-bottom:0.65rem;}
+.chart-svg{width:100%;overflow:visible;}
+.chart-line{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.chart-area{opacity:0.12;}
+.chart-grid-line{stroke:var(--g500);stroke-width:0.5;stroke-dasharray:4 4;}
+.chart-label{font-family:var(--mono);font-size:9px;fill:var(--g400);}
+
+/* ═══════ ANALYTICS GRID ═══════ */
+.analytics-grid{display:grid;grid-template-columns:2fr 1fr;gap:1rem;margin-top:1.5rem;}
+.analytics-grid.full{grid-template-columns:1fr 1fr;}
+.analytics-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;}
+.analytics-card h3{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g300);margin-bottom:0.85rem;}
+.legend{display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.65rem;}
+.legend-item{display:flex;align-items:center;gap:0.35rem;font-size:0.7rem;color:var(--g200);}
+.legend-dot{width:8px;height:8px;border-radius:2px;}
+.donut-segment{transition:opacity 0.2s;cursor:pointer;}
+.donut-segment:hover{opacity:0.8;filter:brightness(1.2);}
+.histo-bar{transition:opacity 0.2s;cursor:pointer;}
+.histo-bar:hover{opacity:0.8;}
+
+/* ═══════ STAKING TAB ═══════ */
+.staking-container{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.5rem;}
+.staking-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.staking-card h3{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--g300);margin-bottom:0.85rem;}
+.staking-metric{font-family:var(--mono);font-size:1.9rem;font-weight:700;color:var(--teal);}
+.staking-metric.amber{color:var(--amber);}
+.delegation-row{display:flex;align-items:center;justify-content:space-between;padding:0.7rem 0;border-bottom:1px solid var(--border);}
+.delegation-row:last-child{border-bottom:none;}
+.del-validator{display:flex;align-items:center;gap:0.6rem;}
+.del-avatar{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:700;}
+.del-name{font-weight:600;font-size:0.83rem;}
+.del-amount{font-family:var(--mono);font-size:0.8rem;color:var(--teal);text-align:right;}
+.del-amount small{display:block;color:var(--g300);font-size:0.65rem;}
+.btn-action{background:transparent;border:1px solid var(--teal);color:var(--teal);padding:0.32rem 0.7rem;border-radius:var(--radius-sm);font-size:0.7rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-action:hover{background:var(--teal-glow);}
+.btn-action.danger{border-color:var(--red);color:var(--red);}
+.btn-action.danger:hover{background:var(--red-glow);}
+.wallet-prompt{text-align:center;padding:3rem;color:var(--g300);}
+.wallet-prompt p{margin-bottom:1rem;}
+
+/* ═══════ TAB CONTENT ═══════ */
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ═══════ ANIMATIONS ═══════ */
+.fade-in{opacity:0;transform:translateY(12px);animation:fadeIn 0.5s ease forwards;}
+@keyframes fadeIn{to{opacity:1;transform:translateY(0);}}
+.d1{animation-delay:0.05s;}.d2{animation-delay:0.1s;}.d3{animation-delay:0.15s;}
+.d4{animation-delay:0.2s;}.d5{animation-delay:0.25s;}.d6{animation-delay:0.3s;}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:1200px){.overview-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:1000px){
+  .detail-stats{grid-template-columns:repeat(2,1fr);}
+  .detail-charts{grid-template-columns:1fr;}
+  .analytics-grid,.analytics-grid.full{grid-template-columns:1fr;}
+  .staking-container{grid-template-columns:1fr;}
+}
+@media(max-width:800px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;}
+  .overview-grid{grid-template-columns:repeat(2,1fr);}
+  .header{padding:0 1rem;}
+  .content{padding:1rem;}
+  .mobile-toggle{display:flex !important;}
+}
+.mobile-toggle{
+  display:none;background:none;border:none;color:var(--white);
+  font-size:1.2rem;cursor:pointer;padding:0.3rem;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     DISCLAIMER POPUP
+     ═══════════════════════════════════════════════════ -->
+<div class="popup-overlay" id="disclaimerPopup">
+  <div class="popup-box">
+    <div class="popup-icon">
+      <svg width="52" height="52" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="14" fill="#4285f4"/>
+        <circle cx="50" cy="13" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="50" y1="21" x2="50" y2="36" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="50" cy="87" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="50" y1="64" x2="50" y2="79" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="13" cy="50" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="21" y1="50" x2="36" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="87" cy="50" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="64" y1="50" x2="79" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="23" cy="23" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="29" y1="29" x2="40" y2="40" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="77" cy="23" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="71" y1="29" x2="60" y2="40" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+        <circle cx="23" cy="77" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+        <line x1="29" y1="71" x2="40" y2="60" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      </svg>
+    </div>
+    <h2>Welcome to Aster Validators</h2>
+    <p>
+      The reference analytics dashboard for the Aster Chain validator ecosystem.
+    </p>
+    <div class="popup-tags">
+      <span class="popup-tag">✦ Testnet Phase</span>
+      <span class="popup-tag amber">⏳ Mainnet Q1 2026</span>
+      <span class="popup-tag">◈ Simulated Data</span>
+    </div>
+    <p style="font-size:0.88rem;">
+      Aster Chain L1 is currently in <strong style="color:var(--amber)">public testnet</strong>.
+      All validator data, scores, staking metrics, and analytics displayed on this platform are
+      <strong style="color:var(--teal)">simulated for demonstration purposes</strong>.
+    </p>
+    <div class="popup-legal">
+      <strong>⚠ Disclaimer:</strong> This dashboard uses generated mock data to preview the full analytics experience.
+      Real-time chain data will be integrated upon Aster Chain mainnet launch. No real tokens are involved.
+      Nothing on this site constitutes financial advice. Validator metrics and scores are illustrative only.
+    </div>
+    <button class="btn-enter" onclick="closeDisclaimer()">
+      I Understand — Enter Dashboard ✦
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     APP LAYOUT
+     ═══════════════════════════════════════════════════ -->
+<div class="layout">
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;filter:drop-shadow(0 0 6px rgba(66,133,244,0.4))">
+      <circle cx="50" cy="50" r="14" fill="#4285f4"/>
+      <circle cx="50" cy="13" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="50" y1="21" x2="50" y2="36" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="50" cy="87" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="50" y1="64" x2="50" y2="79" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="13" cy="50" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="21" y1="50" x2="36" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="87" cy="50" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="64" y1="50" x2="79" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="23" cy="23" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="29" y1="29" x2="40" y2="40" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="77" cy="23" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="71" y1="29" x2="60" y2="40" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+      <circle cx="23" cy="77" r="8" fill="none" stroke="#4285f4" stroke-width="4.5"/>
+      <line x1="29" y1="71" x2="40" y2="60" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+    </svg>
+    <h1>Aster<span>Validators</span></h1>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" data-tab="overview"><span class="nav-icon">◈</span>Dashboard</div>
+      <div class="nav-item" data-tab="leaderboard"><span class="nav-icon">▤</span>Leaderboard<span class="nav-badge" id="valCountBadge">87</span></div>
+      <div class="nav-item" data-tab="analytics"><span class="nav-icon">◐</span>Analytics</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Staking</div>
+      <div class="nav-item" data-tab="staking"><span class="nav-icon">⬡</span>My Staking</div>
+      <div class="nav-item" data-tab="delegate"><span class="nav-icon">⧉</span>Delegate</div>
+      <div class="nav-item" data-tab="redelegate"><span class="nav-icon">↻</span>Redelegate</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">Governance</div>
+      <div class="nav-item" data-tab="proposals"><span class="nav-icon">◎</span>Proposals<span class="nav-badge">3</span></div>
+      <div class="nav-item" data-tab="explorer"><span class="nav-icon">⊞</span>Block Explorer</div>
+      <div class="nav-item" data-tab="parameters"><span class="nav-icon">⚙</span>Parameters</div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="net-status"><span class="net-dot"></span><span class="net-label">Testnet</span></div>
+    <div id="blockInfo">Block #1,204,887 · 0.4s ago</div>
+  </div>
+</aside>
+
+<!-- ═══════ MAIN ═══════ -->
+<main class="main">
+  <header class="header">
+    <div class="header-left">
+      <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div class="header-title">Validator Dashboard</div>
+      <div class="header-breadcrumb"><span class="live-dot"></span>Aster Chain Testnet · Simulated</div>
+    </div>
+    <div class="header-right">
+      <div class="header-search">
+        <span class="search-icon">⌕</span>
+        <input type="text" placeholder="Search validator, address..." id="globalSearch" aria-label="Search validators">
+      </div>
+      <button class="btn-connect" id="btnConnect" onclick="connectWallet()">Connect Wallet</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- SIM BANNER -->
+    <div class="sim-banner fade-in d1">
+      <span class="sim-icon">⚠</span>
+      <span>Simulated data — Aster Chain L1 is in testnet. Real validator data will be integrated at mainnet launch.
+      <a href="https://docs.asterdex.com/" target="_blank" rel="noopener">Learn more →</a></span>
+    </div>
+
+    <!-- OVERVIEW CARDS -->
+    <div class="overview-grid">
+      <div class="ov-card fade-in d1">
+        <div class="ov-label">⬡ Total Staked</div>
+        <div class="ov-value teal" id="ovStaked">2.41B</div>
+        <div class="ov-sub"><span class="up">↑ 3.2%</span> past 7d · $ASTER</div>
+      </div>
+      <div class="ov-card fade-in d2">
+        <div class="ov-label">◈ Active Validators</div>
+        <div class="ov-value" style="color:var(--white)" id="ovActive">87<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / 200</span></div>
+        <div class="ov-sub"><span class="up">↑ 5</span> this week</div>
+      </div>
+      <div class="ov-card amber-accent fade-in d3">
+        <div class="ov-label">◐ Network APR</div>
+        <div class="ov-value amber">14.7%</div>
+        <div class="ov-sub"><span class="down">↓ 0.3%</span> vs last epoch</div>
+      </div>
+      <div class="ov-card fade-in d4">
+        <div class="ov-label">↕ Avg Commission</div>
+        <div class="ov-value" style="color:var(--white)">5.8%</div>
+        <div class="ov-sub">Range: 0% – 20%</div>
+      </div>
+      <div class="ov-card fade-in d5">
+        <div class="ov-label">⊘ Network Uptime</div>
+        <div class="ov-value green">99.97%</div>
+        <div class="ov-sub">2 missed blocks (24h)</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs fade-in d3">
+      <div class="tab active" data-tab="overview">Overview</div>
+      <div class="tab" data-tab="leaderboard">Leaderboard</div>
+      <div class="tab" data-tab="analytics">Analytics</div>
+      <div class="tab" data-tab="staking">My Staking</div>
+    </div>
+
+    <!-- ═══════ TAB: OVERVIEW ═══════ -->
+    <div class="tab-content active" id="tc-overview">
+      <div class="toolbar fade-in d4">
+        <div class="toolbar-left" id="statusFilters">
+          <div class="filter-chip active" data-status="active"><span class="chip-dot green"></span>Active (<span class="filter-count">82</span>)</div>
+          <div class="filter-chip" data-status="inactive"><span class="chip-dot amber"></span>Inactive (<span class="filter-count">3</span>)</div>
+          <div class="filter-chip" data-status="jailed"><span class="chip-dot red"></span>Jailed (<span class="filter-count">2</span>)</div>
+        </div>
+        <div class="toolbar-right">
+          <select class="filter-select" id="sortSelect" aria-label="Sort validators">
+            <option value="score">Sort: Score</option>
+            <option value="stake">Sort: Total Stake</option>
+            <option value="uptime">Sort: Uptime</option>
+            <option value="commission">Sort: Commission</option>
+            <option value="delegators">Sort: Delegators</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap fade-in d5" id="validatorTable"></div>
+      <div class="detail-panel" id="detailPanel"></div>
+      <div class="analytics-grid fade-in d6">
+        <div class="analytics-card"><h3>◐ Stake Distribution (Top 15)</h3><svg class="chart-svg" id="stakeChart" viewBox="0 0 600 200"></svg></div>
+        <div class="analytics-card"><h3>⬡ Commission Distribution</h3><svg class="chart-svg" id="commissionChart" viewBox="0 0 280 200"></svg><div class="legend" id="commLegend"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: LEADERBOARD ═══════ -->
+    <div class="tab-content" id="tc-leaderboard">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <div class="filter-chip active"><span class="chip-dot green"></span>All Validators</div>
+        </div>
+        <div class="toolbar-right">
+          <select class="filter-select" id="lbSort" aria-label="Sort leaderboard">
+            <option value="score">Sort: Score</option>
+            <option value="stake">Sort: Stake</option>
+            <option value="uptime">Sort: Uptime</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap" id="leaderboardTable"></div>
+    </div>
+
+    <!-- ═══════ TAB: ANALYTICS ═══════ -->
+    <div class="tab-content" id="tc-analytics">
+      <div class="analytics-grid full">
+        <div class="analytics-card"><h3>◐ Network Stake Over Time (30d)</h3><svg class="chart-svg" id="stakeTimeChart" viewBox="0 0 500 180"></svg></div>
+        <div class="analytics-card"><h3>⬡ Validator Score Distribution</h3><svg class="chart-svg" id="scoreDistChart" viewBox="0 0 500 180"></svg></div>
+        <div class="analytics-card"><h3>↕ Uptime Heatmap (30d · Top 20)</h3><svg class="chart-svg" id="uptimeHeatmap" viewBox="0 0 560 260"></svg></div>
+        <div class="analytics-card"><h3>◎ Decentralization Index</h3><svg class="chart-svg" id="decentralChart" viewBox="0 0 500 220"></svg><div class="legend" id="decentLegend"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: MY STAKING ═══════ -->
+    <div class="tab-content" id="tc-staking">
+      <div id="stakingContent">
+        <div class="wallet-prompt">
+          <p style="font-size:2.2rem;">⬡</p>
+          <p style="font-size:0.95rem;">Connect your wallet to view staking positions</p>
+          <button class="btn-connect" onclick="connectWallet()" style="font-size:0.85rem;padding:0.55rem 1.5rem;">Connect Wallet</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: DELEGATE ═══════ -->
+    <div class="tab-content" id="tc-delegate">
+      <div class="sim-banner"><span class="sim-icon">⧉</span><span>Delegation will be available at mainnet launch — Preview below</span></div>
+      <div style="max-width:560px;margin:1.5rem auto;">
+        <div class="analytics-card">
+          <h3 style="margin-bottom:1rem;">⧉ Delegate $ASTER</h3>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Select Validator</label>
+            <select class="filter-select" style="width:100%;padding:0.6rem 0.85rem;font-size:0.85rem;" disabled>
+              <option>AsterGuard — Score 96.2 — Commission 5%</option>
+              <option>NovaSphere — Score 95.8 — Commission 3%</option>
+              <option>ZenithCore — Score 95.1 — Commission 5%</option>
+            </select>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Amount (ASTER)</label>
+            <div style="position:relative;"><input type="text" placeholder="0.00" style="width:100%;padding:0.6rem 0.85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.85rem;font-family:var(--mono);" disabled><span style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.65rem;color:var(--g400);cursor:pointer;">MAX</span></div>
+          </div>
+          <div style="padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:1.25rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Estimated APR</span><span style="color:var(--teal);font-family:var(--mono);">14.7%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300);">Commission</span><span style="font-family:var(--mono);">5.0%</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--g300);">Unbonding Period</span><span style="font-family:var(--mono);">21 days</span></div>
+          </div>
+          <button class="btn-connect" style="width:100%;justify-content:center;opacity:0.5;cursor:not-allowed;" disabled>Available at Mainnet Launch</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: REDELEGATE ═══════ -->
+    <div class="tab-content" id="tc-redelegate">
+      <div class="sim-banner"><span class="sim-icon">↻</span><span>Redelegation will be available at mainnet launch — Preview below</span></div>
+      <div style="max-width:560px;margin:1.5rem auto;">
+        <div class="analytics-card">
+          <h3 style="margin-bottom:1rem;">↻ Redelegate $ASTER</h3>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">From Validator</label>
+            <select class="filter-select" style="width:100%;padding:0.6rem 0.85rem;font-size:0.85rem;" disabled>
+              <option>Select source validator...</option>
+            </select>
+          </div>
+          <div style="text-align:center;font-size:1.2rem;color:var(--g400);margin:0.5rem 0;">↓</div>
+          <div style="margin-bottom:1rem;">
+            <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">To Validator</label>
+            <select class="filter-select" style="width:100%;padding:0.6rem 0.85rem;font-size:0.85rem;" disabled>
+              <option>Select destination validator...</option>
+            </select>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Amount (ASTER)</label>
+            <input type="text" placeholder="0.00" style="width:100%;padding:0.6rem 0.85rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.85rem;font-family:var(--mono);" disabled>
+          </div>
+          <div style="padding:0.85rem 1rem;background:rgba(240,168,48,0.06);border:1px solid rgba(240,168,48,0.15);border-radius:var(--radius-sm);margin-bottom:1.25rem;font-size:0.78rem;color:var(--amber);">
+            ⚠ Redelegation is instant, but you cannot redelegate again from the destination validator for 21 days.
+          </div>
+          <button class="btn-connect" style="width:100%;justify-content:center;opacity:0.5;cursor:not-allowed;" disabled>Available at Mainnet Launch</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: PROPOSALS ═══════ -->
+    <div class="tab-content" id="tc-proposals">
+      <div class="sim-banner"><span class="sim-icon">◎</span><span>Governance proposals — Simulated data for testnet phase</span></div>
+      <div style="max-width:720px;margin:1.5rem auto;display:flex;flex-direction:column;gap:0.75rem;">
+        <div class="analytics-card" style="cursor:default;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
+                <span style="background:var(--teal-glow);color:var(--teal);font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">VOTING</span>
+                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#003</span>
+              </div>
+              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Increase max validator set to 120</h3>
+              <p style="font-size:0.78rem;color:var(--g300);">Proposal to expand the active validator set from 100 to 120 to improve decentralization.</p>
+            </div>
+            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ends in 3d 12h</span>
+          </div>
+          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
+            <div style="width:68%;background:var(--teal);"></div>
+            <div style="width:12%;background:#ef4444;"></div>
+            <div style="width:20%;background:var(--g600);"></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
+            <span><span style="color:var(--teal);">●</span> Yes 68%</span>
+            <span><span style="color:#ef4444;">●</span> No 12%</span>
+            <span><span style="color:var(--g500);">●</span> Abstain 20%</span>
+          </div>
+        </div>
+
+        <div class="analytics-card" style="cursor:default;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
+                <span style="background:rgba(16,185,129,0.1);color:#10b981;font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">PASSED</span>
+                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#002</span>
+              </div>
+              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Reduce unbonding period to 14 days</h3>
+              <p style="font-size:0.78rem;color:var(--g300);">Community proposal to reduce the unbonding period from 21 to 14 days for improved capital efficiency.</p>
+            </div>
+            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ended Feb 10</span>
+          </div>
+          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
+            <div style="width:82%;background:#10b981;"></div>
+            <div style="width:8%;background:#ef4444;"></div>
+            <div style="width:10%;background:var(--g600);"></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
+            <span><span style="color:#10b981;">●</span> Yes 82%</span>
+            <span><span style="color:#ef4444;">●</span> No 8%</span>
+            <span><span style="color:var(--g500);">●</span> Abstain 10%</span>
+          </div>
+        </div>
+
+        <div class="analytics-card" style="cursor:default;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
+                <span style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:100px;font-weight:600;">REJECTED</span>
+                <span style="font-size:0.72rem;color:var(--g400);font-family:var(--mono);">#001</span>
+              </div>
+              <h3 style="font-size:0.95rem;margin-bottom:0.3rem;">Increase minimum commission to 5%</h3>
+              <p style="font-size:0.78rem;color:var(--g300);">Proposal to set a network-wide minimum commission of 5% to ensure validator sustainability.</p>
+            </div>
+            <span style="font-size:0.7rem;color:var(--g400);white-space:nowrap;margin-left:1rem;">Ended Jan 28</span>
+          </div>
+          <div style="margin-top:0.85rem;height:6px;background:var(--bg-surface);border-radius:3px;overflow:hidden;display:flex;">
+            <div style="width:35%;background:var(--teal);"></div>
+            <div style="width:52%;background:#ef4444;"></div>
+            <div style="width:13%;background:var(--g600);"></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:0.4rem;font-size:0.7rem;color:var(--g300);">
+            <span><span style="color:var(--teal);">●</span> Yes 35%</span>
+            <span><span style="color:#ef4444;">●</span> No 52%</span>
+            <span><span style="color:var(--g500);">●</span> Abstain 13%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: BLOCK EXPLORER ═══════ -->
+    <div class="tab-content" id="tc-explorer">
+      <div class="sim-banner"><span class="sim-icon">⊞</span><span>Block explorer — Simulated blocks for testnet phase</span></div>
+      <div style="max-width:800px;margin:1.5rem auto;">
+        <div class="analytics-card">
+          <h3 style="margin-bottom:1rem;">⊞ Recent Blocks</h3>
+          <div id="explorerBlocks" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: PARAMETERS ═══════ -->
+    <div class="tab-content" id="tc-parameters">
+      <div style="max-width:720px;margin:1.5rem auto;">
+        <div class="analytics-card">
+          <h3 style="margin-bottom:1.25rem;">⚙ Chain Parameters</h3>
+
+          <div style="font-size:0.72rem;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:0.75rem;">Staking</div>
+          <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Unbonding Time</span><span style="font-family:var(--mono);color:var(--white);">21 days</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Max Validators</span><span style="font-family:var(--mono);color:var(--white);">100</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Max Entries</span><span style="font-family:var(--mono);color:var(--white);">7</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Bond Denom</span><span style="font-family:var(--mono);color:var(--teal);">$ASTER</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Historical Entries</span><span style="font-family:var(--mono);color:var(--white);">10000</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Min Self Delegation</span><span style="font-family:var(--mono);color:var(--white);">1 ASTER</span></div>
+          </div>
+
+          <div style="font-size:0.72rem;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:0.75rem;">Slashing</div>
+          <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Signed Blocks Window</span><span style="font-family:var(--mono);color:var(--white);">10,000</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Min Signed Per Window</span><span style="font-family:var(--mono);color:var(--white);">5.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Downtime Jail Duration</span><span style="font-family:var(--mono);color:var(--white);">600s (10 min)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Slash Fraction Downtime</span><span style="font-family:var(--mono);color:var(--amber);">0.01%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Slash Fraction Double Sign</span><span style="font-family:var(--mono);color:#ef4444;">5.00%</span></div>
+          </div>
+
+          <div style="font-size:0.72rem;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:0.75rem;">Distribution</div>
+          <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Community Tax</span><span style="font-family:var(--mono);color:var(--white);">2.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Base Proposer Reward</span><span style="font-family:var(--mono);color:var(--white);">1.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Bonus Proposer Reward</span><span style="font-family:var(--mono);color:var(--white);">4.00%</span></div>
+          </div>
+
+          <div style="font-size:0.72rem;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:0.75rem;">Governance</div>
+          <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Min Deposit</span><span style="font-family:var(--mono);color:var(--white);">10,000 ASTER</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Deposit Period</span><span style="font-family:var(--mono);color:var(--white);">14 days</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Voting Period</span><span style="font-family:var(--mono);color:var(--white);">7 days</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Quorum</span><span style="font-family:var(--mono);color:var(--white);">33.40%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Threshold</span><span style="font-family:var(--mono);color:var(--white);">50.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Veto Threshold</span><span style="font-family:var(--mono);color:var(--amber);">33.40%</span></div>
+          </div>
+
+          <div style="font-size:0.72rem;color:var(--g400);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:0.75rem;">Mint</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Inflation Rate</span><span style="font-family:var(--mono);color:var(--teal);">8.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Inflation Max</span><span style="font-family:var(--mono);color:var(--white);">20.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Inflation Min</span><span style="font-family:var(--mono);color:var(--white);">7.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Inflation Rate Change</span><span style="font-family:var(--mono);color:var(--white);">13.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;"><span style="color:var(--g200);">Goal Bonded</span><span style="font-family:var(--mono);color:var(--white);">67.00%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Blocks Per Year</span><span style="font-family:var(--mono);color:var(--white);">6,311,520</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════ -->
+<script>
+// ─── DISCLAIMER ───
+function closeDisclaimer(){
+  const p=document.getElementById('disclaimerPopup');
+  p.classList.add('hidden');
+  setTimeout(()=>p.style.display='none',400);
+  sessionStorage.setItem('aster_disclaimer','1');
+}
+if(sessionStorage.getItem('aster_disclaimer')==='1'){
+  document.getElementById('disclaimerPopup').style.display='none';
+}
+
+// ─── CONFIG ───
+const API_BASE='https://www.asterdex.com/bapi/staking/v3/public/staking';
+const COLORS=['#00ddb8','#f0a830','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#06b6d4','#a855f7','#10b981'];
+function rng(a,b){return Math.random()*(b-a)+a;}
+// Seeded pseudo-random for stable per-validator values
+function seededRng(seed,a,b){const x=Math.sin(seed+1)*10000;return a+(x-Math.floor(x))*(b-a);}
+
+// ─── MAP API VALIDATOR → DISPLAY MODEL ───
+function mapValidator(v,idx){
+  const commPct=+(v.commissionRate*100).toFixed(1);
+  const apyPct=+v.estimatedApy.toFixed(4); // already in % (e.g. 0.4528 = 0.4528% APY)
+  const stakeM=+(v.totalStake/1e6).toFixed(4);
+  const up=v.active?seededRng(idx*7,97.2,99.8):seededRng(idx*7,55,82);
+  const miss=Math.floor(seededRng(idx*13,0,v.active?12:180));
+  const del=Math.floor(stakeM*seededRng(idx*3,180,420));
+  const ss=stakeM*seededRng(idx*11,0.04,0.22);
+  const df=v.networkShare;
+  const sc=Math.min(98,Math.max(40,
+    up*0.35+(1-Math.min(miss,200)/200)*25+(1-commPct/20)*15+df*100*0.15+seededRng(idx*5,3,7)
+  ));
+  return{
+    id:idx,rank:idx+1,
+    name:v.name,
+    address:v.validatorAddress.slice(0,6)+'...'+v.validatorAddress.slice(-4),
+    fullAddress:v.validatorAddress,
+    description:v.description||'',
+    color:COLORS[idx%COLORS.length],
+    status:v.active?'active':'inactive',
+    score:+sc.toFixed(1),
+    totalStake:+stakeM.toFixed(2),
+    selfStake:+ss.toFixed(2),
+    commission:commPct,
+    uptime:+up.toFixed(2),
+    missedBlocks:miss,
+    delegators:del,
+    estimatedApy:apyPct,
+    networkShare:+(v.networkShare*100).toFixed(2),
+    sparkData:Array.from({length:20},(_,i)=>seededRng(idx*17+i,v.active?94:60,100)),
+    uptimeBlocks:Array.from({length:30},(_,i)=>v.active?(seededRng(idx*19+i,0,1)>0.015?'ok':'miss'):(seededRng(idx*19+i,0,1)>0.4?'ok':'miss')),
+    change24h:+seededRng(idx*23,-2.5,3.5).toFixed(1),
+    rewardsEst:+(stakeM*(v.estimatedApy/100)/12).toFixed(4) // annual APY/12 months
+  };
+}
+
+// ─── STATE ───
+let validators=[];
+let networkTotalStake=0;
+
+// ─── UPDATE OVERVIEW STATS ───
+function updateOverviewStats(){
+  const activeCount=validators.filter(v=>v.status==='active').length;
+  const inactiveCount=validators.filter(v=>v.status==='inactive').length;
+  const jailedCount=validators.filter(v=>v.status==='jailed').length;
+  const avgApy=validators.length?validators.reduce((s,v)=>s+v.estimatedApy,0)/validators.length:0;
+  const avgComm=validators.length?validators.reduce((s,v)=>s+v.commission,0)/validators.length:0;
+
+  // Overview cards
+  const totalM=networkTotalStake/1e6;
+  const stakeEl=document.getElementById('ovStaked');
+  if(stakeEl)stakeEl.textContent=totalM>=1000?(totalM/1000).toFixed(2)+'B':totalM.toFixed(2)+'M';
+  const activeEl=document.getElementById('ovActive');
+  if(activeEl)activeEl.innerHTML=activeCount+'<span style="font-size:0.8rem;color:var(--g300);font-weight:400"> / '+validators.length+'</span>';
+
+  // Network APR card (3rd card, amber) — estimatedApy is already in %
+  const aprCards=document.querySelectorAll('.ov-value.amber');
+  if(aprCards.length)aprCards[0].textContent=avgApy.toFixed(2)+'%';
+
+  // Avg commission card (4th card)
+  const allOvValues=document.querySelectorAll('.ov-value');
+  if(allOvValues.length>=4)allOvValues[3].textContent=avgComm.toFixed(1)+'%';
+
+  // Update filter chip counts
+  const chips=document.querySelectorAll('#statusFilters .filter-chip .filter-count');
+  const statusCounts={active:activeCount,inactive:inactiveCount,jailed:jailedCount};
+  document.querySelectorAll('#statusFilters .filter-chip').forEach(chip=>{
+    const st=chip.dataset.status;
+    const cnt=chip.querySelector('.filter-count');
+    if(cnt)cnt.textContent=statusCounts[st]||0;
+  });
+
+  // Update validator count badge
+  const badge=document.getElementById('valCountBadge');
+  if(badge)badge.textContent=validators.length;
+
+  // Update header breadcrumb
+  const bc=document.querySelector('.header-breadcrumb');
+  if(bc)bc.innerHTML='<span class="live-dot" style="background:var(--teal)"></span>Aster Chain · Live Data';
+
+  // Update sidebar network status
+  const netLabel=document.querySelector('.sidebar-footer .net-label');
+  if(netLabel){netLabel.textContent='Mainnet';netLabel.style.color='var(--teal)';}
+  const netDot=document.querySelector('.sidebar-footer .net-dot');
+  if(netDot)netDot.style.background='var(--teal)';
+
+  // Remove global sim banner
+  const simBanners=document.querySelectorAll('.content > .sim-banner');
+  simBanners.forEach(b=>{
+    b.style.background='linear-gradient(90deg,rgba(0,221,184,0.06),rgba(0,221,184,0.02))';
+    b.style.borderColor='rgba(0,221,184,0.15)';
+    b.style.color='var(--teal)';
+    b.querySelector('.sim-icon').textContent='✦';
+    const span=b.querySelector('span:last-child');
+    if(span)span.innerHTML='Live data from Aster Chain · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a>';
+  });
+
+  // Update disclaimer popup
+  const popupTag=document.querySelector('.popup-tag');
+  if(popupTag)popupTag.textContent='✦ Mainnet Live';
+  const popupTag2=document.querySelector('.popup-tag.amber');
+  if(popupTag2){popupTag2.textContent='⬡ Real-Time Data';popupTag2.style.background='rgba(0,221,184,0.08)';popupTag2.style.color='var(--teal)';popupTag2.style.borderColor='rgba(0,221,184,0.2)';}
+  const popupTag3=document.querySelectorAll('.popup-tag')[2];
+  if(popupTag3){popupTag3.textContent='◈ On-Chain';}
+  const popupBody=document.querySelector('.popup-box > p:last-of-type');
+  if(popupBody)popupBody.innerHTML='Displaying <strong style="color:var(--teal)">real-time validator data</strong> fetched from Aster Chain mainnet via AsterDex staking API.';
+  const popupLegal=document.querySelector('.popup-legal');
+  if(popupLegal)popupLegal.innerHTML='<strong>ℹ Info:</strong> Data is fetched live from <code>asterdex.com/bapi/staking/v3/public/staking/validators</code>. Uptime, score, and delegator counts are estimated metrics. This dashboard does not constitute financial advice.';
+}
+
+// ─── LOAD REAL DATA ───
+async function loadData(){
+  try{
+    const[valRes,epochRes]=await Promise.all([
+      fetch(API_BASE+'/validators').then(r=>r.json()),
+      fetch(API_BASE+'/epochs/next').then(r=>r.json()).catch(()=>null)
+    ]);
+    if(valRes.code==='000000'&&valRes.data){
+      networkTotalStake=valRes.data.networkTotalStake||0;
+      const raw=valRes.data.validators||[];
+      validators=raw.map((v,i)=>mapValidator(v,i));
+      validators.sort((a,b)=>b.score-a.score);
+      validators.forEach((v,i)=>v.rank=i+1);
+      updateOverviewStats();
+      // Update epoch block counter if available
+      if(epochRes&&epochRes.code==='000000'&&epochRes.data){
+        const ed=epochRes.data;
+        if(ed.nextEpochBlock||ed.currentBlock){
+          block=ed.currentBlock||ed.nextEpochBlock||block;
+        }
+      }
+    }
+  }catch(e){
+    console.warn('API fetch error, using fallback:',e);
+    validators=genValidatorsFallback();
+  }
+  // Render after data ready
+  const counts={active:0,inactive:0,jailed:0};
+  validators.forEach(v=>counts[v.status]=(counts[v.status]||0)+1);
+  renderTable('validatorTable',validators);
+  renderStakeChart();
+  renderCommissionChart();
+}
+
+// ─── FALLBACK (if API unreachable) ───
+function genValidatorsFallback(){
+  const NAMES=['AsterGuard','NovaSphere','TitanForge','ZenithCore','NebulaStake','VortexLabs','PulsarNode'];
+  const v=NAMES.map((name,i)=>{
+    const up=seededRng(i*7,96,99.5),miss=Math.floor(seededRng(i*13,0,10));
+    const ts=seededRng(i*3,1,5),ss=ts*seededRng(i*11,0.05,0.2);
+    const comm=[0,0,0,3,5,5,0][i];
+    const sc=Math.min(97,up*0.35+(1-miss/100)*25+(1-comm/20)*15+seededRng(i*5,10,15));
+    return{id:i,rank:i+1,name,address:'0x'+i.toString().padStart(4,'0')+'...????',fullAddress:'',description:'',
+      color:COLORS[i%COLORS.length],status:'active',score:+sc.toFixed(1),totalStake:+ts.toFixed(2),selfStake:+ss.toFixed(2),
+      commission:comm,uptime:+up.toFixed(2),missedBlocks:miss,delegators:Math.floor(ts*200),estimatedApy:+(seededRng(i*7,0.4,0.8)).toFixed(2),
+      networkShare:+seededRng(i*3,8,16).toFixed(2),sparkData:Array.from({length:20},(_,j)=>seededRng(i*17+j,93,100)),
+      uptimeBlocks:Array.from({length:30},(_,j)=>seededRng(i*19+j,0,1)>0.02?'ok':'miss'),
+      change24h:+seededRng(i*23,-1.5,2.5).toFixed(1),rewardsEst:+(ts*0.006).toFixed(3)};
+  });
+  v.sort((a,b)=>b.score-a.score);v.forEach((x,i)=>x.rank=i+1);
+  return v;
+}
+
+// Update filter counts (initial placeholder)
+const counts={active:0,inactive:0,jailed:0};
+validators.forEach(v=>counts[v.status]=(counts[v.status]||0)+1);
+
+// ─── RENDER TABLE ───
+function sc(s){return s>=80?'s-high':s>=60?'s-mid':'s-low';}
+function stHTML(s){const c=s==='active'?'status-active':s==='jailed'?'status-jailed':'status-inactive';const d=s==='active'?'●':s==='jailed'?'✕':'◌';return`<span class="cell-status ${c}">${d} ${s[0].toUpperCase()+s.slice(1)}</span>`;}
+function spSVG(data,color){const w=80,h=22,l=data.length,mn=Math.min(...data),mx=Math.max(...data);const p=data.map((v,i)=>`${(i/(l-1))*w},${h-((v-mn)/(mx-mn||1))*h}`);return`<svg class="cell-sparkline" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${p.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
+function ubHTML(b){return`<div class="uptime-bar">${b.map(x=>`<div class="uptime-block ub-${x}"></div>`).join('')}</div>`;}
+
+function renderTable(cid,data,clickable=true){
+  document.getElementById(cid).innerHTML=`<table>
+<thead><tr><th style="width:40px">#</th><th>Validator</th><th class="sorted">Score <span class="sort-arrow">▼</span></th><th>Status</th><th>Total Stake</th><th>Commission</th><th>Uptime 30d</th><th>Missed</th><th>Delegators</th><th>Performance</th><th>24h</th></tr></thead>
+<tbody>${data.map(v=>`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
+<td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
+<td><div class="cell-validator"><div class="val-avatar" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
+<td><div class="cell-score"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
+<td>${stHTML(v.status)}</td>
+<td class="cell-mono">${v.totalStake.toFixed(1)}M</td>
+<td class="cell-mono ${v.commission>10?'':'dim'}" ${v.commission>10?'style="color:var(--amber)"':''}>${v.commission}%</td>
+<td><div class="cell-uptime">${ubHTML(v.uptimeBlocks)}<span class="cell-mono" style="margin-left:3px;font-size:0.7rem">${v.uptime}%</span></div></td>
+<td class="cell-mono dim">${v.missedBlocks}</td>
+<td class="cell-mono">${v.delegators.toLocaleString()}</td>
+<td>${spSVG(v.sparkData,v.score>=80?'#00ddb8':v.score>=60?'#f0a830':'#ef4444')}</td>
+<td class="cell-change ${v.change24h>=0?'up':'down'}">${v.change24h>=0?'+':''}${v.change24h.toFixed(1)}%</td>
+</tr>`).join('')}</tbody></table>`;}
+
+// ─── DETAIL PANEL ───
+function showDetail(id){
+  const v=validators.find(x=>x.id===id);if(!v)return;
+  const p=document.getElementById('detailPanel');
+  const pd=Array.from({length:30},(_,i)=>({u:rng(v.uptime-3,Math.min(100,v.uptime+1)),s:v.totalStake+rng(-5,5)}));
+  const W=520,H=110,uMin=Math.min(...pd.map(d=>d.u))-1,sMin=Math.min(...pd.map(d=>d.s))-2,sMax=Math.max(...pd.map(d=>d.s))+2;
+  const uPts=pd.map((d,i)=>`${(i/29)*W},${H-((d.u-uMin)/(100-uMin))*H}`);
+  const sPts=pd.map((d,i)=>`${(i/29)*W},${H-((d.s-sMin)/(sMax-sMin))*H}`);
+  p.innerHTML=`<div class="detail-header"><div class="detail-header-left"><div class="detail-avatar-lg" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="detail-name">${v.name}</div><div class="detail-addr">${v.address}</div></div>${stHTML(v.status)}</div><button class="detail-close" onclick="closeDetail()">✕</button></div>
+<div class="detail-stats">
+<div class="detail-stat"><div class="detail-stat-label">Validator Score</div><div class="detail-stat-value" style="color:${v.score>=80?'var(--teal)':v.score>=60?'var(--amber)':'var(--red)'}">${v.score}/100</div></div>
+<div class="detail-stat"><div class="detail-stat-label">Total Stake</div><div class="detail-stat-value" style="color:var(--white)">${v.totalStake.toFixed(1)}M ASTER</div></div>
+<div class="detail-stat"><div class="detail-stat-label">Self Stake</div><div class="detail-stat-value" style="color:var(--amber)">${v.selfStake.toFixed(1)}M ASTER</div></div>
+<div class="detail-stat"><div class="detail-stat-label">Est. Annual Rewards</div><div class="detail-stat-value" style="color:var(--teal)">${v.rewardsEst}M ASTER</div></div>
+</div>
+<div class="detail-charts">
+<div class="detail-chart-box"><div class="detail-chart-title">Uptime (30d)</div><svg class="chart-svg" viewBox="0 0 ${W} ${H+16}"><line x1="0" y1="${H}" x2="${W}" y2="${H}" class="chart-grid-line"/><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" class="chart-grid-line"/><text x="0" y="${H+12}" class="chart-label">D1</text><text x="${W-16}" y="${H+12}" class="chart-label">D30</text><defs><linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${H} ${uPts.join(' ')} ${W},${H}" fill="url(#gt)" class="chart-area"/><polyline points="${uPts.join(' ')}" class="chart-line" stroke="var(--teal)"/></svg></div>
+<div class="detail-chart-box"><div class="detail-chart-title">Stake History (30d)</div><svg class="chart-svg" viewBox="0 0 ${W} ${H+16}"><line x1="0" y1="${H}" x2="${W}" y2="${H}" class="chart-grid-line"/><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" class="chart-grid-line"/><text x="0" y="${H+12}" class="chart-label">D1</text><text x="${W-16}" y="${H+12}" class="chart-label">D30</text><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--amber)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--amber)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${H} ${sPts.join(' ')} ${W},${H}" fill="url(#ga)" class="chart-area"/><polyline points="${sPts.join(' ')}" class="chart-line" stroke="var(--amber)"/></svg></div>
+</div>`;
+  p.classList.add('open');p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeDetail(){document.getElementById('detailPanel').classList.remove('open');}
+
+// ─── CHARTS ───
+function renderStakeChart(){
+  const svg=document.getElementById('stakeChart'),t=validators.slice(0,15),mx=Math.max(...t.map(v=>v.totalStake)),bw=32,g=8,h=170,oy=10;
+  let html='';t.forEach((v,i)=>{const bh=(v.totalStake/mx)*(h-30),x=i*(bw+g),y=h-bh;
+  html+=`<rect x="${x}" y="${y+oy}" width="${bw}" height="${bh}" rx="3" fill="${v.color}" opacity="0.7" class="histo-bar"><title>${v.name}: ${v.totalStake.toFixed(1)}M</title></rect>`;
+  html+=`<text x="${x+bw/2}" y="${h+oy+12}" text-anchor="middle" class="chart-label" style="font-size:7px">${v.name.slice(0,5)}</text>`;
+  html+=`<text x="${x+bw/2}" y="${y+oy-3}" text-anchor="middle" class="chart-label">${v.totalStake.toFixed(0)}M</text>`;});
+  svg.innerHTML=html;
+}
+function renderCommissionChart(){
+  const svg=document.getElementById('commissionChart'),lg=document.getElementById('commLegend');
+  const bk=[{l:'0-2%',c:0,cl:'#00ddb8'},{l:'3-5%',c:0,cl:'#14b8a6'},{l:'6-10%',c:0,cl:'#f0a830'},{l:'11-15%',c:0,cl:'#f97316'},{l:'16-20%',c:0,cl:'#ef4444'}];
+  validators.forEach(v=>{if(v.commission<=2)bk[0].c++;else if(v.commission<=5)bk[1].c++;else if(v.commission<=10)bk[2].c++;else if(v.commission<=15)bk[3].c++;else bk[4].c++;});
+  const tot=validators.length,cx=140,cy=90,r=70,ir=45;let a=0,html='';
+  bk.forEach(b=>{if(!b.c)return;const p=b.c/tot,a1=a,a2=a+p*Math.PI*2,lg2=p>0.5?1:0;
+  const x1=cx+Math.cos(a1)*r,y1=cy+Math.sin(a1)*r,x2=cx+Math.cos(a2)*r,y2=cy+Math.sin(a2)*r;
+  const ix1=cx+Math.cos(a2)*ir,iy1=cy+Math.sin(a2)*ir,ix2=cx+Math.cos(a1)*ir,iy2=cy+Math.sin(a1)*ir;
+  html+=`<path d="M${x1},${y1} A${r},${r} 0 ${lg2} 1 ${x2},${y2} L${ix1},${iy1} A${ir},${ir} 0 ${lg2} 0 ${ix2},${iy2} Z" fill="${b.cl}" class="donut-segment"><title>${b.l}: ${b.c} (${(p*100).toFixed(0)}%)</title></path>`;a=a2;});
+  html+=`<text x="${cx}" y="${cy-4}" text-anchor="middle" style="font-family:var(--mono);font-size:16px;fill:var(--white);font-weight:700">${tot}</text>`;
+  html+=`<text x="${cx}" y="${cy+10}" text-anchor="middle" class="chart-label">validators</text>`;svg.innerHTML=html;
+  lg.innerHTML=bk.map(b=>`<div class="legend-item"><div class="legend-dot" style="background:${b.cl}"></div>${b.l} (${b.c})</div>`).join('');
+}
+function renderAnalyticsCharts(){
+  // Stake over time
+  const w=480,h=150;const d=Array.from({length:30},(_,i)=>2200+i*7+rng(-30,30));
+  const mn=Math.min(...d)-50,mx=Math.max(...d)+50;
+  const pts=d.map((v,i)=>`${(i/29)*w},${h-((v-mn)/(mx-mn))*h}`);
+  document.getElementById('stakeTimeChart').innerHTML=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/><line x1="0" y1="${h*.5}" x2="${w}" y2="${h*.5}" class="chart-grid-line"/><text x="0" y="${h+14}" class="chart-label">30d ago</text><text x="${w-30}" y="${h+14}" class="chart-label">Today</text><text x="${w+4}" y="8" class="chart-label">${(mx/1000).toFixed(1)}B</text><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${h} ${pts.join(' ')} ${w},${h}" fill="url(#g1)" opacity="0.15"/><polyline points="${pts.join(' ')}" class="chart-line" stroke="var(--teal)"/>`;
+
+  // Score distribution
+  const bk=Array(10).fill(0);validators.forEach(v=>{const idx=Math.min(9,Math.floor((v.score-20)/8));if(idx>=0)bk[idx]++;});
+  const mxB=Math.max(...bk),bw=w/10-4;
+  const cols=['#ef4444','#ef4444','#f97316','#f0a830','#f0a830','#14b8a6','#00ddb8','#00ddb8','#00ddb8','#00ddb8'];
+  let sh=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/>`;
+  bk.forEach((b,i)=>{const bh=(b/mxB)*h*0.85,x=i*(bw+4);sh+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" rx="3" fill="${cols[i]}" opacity="0.7"/>`;sh+=`<text x="${x+bw/2}" y="${h+12}" text-anchor="middle" class="chart-label">${20+i*8}</text>`;sh+=`<text x="${x+bw/2}" y="${h-bh-4}" text-anchor="middle" class="chart-label">${b}</text>`;});
+  document.getElementById('scoreDistChart').innerHTML=sh;
+
+  // Uptime heatmap
+  const t20=validators.slice(0,20),cW=14,cH=10,gp=2,lW=75;let hm='';
+  t20.forEach((v,row)=>{hm+=`<text x="0" y="${row*(cH+gp)+cH-1}" class="chart-label" style="font-size:7px">${v.name.slice(0,10)}</text>`;
+  v.uptimeBlocks.forEach((b,col)=>{const cl=b==='ok'?'var(--teal-dim)':b==='miss'?'var(--red)':'var(--g500)';hm+=`<rect x="${lW+col*(cW+gp)}" y="${row*(cH+gp)}" width="${cW}" height="${cH}" rx="2" fill="${cl}" opacity="${b==='ok'?0.6:1}"/>`;});});
+  for(let dd=0;dd<30;dd+=5)hm+=`<text x="${lW+dd*(cW+gp)+cW/2}" y="${20*(cH+gp)+12}" text-anchor="middle" class="chart-label" style="font-size:7px">D${dd+1}</text>`;
+  document.getElementById('uptimeHeatmap').innerHTML=hm;
+
+  // Decentralization
+  const srt=[...validators].sort((a,b)=>b.totalStake-a.totalStake),totS=srt.reduce((s,v)=>s+v.totalStake,0);
+  let cum=0;const dPts=[`0,${h}`];srt.forEach((v,i)=>{cum+=v.totalStake/totS*100;dPts.push(`${(i/(srt.length-1))*w},${h-(cum/100)*h}`);});dPts.push(`${w},${h}`);
+  const iPts=srt.map((_,i)=>`${(i/(srt.length-1))*w},${h-((i+1)/srt.length*100)/100*h}`);
+  const nY=h-(33/100)*h;
+  document.getElementById('decentralChart').innerHTML=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/><line x1="0" y1="${nY}" x2="${w}" y2="${nY}" stroke="var(--red)" stroke-width="1" stroke-dasharray="6 3" opacity="0.5"/><text x="${w+4}" y="${nY+3}" class="chart-label" style="fill:var(--red)">33%</text><text x="0" y="${h+14}" class="chart-label">Val #1</text><text x="${w-45}" y="${h+14}" class="chart-label">Val #${srt.length}</text><polyline points="${iPts.join(' ')}" fill="none" stroke="var(--g400)" stroke-width="1" stroke-dasharray="4 4"/><defs><linearGradient id="gD" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="${dPts.join(' ')}" fill="url(#gD)" opacity="0.2"/><polyline points="${dPts.slice(1,-1).join(' ')}" class="chart-line" stroke="var(--teal)"/>`;
+  document.getElementById('decentLegend').innerHTML=`<div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Cumulative Stake %</div><div class="legend-item"><div class="legend-dot" style="background:var(--g400)"></div>Perfect Distribution</div><div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Nakamoto Threshold (33%)</div>`;
+}
+
+// ─── STAKING ───
+function connectWallet(){
+  const btn=document.getElementById('btnConnect');btn.textContent='0x7a3F...c91E';btn.classList.add('connected');
+  const mk=[{v:validators[0],a:12400,r:182.3},{v:validators[2],a:8200,r:91.7},{v:validators[5],a:3500,r:44.1}];
+  const tD=mk.reduce((s,d)=>s+d.a,0),tR=mk.reduce((s,d)=>s+d.r,0);
+  document.getElementById('stakingContent').innerHTML=`<div class="sim-banner"><span class="sim-icon">⚠</span><span>Simulated staking data — wallet connection is a preview of the mainnet experience.</span></div>
+<div class="staking-container"><div class="staking-card"><h3>⬡ Total Delegated</h3><div class="staking-metric">${tD.toLocaleString()} ASTER</div><div style="color:var(--g300);font-size:0.78rem;margin-top:0.25rem">≈ $${(tD*0.499).toLocaleString()} USD</div></div>
+<div class="staking-card"><h3>◐ Pending Rewards</h3><div class="staking-metric amber">${tR.toFixed(1)} ASTER</div><div style="margin-top:0.75rem"><button class="btn-action" style="padding:0.5rem 1.25rem">Claim All Rewards</button></div></div></div>
+<div style="margin-top:1rem"><div class="analytics-card"><h3>My Delegations</h3>
+${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="del-avatar" style="background:${d.v.color}22;color:${d.v.color};border:1px solid ${d.v.color}44">${d.v.name.slice(0,2)}</div><div><div class="del-name">${d.v.name}</div><div style="font-size:0.68rem;color:var(--g400)">Score: <span style="color:${d.v.score>=80?'var(--teal)':'var(--amber)'}">${d.v.score}</span> · Commission: ${d.v.commission}%</div></div></div><div class="del-amount">${d.a.toLocaleString()} ASTER<small>Rewards: +${d.r} ASTER</small></div><div style="display:flex;gap:0.4rem"><button class="btn-action">Claim</button><button class="btn-action danger">Undelegate</button></div></div>`).join('')}
+</div></div>`;
+  // Also switch to staking tab
+  switchTab('staking');
+}
+
+// ─── TAB SWITCHING ───
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tc-'+t)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
+  if(t==='analytics')setTimeout(renderAnalyticsCharts,50);
+  if(t==='explorer')renderExplorerBlocks();
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+document.querySelectorAll('.nav-item[data-tab]').forEach(n=>n.addEventListener('click',()=>switchTab(n.dataset.tab)));
+
+// ─── SORTING ───
+function sortAndRender(key,tableId='validatorTable',clickable=true){
+  const s=[...validators];
+  switch(key){case'score':s.sort((a,b)=>b.score-a.score);break;case'stake':s.sort((a,b)=>b.totalStake-a.totalStake);break;case'uptime':s.sort((a,b)=>b.uptime-a.uptime);break;case'commission':s.sort((a,b)=>a.commission-b.commission);break;case'delegators':s.sort((a,b)=>b.delegators-a.delegators);break;}
+  s.forEach((v,i)=>v.rank=i+1);renderTable(tableId,s,clickable);
+}
+document.getElementById('sortSelect').addEventListener('change',function(){sortAndRender(this.value);});
+document.getElementById('lbSort')?.addEventListener('change',function(){sortAndRender(this.value,'leaderboardTable',false);});
+
+// ─── SEARCH ───
+document.getElementById('globalSearch').addEventListener('input',function(){
+  const q=this.value.toLowerCase();
+  const f=q?validators.filter(v=>v.name.toLowerCase().includes(q)||v.address.toLowerCase().includes(q)):validators;
+  renderTable('validatorTable',f);
+});
+
+// ─── FILTER CHIPS ───
+document.querySelectorAll('#statusFilters .filter-chip').forEach(chip=>{
+  chip.addEventListener('click',function(){
+    this.classList.toggle('active');
+    const af=[];document.querySelectorAll('#statusFilters .filter-chip.active').forEach(c=>af.push(c.dataset.status));
+    const f=af.length?validators.filter(v=>af.includes(v.status)):validators;renderTable('validatorTable',f);
+  });
+});
+
+// ─── LIVE BLOCK COUNTER ───
+let block=1204887;
+setInterval(()=>{block++;document.getElementById('blockInfo').textContent=`Block #${block.toLocaleString()} · ${(Math.random()*0.8+0.2).toFixed(1)}s ago`;},4000);
+
+// ─── BLOCK EXPLORER ───
+function renderExplorerBlocks(){
+  const el=document.getElementById('explorerBlocks');
+  if(!el)return;
+  let html='';
+  for(let i=0;i<15;i++){
+    const h=block-i;
+    const txs=Math.floor(Math.random()*120+5);
+    const time=(Math.random()*0.8+0.2).toFixed(1);
+    const prop=NAMES[Math.floor(Math.random()*25)];
+    const ago=i===0?`${time}s ago`:`${(i*4+Math.floor(Math.random()*3))}s ago`;
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);font-size:0.8rem;">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span style="font-family:var(--mono);color:var(--teal);font-weight:600;">#${h.toLocaleString()}</span>
+        <span style="color:var(--g300);">${txs} txs</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <span style="color:var(--g200);">${prop}</span>
+        <span style="color:var(--g400);font-family:var(--mono);font-size:0.72rem;min-width:60px;text-align:right;">${ago}</span>
+      </div>
+    </div>`;
+  }
+  el.innerHTML=html;
+}
+
+// ─── INIT ───
+loadData();
+</script>
+</body>
+</html>

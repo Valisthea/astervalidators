@@ -1,0 +1,12 @@
+# ═══════════════════════════════════════
+# robots.txt — astervalidators.com
+# ═══════════════════════════════════════
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://astervalidators.com/sitemap.xml
+
+# Crawl-delay (optional, be nice to crawlers)
+Crawl-delay: 1
