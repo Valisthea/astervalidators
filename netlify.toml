@@ -43,10 +43,17 @@
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=600"
 
-# ─── Proxy API (évite les CORS + CSP) ───
+# ─── Proxy API staking (évite les CORS + CSP) ───
 [[redirects]]
   from = "/api/staking/*"
   to = "https://www.asterdex.com/bapi/staking/v3/public/staking/:splat"
+  status = 200
+  force = true
+
+# ─── Proxy prix ASTER → CoinGecko ───
+[[redirects]]
+  from = "/api/price/aster"
+  to = "https://api.coingecko.com/api/v3/simple/price?ids=aster&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true"
   status = 200
   force = true
 

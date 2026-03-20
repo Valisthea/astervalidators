@@ -326,7 +326,9 @@ input,select,button{font-family:var(--font);}
 .sim-banner a{color:var(--amber);text-decoration:underline;text-underline-offset:2px;}
 
 /* ═══════ OVERVIEW CARDS ═══════ */
-.overview-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem;}
+.overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.epoch-bar-wrap{height:3px;background:var(--g600);border-radius:2px;overflow:hidden;margin:0.45rem 0 0.2rem;}
+.epoch-bar-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 1s linear;}
 .ov-card{
   background:var(--bg-card);border:1px solid var(--border);
   border-radius:var(--radius);padding:1.1rem 1.25rem;
@@ -504,6 +506,7 @@ tr:last-child td{border-bottom:none;}
 
 /* ═══════ RESPONSIVE ═══════ */
 @media(max-width:1200px){.overview-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:700px){.overview-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:1000px){
   .detail-stats{grid-template-columns:repeat(2,1fr);}
   .detail-charts{grid-template-columns:1fr;}
@@ -658,35 +661,50 @@ tr:last-child td{border-bottom:none;}
 
     <!-- OVERVIEW CARDS -->
     <div class="overview-grid">
+      <!-- Row 1 -->
       <div class="ov-card fade-in d1">
-        <div class="ov-label">⬡ Total Staked</div>
-        <div class="ov-value teal" id="ovStaked">—</div>
-        <div class="ov-sub">ASTER · Genesis mainnet</div>
+        <div class="ov-label">◈ ASTER Price</div>
+        <div class="ov-value" style="color:var(--white)" id="ovPrice">—</div>
+        <div class="ov-sub" id="ovPriceSub" style="display:flex;align-items:center;gap:0.4rem">Not yet listed</div>
       </div>
       <div class="ov-card fade-in d2">
+        <div class="ov-label">⬡ Total Staked</div>
+        <div class="ov-value teal" id="ovStaked">—</div>
+        <div class="ov-sub" id="ovStakedSub">ASTER · Genesis mainnet</div>
+      </div>
+      <div class="ov-card fade-in d3">
         <div class="ov-label">◈ Active Validators</div>
         <div class="ov-value" style="color:var(--white)" id="ovActive">—</div>
         <div class="ov-sub" id="ovActiveSub">Genesis set</div>
       </div>
-      <div class="ov-card amber-accent fade-in d3">
+      <div class="ov-card amber-accent fade-in d4">
         <div class="ov-label">◐ Avg Base APY</div>
         <div class="ov-value amber" id="ovApy">—</div>
-        <div class="ov-sub" id="ovApySub">Base only · <span style="color:var(--teal)">+Loyalty rewards</span></div>
+        <div class="ov-sub" id="ovApySub">Active validators · +Loyalty</div>
       </div>
-      <div class="ov-card fade-in d4">
+      <!-- Row 2 -->
+      <div class="ov-card fade-in d1">
+        <div class="ov-label">⬡ Nakamoto Coefficient
+          <span class="score-info" style="margin-left:3px">ⓘ<div class="score-tooltip" style="min-width:210px"><div class="score-tooltip-title">⬡ Nakamoto Coefficient</div><div style="font-size:0.7rem;color:var(--g300);line-height:1.6">Minimum number of validators needed to collectively control &gt;33% of total stake.<br><br>Lower = more decentralized.<br>A value of 1 means one validator alone holds &gt;33% — a centralization risk.</div></div></span>
+        </div>
+        <div class="ov-value teal" id="ovNakamoto">—</div>
+        <div class="ov-sub" id="ovNakamotoSub">validators control >33% stake</div>
+      </div>
+      <div class="ov-card fade-in d2">
         <div class="ov-label">↕ Avg Commission</div>
         <div class="ov-value" style="color:var(--white)" id="ovCommission">—</div>
         <div class="ov-sub" id="ovCommissionSub">—</div>
       </div>
-      <div class="ov-card fade-in d5">
+      <div class="ov-card fade-in d3">
         <div class="ov-label">⬡ Weekly Reward Pool</div>
-        <div class="ov-value green">450K</div>
-        <div class="ov-sub"><span style="color:var(--teal)">150K</span> Base · <span style="color:var(--amber)">300K</span> Loyalty · ASTER</div>
+        <div class="ov-value" style="color:var(--green,#10b981)">450K</div>
+        <div class="ov-sub"><span style="color:var(--teal)">150K</span> Base · <span style="color:var(--amber)">300K</span> Loyalty</div>
       </div>
-      <div class="ov-card fade-in d6">
+      <div class="ov-card fade-in d4">
         <div class="ov-label">◷ Current Epoch</div>
-        <div class="ov-value" style="color:var(--white);font-size:1rem;" id="ovEpoch">—</div>
-        <div class="ov-sub" id="ovEpochSub">Weekly · Mon→Sun UTC</div>
+        <div class="ov-value" style="color:var(--white);font-size:0.95rem;" id="ovEpoch">—</div>
+        <div class="epoch-bar-wrap"><div class="epoch-bar-fill" id="epochBarFill" style="width:0%"></div></div>
+        <div class="ov-sub"><span id="epochCountdown" style="font-family:var(--mono);color:var(--teal);font-weight:600">—</span> <span style="color:var(--g400)">remaining</span></div>
       </div>
     </div>
 
@@ -827,7 +845,36 @@ tr:last-child td{border-bottom:none;}
     <!-- ═══════ TAB: DELEGATE ═══════ -->
     <div class="tab-content" id="tc-delegate">
       <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">⧉</span><span>Connect your wallet on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a> to delegate ASTER tokens</span></div>
-      <div style="max-width:560px;margin:1.5rem auto;">
+
+      <!-- ─── APY REWARD CALCULATOR ─── -->
+      <div style="max-width:560px;margin:1.5rem auto 0;">
+        <div class="analytics-card">
+          <h3 style="margin-bottom:1rem;">◐ APY Reward Calculator <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 7px;border-radius:4px;vertical-align:middle">Live APY</span></h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+            <div>
+              <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Amount (ASTER)</label>
+              <input id="calcAmount" type="number" min="0" placeholder="1000" style="width:100%;padding:0.55rem 0.75rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--white);font-size:0.9rem;font-family:var(--mono);box-sizing:border-box" oninput="updateCalc()">
+            </div>
+            <div>
+              <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Validator</label>
+              <select id="calcSelect" class="filter-select" style="width:100%;padding:0.55rem 0.75rem;font-size:0.82rem;" onchange="updateCalc()">
+                <option>Loading...</option>
+              </select>
+            </div>
+          </div>
+          <div id="calcResults" style="padding:1rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.5rem;"><span style="color:var(--g300)">APY (base)</span><span style="color:var(--teal);font-family:var(--mono);font-weight:700" id="calcApy">—</span></div>
+            <div style="height:1px;background:var(--border);margin:0.6rem 0;"></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem;"><span style="color:var(--g300)">Weekly rewards</span><span style="font-family:var(--mono);font-weight:600;color:var(--white)" id="calcWeekly">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem;"><span style="color:var(--g300)">Monthly rewards</span><span style="font-family:var(--mono);font-weight:600;color:var(--white)" id="calcMonthly">—</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem;"><span style="color:var(--g300)">Annual rewards</span><span style="font-family:var(--mono);font-weight:700;color:var(--teal)" id="calcAnnual">—</span></div>
+            <div id="calcUsdRow" style="display:none;display:flex;justify-content:space-between;font-size:0.78rem;margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border)"><span style="color:var(--g400)">Annual in USD</span><span style="font-family:var(--mono);color:var(--amber);font-weight:600" id="calcUsd">—</span></div>
+          </div>
+          <div style="font-size:0.67rem;color:var(--g500);margin-top:0.6rem;line-height:1.5">⚠ Base APY only — does not include loyalty rewards (300K ASTER/week distributed by veASTER weight, duration-dependent).</div>
+        </div>
+      </div>
+
+      <div style="max-width:560px;margin:1rem auto;">
         <div class="analytics-card">
           <h3 style="margin-bottom:1rem;">⧉ Delegate $ASTER</h3>
           <div style="margin-bottom:1rem;">
@@ -1096,6 +1143,97 @@ function computeScores(vals){
 // ─── STATE ───
 let validators=[];
 let networkTotalStake=0;
+let asterPrice=null; // USD price of ASTER, null = not available
+
+// ─── NAKAMOTO COEFFICIENT ───
+// Minimum number of validators that together hold > 33% of stake
+function nakamotoCoeff(){
+  if(!validators.length)return null;
+  const sorted=[...validators].sort((a,b)=>b.networkShare-a.networkShare);
+  let cum=0,n=0;
+  for(const v of sorted){cum+=v.networkShare;n++;if(cum>=33)break;}
+  return n;
+}
+
+// ─── FETCH ASTER PRICE ───
+async function fetchPrice(){
+  try{
+    const r=await fetch('/api/price/aster');
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d&&d.aster&&d.aster.usd){
+      asterPrice=d.aster.usd;
+      const chg=d.aster.usd_24h_change;
+      const priceEl=document.getElementById('ovPrice');
+      const subEl=document.getElementById('ovPriceSub');
+      if(priceEl)priceEl.textContent='$'+asterPrice.toFixed(4);
+      if(subEl){
+        const chgStr=chg!=null?(chg>=0?'+':'')+chg.toFixed(2)+'%':'';
+        const chgCol=chg>=0?'var(--teal)':'var(--red)';
+        subEl.innerHTML='USD · <span style="color:'+chgCol+';font-weight:600">'+chgStr+' 24h</span>';
+      }
+      updateCalc(); // refresh calculator with price
+    }
+  }catch(e){/* price not available yet */}
+}
+
+// ─── EPOCH COUNTDOWN ───
+function startEpochCountdown(){
+  function tick(){
+    const now=new Date();
+    const dow=now.getUTCDay(); // 0=Sun,1=Mon…
+    const msSinceMon=(((dow===0?7:dow)-1)*86400+(now.getUTCHours()*3600+now.getUTCMinutes()*60+now.getUTCSeconds()))*1000+now.getUTCMilliseconds();
+    const epochDuration=7*24*3600*1000;
+    const msRemaining=epochDuration-msSinceMon;
+    const pct=Math.min(100,(msSinceMon/epochDuration)*100);
+    // Progress bar
+    const bar=document.getElementById('epochBarFill');
+    if(bar)bar.style.width=pct.toFixed(2)+'%';
+    // Countdown
+    const s=Math.floor(msRemaining/1000)%60;
+    const m=Math.floor(msRemaining/60000)%60;
+    const h=Math.floor(msRemaining/3600000)%24;
+    const dd=Math.floor(msRemaining/86400000);
+    const pad=n=>String(n).padStart(2,'0');
+    const cdEl=document.getElementById('epochCountdown');
+    if(cdEl)cdEl.textContent=`${dd}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+  }
+  tick();
+  setInterval(tick,1000);
+}
+
+// ─── APY CALCULATOR ───
+function updateCalc(){
+  const amtEl=document.getElementById('calcAmount');
+  const selEl=document.getElementById('calcSelect');
+  if(!amtEl||!selEl||!validators.length)return;
+  const amount=parseFloat(amtEl.value)||0;
+  const addr=selEl.value;
+  const v=validators.find(x=>x.fullAddress===addr)||validators[0];
+  if(!v)return;
+  const apy=v.estimatedApy; // already in %
+  const weekly=amount*(apy/100)/52;
+  const monthly=amount*(apy/100)/12;
+  const annual=amount*(apy/100);
+  const fmt=n=>n.toLocaleString('en-US',{maximumFractionDigits:4});
+  const apyEl=document.getElementById('calcApy');
+  if(apyEl)apyEl.textContent=apy+'%';
+  const wEl=document.getElementById('calcWeekly');
+  if(wEl)wEl.textContent=amount>0?fmt(weekly)+' ASTER':'—';
+  const mEl=document.getElementById('calcMonthly');
+  if(mEl)mEl.textContent=amount>0?fmt(monthly)+' ASTER':'—';
+  const aEl=document.getElementById('calcAnnual');
+  if(aEl)aEl.textContent=amount>0?fmt(annual)+' ASTER':'—';
+  // USD row
+  const usdRow=document.getElementById('calcUsdRow');
+  const usdEl=document.getElementById('calcUsd');
+  if(asterPrice&&amount>0&&usdRow&&usdEl){
+    usdRow.style.display='flex';
+    usdEl.textContent='≈ $'+(annual*asterPrice).toLocaleString('en-US',{maximumFractionDigits:2});
+  }else if(usdRow){
+    usdRow.style.display='none';
+  }
+}
 
 // ─── UPDATE OVERVIEW STATS ───
 function updateOverviewStats(){
@@ -1115,6 +1253,20 @@ function updateOverviewStats(){
   // Total Staked
   const stakeEl=document.getElementById('ovStaked');
   if(stakeEl)stakeEl.textContent=totalM>=1000?(totalM/1000).toFixed(2)+'B':(totalM.toFixed(2)+'M');
+  const stakeSubEl=document.getElementById('ovStakedSub');
+  if(stakeSubEl){
+    const usdStr=asterPrice?(' · <span style="color:var(--g300)">≈ $'+(networkTotalStake*asterPrice).toLocaleString('en-US',{maximumFractionDigits:0})+'</span>'):'';
+    stakeSubEl.innerHTML='ASTER · Mainnet'+usdStr;
+  }
+  // Nakamoto Coefficient
+  const nc=nakamotoCoeff();
+  const nakEl=document.getElementById('ovNakamoto');
+  if(nakEl&&nc!==null)nakEl.textContent=nc;
+  const nakSub=document.getElementById('ovNakamotoSub');
+  if(nakSub&&nc!==null){
+    const risk=nc<=2?'<span style="color:var(--amber)">⚠ High concentration</span>':nc<=3?'<span style="color:var(--teal)">✓ Acceptable</span>':'<span style="color:var(--teal)">✓ Well decentralized</span>';
+    nakSub.innerHTML='validators control &gt;33% · '+risk;
+  }
 
   // Active validators
   const activeEl=document.getElementById('ovActive');
@@ -1128,17 +1280,15 @@ function updateOverviewStats(){
   const apySubEl=document.getElementById('ovApySub');
   if(apySubEl)apySubEl.innerHTML='Base only · <span style="color:var(--teal)">+Loyalty rewards</span>';
 
-  // Current epoch (Mon 00:00 UTC → Sun 00:00 UTC)
+  // Current epoch dates (static label, countdown handled by startEpochCountdown)
   const now=new Date();
-  const dow=now.getUTCDay(); // 0=Sun,1=Mon...
+  const dow=now.getUTCDay();
   const msSinceMon=(((dow===0?7:dow)-1)*86400+(now.getUTCHours()*3600+now.getUTCMinutes()*60+now.getUTCSeconds()))*1000;
   const epochStart=new Date(now.getTime()-msSinceMon);
   const epochEnd=new Date(epochStart.getTime()+7*86400*1000);
-  const fmt=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+  const fmtD=d=>d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
   const epEl=document.getElementById('ovEpoch');
-  if(epEl)epEl.textContent=fmt(epochStart)+' – '+fmt(epochEnd);
-  const epSubEl=document.getElementById('ovEpochSub');
-  if(epSubEl)epSubEl.textContent='Settles Sun 00:00 UTC · Weekly';
+  if(epEl)epEl.textContent=fmtD(epochStart)+' → '+fmtD(epochEnd);
 
   // Avg Commission
   const commEl=document.getElementById('ovCommission');
@@ -1180,7 +1330,8 @@ function updateOverviewStats(){
   if(bannerIcon)bannerIcon.textContent='✦';
   const bannerText=document.getElementById('topBannerText');
   lastRefresh=Date.now();
-  if(bannerText)bannerText.innerHTML=n+' validators · Total staked: '+totalM.toFixed(2)+'M ASTER · Avg APY: '+avgApy.toFixed(4)+'% · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake on AsterDex →</a> · <span style="color:var(--g400)">Updated <span id="refreshAge">just now</span></span>';
+  const nc2=nakamotoCoeff();
+  if(bannerText)bannerText.innerHTML=n+' validators · Staked: '+totalM.toFixed(2)+'M ASTER · Avg APY: '+avgApy.toFixed(2)+'%'+(nc2?' · Nakamoto: <span style="color:var(--teal);font-weight:600">'+nc2+'</span>':'')+' · <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">Stake →</a> · <span style="color:var(--g400)">Updated <span id="refreshAge">just now</span></span>';
 
 }
 
@@ -1227,6 +1378,14 @@ async function loadData(){
     };
     delegateSel.addEventListener('change',updateApyDisplay);
     updateApyDisplay();
+  }
+
+  // Populate calculator validator select
+  const calcSel=document.getElementById('calcSelect');
+  if(calcSel&&validators.length){
+    const activeV=validators.filter(v=>v.status==='active');
+    calcSel.innerHTML=activeV.map(v=>`<option value="${v.fullAddress}">${v.name} — ${v.estimatedApy}% APY</option>`).join('');
+    updateCalc();
   }
 
   // Render after data ready
@@ -1552,10 +1711,14 @@ let _activeTab='validators';
 
 // ─── AUTO-REFRESH ───
 let lastRefresh=null;
+let _priceRefreshCounter=0;
 function startAutoRefresh(){
   // Re-fetch live data every 15 seconds
   setInterval(async()=>{
     await loadData();
+    // Refresh price every 5 minutes (every 20th cycle of 15s)
+    _priceRefreshCounter++;
+    if(_priceRefreshCounter>=20){_priceRefreshCounter=0;fetchPrice();}
     // Re-render current visible tab
     if(_activeTab==='leaderboard')renderTable('leaderboardTable',validators,false);
     if(_activeTab==='analytics')renderAnalyticsCharts();
@@ -1574,7 +1737,9 @@ function startAutoRefresh(){
 
 // ─── INIT ───
 loadData();
+fetchPrice();
 startAutoRefresh();
+startEpochCountdown();
 </script>
 </body>
 </html>
