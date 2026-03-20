@@ -583,6 +583,7 @@ tr:last-child td{border-bottom:none;}
       <line x1="29" y1="71" x2="40" y2="60" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
     </svg>
     <h1>Aster<span>Validators</span></h1>
+    <span style="font-size:0.58rem;font-weight:700;letter-spacing:0.8px;background:linear-gradient(135deg,var(--teal),#3b82f6);color:#000;padding:2px 6px;border-radius:4px;margin-left:2px;line-height:1">BETA</span>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">
@@ -716,11 +717,53 @@ tr:last-child td{border-bottom:none;}
 
     <!-- ═══════ TAB: ANALYTICS ═══════ -->
     <div class="tab-content" id="tc-analytics">
+      <!-- Live data row -->
+      <div class="analytics-grid full" style="margin-bottom:1rem">
+        <!-- LIVE: Stake distribution (real data) -->
+        <div class="analytics-card">
+          <h3>⬡ Stake Distribution <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <svg class="chart-svg" id="stakeChart2" viewBox="0 0 500 180"></svg>
+        </div>
+        <!-- LIVE: APY Comparison (real data) -->
+        <div class="analytics-card">
+          <h3>◐ APY by Validator <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <svg class="chart-svg" id="apyChart" viewBox="0 0 500 180"></svg>
+        </div>
+        <!-- LIVE: Score Distribution (computed from real data) -->
+        <div class="analytics-card">
+          <h3>⬡ Validator Score Distribution <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <svg class="chart-svg" id="scoreDistChart" viewBox="0 0 500 180"></svg>
+        </div>
+        <!-- LIVE: Decentralization (real networkShare) -->
+        <div class="analytics-card">
+          <h3>◎ Decentralization Index <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <svg class="chart-svg" id="decentralChart" viewBox="0 0 500 220"></svg>
+          <div class="legend" id="decentLegend"></div>
+        </div>
+      </div>
+
+      <!-- Coming soon row (blurred) -->
       <div class="analytics-grid full">
-        <div class="analytics-card"><h3>◐ Network Stake Over Time (30d)</h3><svg class="chart-svg" id="stakeTimeChart" viewBox="0 0 500 180"></svg></div>
-        <div class="analytics-card"><h3>⬡ Validator Score Distribution</h3><svg class="chart-svg" id="scoreDistChart" viewBox="0 0 500 180"></svg></div>
-        <div class="analytics-card"><h3>↕ Uptime Heatmap (30d · Top 20)</h3><svg class="chart-svg" id="uptimeHeatmap" viewBox="0 0 560 260"></svg></div>
-        <div class="analytics-card"><h3>◎ Decentralization Index</h3><svg class="chart-svg" id="decentralChart" viewBox="0 0 500 220"></svg><div class="legend" id="decentLegend"></div></div>
+        <!-- COMING SOON: Network Stake Over Time -->
+        <div class="analytics-card" style="position:relative;overflow:hidden">
+          <h3>◐ Network Stake Over Time (30d) <span style="font-size:0.6rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:2px 6px;border-radius:4px;vertical-align:middle">Coming Soon</span></h3>
+          <svg class="chart-svg" id="stakeTimeChart" viewBox="0 0 500 180" style="filter:blur(4px);opacity:0.3"></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
+            <span style="font-size:1.5rem">⏳</span>
+            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Historical data coming soon</span>
+            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Requires on-chain indexer for stake history</span>
+          </div>
+        </div>
+        <!-- COMING SOON: Uptime Heatmap -->
+        <div class="analytics-card" style="position:relative;overflow:hidden">
+          <h3>↕ Uptime Heatmap (30d) <span style="font-size:0.6rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:2px 6px;border-radius:4px;vertical-align:middle">Coming Soon</span></h3>
+          <svg class="chart-svg" id="uptimeHeatmap" viewBox="0 0 560 260" style="filter:blur(4px);opacity:0.3"></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
+            <span style="font-size:1.5rem">⏳</span>
+            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Real uptime data coming soon</span>
+            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Not yet available via public API</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -963,18 +1006,18 @@ function rng(a,b){return Math.random()*(b-a)+a;}
 function seededRng(seed,a,b){const x=Math.sin(seed+1)*10000;return a+(x-Math.floor(x))*(b-a);}
 
 // ─── MAP API VALIDATOR → DISPLAY MODEL ───
+// estimatedApy is a decimal: 0.4528 = 45.28% APY (confirmed vs AsterDex UI)
 function mapValidator(v,idx){
   const commPct=+(v.commissionRate*100).toFixed(1);
-  const apyPct=+v.estimatedApy.toFixed(4); // already in % (e.g. 0.4528 = 0.4528% APY)
+  const apyPct=+(v.estimatedApy*100).toFixed(2);   // 0.4528 → 45.28%
+  const epyPct=+(v.estimatedEpy*100).toFixed(4);   // per-epoch yield in %
+  const stakeRaw=v.totalStake;                      // full value, not divided
   const stakeM=+(v.totalStake/1e6).toFixed(4);
-  const up=v.active?seededRng(idx*7,97.2,99.8):seededRng(idx*7,55,82);
-  const miss=Math.floor(seededRng(idx*13,0,v.active?12:180));
   const del=Math.floor(stakeM*seededRng(idx*3,180,420));
   const ss=stakeM*seededRng(idx*11,0.04,0.22);
-  const df=v.networkShare;
-  const sc=Math.min(98,Math.max(40,
-    up*0.35+(1-Math.min(miss,200)/200)*25+(1-commPct/20)*15+df*100*0.15+seededRng(idx*5,3,7)
-  ));
+  // uptime: estimated (not in API) — clearly marked
+  const up=v.active?seededRng(idx*7,97.2,99.8):seededRng(idx*7,55,82);
+  const miss=Math.floor(seededRng(idx*13,0,v.active?12:180));
   return{
     id:idx,rank:idx+1,
     name:v.name,
@@ -983,21 +1026,44 @@ function mapValidator(v,idx){
     description:v.description||'',
     color:COLORS[idx%COLORS.length],
     status:v.active?'active':'inactive',
-    score:+sc.toFixed(1),
-    totalStake:+stakeM.toFixed(2),
+    score:0, // computed in computeScores() after all validators loaded
+    totalStake:stakeRaw,         // real full value
+    totalStakeM:+stakeM.toFixed(2),
     selfStake:+ss.toFixed(2),
     commission:commPct,
-    uptime:+up.toFixed(2),
-    missedBlocks:miss,
-    delegators:del,
+    uptime:+up.toFixed(2),       // estimated
+    missedBlocks:miss,            // estimated
+    delegators:del,               // estimated
     estimatedApy:apyPct,
-    estimatedEpy:v.estimatedEpy||0,
+    estimatedEpy:epyPct,
     networkShare:+(v.networkShare*100).toFixed(2),
     sparkData:Array.from({length:20},(_,i)=>seededRng(idx*17+i,v.active?94:60,100)),
     uptimeBlocks:Array.from({length:30},(_,i)=>v.active?(seededRng(idx*19+i,0,1)>0.015?'ok':'miss'):(seededRng(idx*19+i,0,1)>0.4?'ok':'miss')),
     change24h:+seededRng(idx*23,-2.5,3.5).toFixed(1),
-    rewardsEst:+(stakeM*(v.estimatedApy/100)/12).toFixed(4) // annual APY/12 months
+    rewardsEst:+(stakeM*(apyPct/100)/12).toFixed(2) // monthly est. in M ASTER
   };
+}
+
+// ─── OPTION A: SCORE FROM REAL DATA ONLY ───
+// Components (all from API):
+//   APY rank       50% — higher APY = more rewards for delegators
+//   Network share  30% — weight in securing the chain
+//   Stake size     20% — trust/commitment signal
+// uptime/missed are estimated → shown with "Est." pill, NOT in score
+function computeScores(vals){
+  if(!vals.length)return;
+  const maxApy=Math.max(...vals.map(v=>v.estimatedApy));
+  const maxShare=Math.max(...vals.map(v=>v.networkShare));
+  const maxStake=Math.max(...vals.map(v=>v.totalStake));
+  vals.forEach(v=>{
+    const apyN=maxApy>0?v.estimatedApy/maxApy:0;
+    const shareN=maxShare>0?v.networkShare/maxShare:0;
+    const stakeN=maxStake>0?v.totalStake/maxStake:0;
+    const commFactor=v.commission===0?1:Math.max(0,1-v.commission/20);
+    v.score=+Math.min(99,Math.max(10,
+      apyN*50+shareN*30+stakeN*20
+    ).toFixed(1));
+  });
 }
 
 // ─── STATE ───
@@ -1019,7 +1085,7 @@ function updateOverviewStats(){
 
   // Total Staked
   const stakeEl=document.getElementById('ovStaked');
-  if(stakeEl)stakeEl.textContent=totalM>=1000?(totalM/1000).toFixed(2)+'B':totalM.toFixed(2)+'M';
+  if(stakeEl)stakeEl.textContent=totalM>=1000?(totalM/1000).toFixed(2)+'B':(totalM.toFixed(2)+'M');
 
   // Active validators
   const activeEl=document.getElementById('ovActive');
@@ -1092,6 +1158,7 @@ async function loadData(){
       networkTotalStake=valRes.data.networkTotalStake||0;
       const raw=valRes.data.validators||[];
       validators=raw.map((v,i)=>mapValidator(v,i));
+      computeScores(validators);
       validators.sort((a,b)=>b.score-a.score);
       validators.forEach((v,i)=>v.rank=i+1);
       updateOverviewStats();
@@ -1162,13 +1229,13 @@ function ubHTML(b){return`<div class="uptime-bar">${b.map(x=>`<div class="uptime
 
 function renderTable(cid,data,clickable=true){
   document.getElementById(cid).innerHTML=`<table>
-<thead><tr><th style="width:40px">#</th><th>Validator</th><th class="sorted">Score <span class="sort-arrow">▼</span></th><th>Status</th><th>Total Stake</th><th>Commission</th><th>Uptime 30d</th><th>Missed</th><th>Delegators</th><th>Performance</th><th>24h</th></tr></thead>
+<thead><tr><th style="width:40px">#</th><th>Validator</th><th class="sorted" title="Score A: APY (50%) + Network Share (30%) + Stake (20%) — real on-chain data only">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">A</span></th><th>Status</th><th>Total Stake</th><th>Commission</th><th>Uptime 30d <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated — not available from API">Est.</span></th><th>Missed <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Delegators <span style="font-size:0.55rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:1px 4px;border-radius:3px" title="Estimated">Est.</span></th><th>Performance</th><th>24h</th></tr></thead>
 <tbody>${data.map(v=>`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
 <td><div class="cell-validator"><div class="val-avatar" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
 <td><div class="cell-score"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
 <td>${stHTML(v.status)}</td>
-<td class="cell-mono">${v.totalStake.toFixed(1)}M</td>
+<td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})}</td>
 <td class="cell-mono ${v.commission>10?'':'dim'}" ${v.commission>10?'style="color:var(--amber)"':''}>${v.commission}%</td>
 <td><div class="cell-uptime">${ubHTML(v.uptimeBlocks)}<span class="cell-mono" style="margin-left:3px;font-size:0.7rem">${v.uptime}%</span></div></td>
 <td class="cell-mono dim">${v.missedBlocks}</td>
@@ -1188,8 +1255,8 @@ function showDetail(id){
   p.innerHTML=`<div class="detail-header"><div class="detail-header-left"><div class="detail-avatar-lg" style="background:${v.color}22;color:${v.color};border:1px solid ${v.color}44;">${v.name.slice(0,2).toUpperCase()}</div><div><div class="detail-name">${v.name}</div><div class="detail-addr">${v.address}</div></div>${stHTML(v.status)}</div><button class="detail-close" onclick="closeDetail()">✕</button></div>
 <div class="detail-stats">
 <div class="detail-stat"><div class="detail-stat-label">Validator Score</div><div class="detail-stat-value" style="color:${v.score>=80?'var(--teal)':v.score>=60?'var(--amber)':'var(--red)'}">${v.score}/100</div></div>
-<div class="detail-stat"><div class="detail-stat-label">Total Stake</div><div class="detail-stat-value" style="color:var(--white)">${v.totalStake.toFixed(1)}M ASTER</div></div>
-<div class="detail-stat"><div class="detail-stat-label">Self Stake</div><div class="detail-stat-value" style="color:var(--amber)">${v.selfStake.toFixed(1)}M ASTER</div></div>
+<div class="detail-stat"><div class="detail-stat-label">Total Stake</div><div class="detail-stat-value" style="color:var(--white);font-size:0.9rem">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})} ASTER</div></div>
+<div class="detail-stat"><div class="detail-stat-label">Est. Self Stake</div><div class="detail-stat-value" style="color:var(--amber)">${v.selfStake.toFixed(2)}M <span style="font-size:0.6rem;color:var(--amber);opacity:0.7">Est.</span></div></div>
 <div class="detail-stat"><div class="detail-stat-label">Est. Annual Rewards</div><div class="detail-stat-value" style="color:var(--teal)">${v.rewardsEst}M ASTER</div></div>
 </div>
 <div class="detail-charts">
@@ -1204,9 +1271,10 @@ function closeDetail(){document.getElementById('detailPanel').classList.remove('
 function renderStakeChart(){
   const svg=document.getElementById('stakeChart'),t=validators.slice(0,15),mx=Math.max(...t.map(v=>v.totalStake)),bw=32,g=8,h=170,oy=10;
   let html='';t.forEach((v,i)=>{const bh=(v.totalStake/mx)*(h-30),x=i*(bw+g),y=h-bh;
-  html+=`<rect x="${x}" y="${y+oy}" width="${bw}" height="${bh}" rx="3" fill="${v.color}" opacity="0.7" class="histo-bar"><title>${v.name}: ${v.totalStake.toFixed(1)}M</title></rect>`;
+  const stakeK=(v.totalStake/1000).toFixed(0)+'K';
+  html+=`<rect x="${x}" y="${y+oy}" width="${bw}" height="${bh}" rx="3" fill="${v.color}" opacity="0.7" class="histo-bar"><title>${v.name}: ${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:0})} ASTER</title></rect>`;
   html+=`<text x="${x+bw/2}" y="${h+oy+12}" text-anchor="middle" class="chart-label" style="font-size:7px">${v.name.slice(0,5)}</text>`;
-  html+=`<text x="${x+bw/2}" y="${y+oy-3}" text-anchor="middle" class="chart-label">${v.totalStake.toFixed(0)}M</text>`;});
+  html+=`<text x="${x+bw/2}" y="${y+oy-3}" text-anchor="middle" class="chart-label">${stakeK}</text>`;});
   svg.innerHTML=html;
 }
 function renderCommissionChart(){
@@ -1223,7 +1291,42 @@ function renderCommissionChart(){
   lg.innerHTML=bk.map(b=>`<div class="legend-item"><div class="legend-dot" style="background:${b.cl}"></div>${b.l} (${b.c})</div>`).join('');
 }
 function renderAnalyticsCharts(){
-  // Stake over time
+  const w=480,h=150;
+
+  // ── LIVE: Stake Distribution (real totalStake) ──
+  const sc2=document.getElementById('stakeChart2');
+  if(sc2&&validators.length){
+    const maxS=Math.max(...validators.map(v=>v.totalStake));
+    const bw=Math.floor((w-20)/validators.length)-6;
+    let html2='';
+    validators.forEach((v,i)=>{
+      const bh=((v.totalStake/maxS)*(h-30));
+      const x=i*(bw+6);const y=h-bh;
+      const stakeK=(v.totalStake/1000).toFixed(0)+'K';
+      html2+=`<rect x="${x}" y="${y+10}" width="${bw}" height="${bh}" rx="3" fill="${v.color}" opacity="0.75"><title>${v.name}: ${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:0})} ASTER</title></rect>`;
+      html2+=`<text x="${x+bw/2}" y="${h+22}" text-anchor="middle" class="chart-label" style="font-size:7px">${v.name.slice(0,6)}</text>`;
+      html2+=`<text x="${x+bw/2}" y="${y+7}" text-anchor="middle" class="chart-label">${stakeK}</text>`;
+    });
+    sc2.innerHTML=html2;
+  }
+
+  // ── LIVE: APY by Validator ──
+  const apySvg=document.getElementById('apyChart');
+  if(apySvg&&validators.length){
+    const maxA=Math.max(...validators.map(v=>v.estimatedApy));
+    const bw=Math.floor((w-20)/validators.length)-6;
+    let htmlA='';
+    validators.forEach((v,i)=>{
+      const bh=((v.estimatedApy/maxA)*(h-30));
+      const x=i*(bw+6);const y=h-bh;
+      htmlA+=`<rect x="${x}" y="${y+10}" width="${bw}" height="${bh}" rx="3" fill="var(--teal)" opacity="${0.5+0.5*(v.estimatedApy/maxA)}"><title>${v.name}: ${v.estimatedApy}% APY</title></rect>`;
+      htmlA+=`<text x="${x+bw/2}" y="${h+22}" text-anchor="middle" class="chart-label" style="font-size:7px">${v.name.slice(0,6)}</text>`;
+      htmlA+=`<text x="${x+bw/2}" y="${y+7}" text-anchor="middle" class="chart-label">${v.estimatedApy}%</text>`;
+    });
+    apySvg.innerHTML=htmlA;
+  }
+
+  // Stake over time (placeholder, blurred)
   const w=480,h=150;const d=Array.from({length:30},(_,i)=>2200+i*7+rng(-30,30));
   const mn=Math.min(...d)-50,mx=Math.max(...d)+50;
   const pts=d.map((v,i)=>`${(i/29)*w},${h-((v-mn)/(mx-mn))*h}`);
@@ -1245,7 +1348,7 @@ function renderAnalyticsCharts(){
   document.getElementById('uptimeHeatmap').innerHTML=hm;
 
   // Decentralization
-  const srt=[...validators].sort((a,b)=>b.totalStake-a.totalStake),totS=srt.reduce((s,v)=>s+v.totalStake,0);
+  const srt=[...validators].sort((a,b)=>b.totalStake-a.totalStake),totS=srt.reduce((s,v)=>s+Number(v.totalStake),0);
   let cum=0;const dPts=[`0,${h}`];srt.forEach((v,i)=>{cum+=v.totalStake/totS*100;dPts.push(`${(i/(srt.length-1))*w},${h-(cum/100)*h}`);});dPts.push(`${w},${h}`);
   const iPts=srt.map((_,i)=>`${(i/(srt.length-1))*w},${h-((i+1)/srt.length*100)/100*h}`);
   const nY=h-(33/100)*h;
