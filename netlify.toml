@@ -50,10 +50,10 @@
   status = 200
   force = true
 
-# ─── Proxy prix ASTER → CoinGecko ───
+# ─── Proxy prix ASTER → AsterDex ticker ───
 [[redirects]]
   from = "/api/price/aster"
-  to = "https://api.coingecko.com/api/v3/simple/price?ids=aster&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true"
+  to = "https://www.asterdex.com/bapi/future/v1/public/future/aster/ticker/pair"
   status = 200
   force = true
 

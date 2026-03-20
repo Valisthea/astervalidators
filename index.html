@@ -665,7 +665,7 @@ tr:last-child td{border-bottom:none;}
       <div class="ov-card fade-in d1">
         <div class="ov-label">◈ ASTER Price</div>
         <div class="ov-value" style="color:var(--white)" id="ovPrice">—</div>
-        <div class="ov-sub" id="ovPriceSub" style="display:flex;align-items:center;gap:0.4rem">Not yet listed</div>
+        <div class="ov-sub" id="ovPriceSub" style="display:flex;align-items:center;gap:0.4rem">Loading…</div>
       </div>
       <div class="ov-card fade-in d2">
         <div class="ov-label">⬡ Total Staked</div>
@@ -959,7 +959,7 @@ tr:last-child td{border-bottom:none;}
           Real-time block data (TX counts, proposers) is not available via public API yet.<br>
           In the meantime, use the official Aster Chain block explorer.
         </span>
-        <a href="https://explorer.asterdex.com" target="_blank" rel="noopener" class="btn-connect" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;margin-top:0.5rem">
+        <a href="https://www.asterdex.com/en/explorer" target="_blank" rel="noopener" class="btn-connect" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;margin-top:0.5rem">
           Open Official Explorer →
         </a>
         <span style="font-size:0.7rem;color:var(--g500);margin-top:0.25rem">⚠ Previous block list was simulated — removed for transparency</span>
@@ -1161,20 +1161,24 @@ async function fetchPrice(){
     const r=await fetch('/api/price/aster');
     if(!r.ok)return;
     const d=await r.json();
-    if(d&&d.aster&&d.aster.usd){
-      asterPrice=d.aster.usd;
-      const chg=d.aster.usd_24h_change;
+    const pairs=d&&d.data?d.data:[];
+    const t=pairs.find(p=>p.symbol==='ASTERUSDT');
+    if(t&&t.lastPrice!=null){
+      asterPrice=parseFloat(t.lastPrice);
+      const hi=parseFloat(t.highPrice)||0;
+      const lo=parseFloat(t.lowPrice)||0;
+      const vol=parseFloat(t.baseVolume)||0;
       const priceEl=document.getElementById('ovPrice');
       const subEl=document.getElementById('ovPriceSub');
       if(priceEl)priceEl.textContent='$'+asterPrice.toFixed(4);
       if(subEl){
-        const chgStr=chg!=null?(chg>=0?'+':'')+chg.toFixed(2)+'%':'';
-        const chgCol=chg>=0?'var(--teal)':'var(--red)';
-        subEl.innerHTML='USD · <span style="color:'+chgCol+';font-weight:600">'+chgStr+' 24h</span>';
+        const volStr=vol>0?' · Vol: '+(vol/1e6).toFixed(1)+'M':'';
+        const rangeStr=lo&&hi?'24h $'+lo.toFixed(4)+'–$'+hi.toFixed(4):'';
+        subEl.innerHTML='<span style="color:var(--sub)">'+rangeStr+volStr+'</span>';
       }
-      updateCalc(); // refresh calculator with price
+      updateCalc(); // refresh calculator with live price
     }
-  }catch(e){/* price not available yet */}
+  }catch(e){/* price not available */}
 }
 
 // ─── EPOCH COUNTDOWN ───
@@ -1716,9 +1720,9 @@ function startAutoRefresh(){
   // Re-fetch live data every 15 seconds
   setInterval(async()=>{
     await loadData();
-    // Refresh price every 5 minutes (every 20th cycle of 15s)
+    // Refresh price every 60s (every 4th cycle of 15s)
     _priceRefreshCounter++;
-    if(_priceRefreshCounter>=20){_priceRefreshCounter=0;fetchPrice();}
+    if(_priceRefreshCounter>=4){_priceRefreshCounter=0;fetchPrice();}
     // Re-render current visible tab
     if(_activeTab==='leaderboard')renderTable('leaderboardTable',validators,false);
     if(_activeTab==='analytics')renderAnalyticsCharts();
