@@ -275,16 +275,28 @@ input,select,button{font-family:var(--font);}
 .nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--teal);border-radius:0 3px 3px 0;}
 .nav-icon{width:18px;text-align:center;font-size:0.85rem;flex-shrink:0;}
 .nav-badge{margin-left:auto;font-family:var(--mono);font-size:0.62rem;background:var(--teal-subtle);color:var(--teal);padding:0.15rem 0.45rem;border-radius:10px;font-weight:600;}
-/* More Apps external links */
-.nav-item-ext{
-  display:flex;align-items:center;gap:0.65rem;
-  padding:0.6rem 0.75rem;border-radius:var(--radius-sm);
-  color:var(--g300);font-size:0.82rem;text-decoration:none;
-  cursor:pointer;transition:all 0.15s;margin-bottom:2px;
+/* ═══════ MORE APPS PAGE ═══════ */
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-top:1.5rem;}
+.app-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;display:flex;flex-direction:column;gap:1rem;
+  transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
+  text-decoration:none;color:inherit;
 }
-.nav-item-ext:hover{background:rgba(66,133,244,0.08);color:var(--white);}
-.nav-item-ext .nav-ext-arrow{margin-left:auto;font-size:0.6rem;color:var(--g500);opacity:0.7;}
-.nav-item-ext:hover .nav-ext-arrow{color:var(--teal);opacity:1;}
+.app-card:hover{border-color:var(--border-mid);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.35);}
+.app-card-header{display:flex;align-items:center;gap:0.9rem;}
+.app-card-icon{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+  border:1px solid var(--border);
+}
+.app-card-name{font-size:0.92rem;font-weight:700;color:var(--white);margin-bottom:0.1rem;}
+.app-card-cat{font-size:0.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--g400);}
+.app-card-desc{font-size:0.79rem;color:var(--g300);line-height:1.65;flex:1;}
+.app-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:0.75rem;border-top:1px solid var(--border);}
+.app-card-tag{font-size:0.62rem;font-weight:700;letter-spacing:0.5px;padding:0.2rem 0.5rem;border-radius:5px;}
+.app-card-link{font-size:0.75rem;font-weight:600;color:var(--teal);display:flex;align-items:center;gap:0.3rem;}
+.app-card:hover .app-card-link{text-decoration:underline;}
 .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:0.7rem;color:var(--g400);}
 .sidebar-footer .net-status{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.3rem;}
 .sidebar-footer .net-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
@@ -642,18 +654,7 @@ tr:last-child td{border-bottom:none;}
     </div>
     <div class="nav-section">
       <div class="nav-section-label">More Apps</div>
-      <a class="nav-item-ext" href="https://www.asterdex.com" target="_blank" rel="noopener">
-        <span class="nav-icon">◈</span>AsterDex Exchange<span class="nav-ext-arrow">↗</span>
-      </a>
-      <a class="nav-item-ext" href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener">
-        <span class="nav-icon">⬡</span>Staking Portal<span class="nav-ext-arrow">↗</span>
-      </a>
-      <a class="nav-item-ext" href="https://www.asterdex.com/en/explorer" target="_blank" rel="noopener">
-        <span class="nav-icon">⊞</span>Block Explorer<span class="nav-ext-arrow">↗</span>
-      </a>
-      <a class="nav-item-ext" href="https://docs.asterdex.com" target="_blank" rel="noopener">
-        <span class="nav-icon">◉</span>Documentation<span class="nav-ext-arrow">↗</span>
-      </a>
+      <div class="nav-item" data-tab="moreapps"><span class="nav-icon">⊹</span>Aster Ecosystem</div>
     </div>
   </nav>
   <div class="sidebar-footer">
@@ -1045,6 +1046,159 @@ tr:last-child td{border-bottom:none;}
             <div style="display:flex;justify-content:space-between;padding:0.65rem 0;font-size:0.82rem;"><span style="color:var(--g200);">Blocks Per Year</span><span style="font-family:var(--mono);color:var(--white);">6,311,520</span></div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: MORE APPS ═══════ -->
+    <div class="tab-content" id="tc-moreapps">
+      <div style="max-width:900px;margin:0 auto;padding:0.5rem 0 2rem">
+
+        <!-- Header -->
+        <div style="margin-bottom:0.25rem">
+          <h2 style="font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:0.35rem">⊹ Aster Ecosystem</h2>
+          <p style="font-size:0.8rem;color:var(--g400);line-height:1.6">All official AsterDex apps and resources — trade, stake, explore, and build on Aster Chain.</p>
+        </div>
+
+        <!-- Section: Trading -->
+        <div style="margin-top:1.75rem;margin-bottom:0.6rem;font-size:0.65rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--g400)">Trading</div>
+        <div class="apps-grid">
+
+          <a class="app-card" href="https://www.asterdex.com" target="_blank" rel="noopener">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(66,133,244,0.1);border-color:rgba(66,133,244,0.25)">
+                <svg width="22" height="22" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="12" fill="#4285f4"/>
+                  <circle cx="50" cy="13" r="7" fill="none" stroke="#4285f4" stroke-width="4"/>
+                  <line x1="50" y1="20" x2="50" y2="38" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="50" cy="87" r="7" fill="none" stroke="#4285f4" stroke-width="4"/>
+                  <line x1="50" y1="62" x2="50" y2="80" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="13" cy="50" r="7" fill="none" stroke="#4285f4" stroke-width="4"/>
+                  <line x1="20" y1="50" x2="38" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="87" cy="50" r="7" fill="none" stroke="#4285f4" stroke-width="4"/>
+                  <line x1="62" y1="50" x2="80" y2="50" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
+                </svg>
+              </div>
+              <div>
+                <div class="app-card-name">AsterDex Exchange</div>
+                <div class="app-card-cat">Perpetual DEX</div>
+              </div>
+            </div>
+            <div class="app-card-desc">The next-gen perpetual DEX built on Aster Chain. Trade 100+ pairs with deep liquidity, low fees, and 50ms block finality.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:rgba(66,133,244,0.12);color:#4285f4;border:1px solid rgba(66,133,244,0.2)">Live</span>
+              <span class="app-card-link">Open Exchange ↗</span>
+            </div>
+          </a>
+
+          <a class="app-card" href="https://www.asterdex.com/en/earn" target="_blank" rel="noopener">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(0,221,184,0.08);border-color:rgba(0,221,184,0.2)">
+                <span style="color:var(--teal);font-size:1.2rem">◈</span>
+              </div>
+              <div>
+                <div class="app-card-name">Earn</div>
+                <div class="app-card-cat">Yield · Liquidity</div>
+              </div>
+            </div>
+            <div class="app-card-desc">Provide liquidity and earn trading fees. Access yield strategies and passive income opportunities on AsterDex.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:rgba(0,221,184,0.1);color:var(--teal);border:1px solid rgba(0,221,184,0.2)">Live</span>
+              <span class="app-card-link">Open Earn ↗</span>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Section: Staking & Network -->
+        <div style="margin-top:1.75rem;margin-bottom:0.6rem;font-size:0.65rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--g400)">Staking & Network</div>
+        <div class="apps-grid">
+
+          <a class="app-card" href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(0,221,184,0.08);border-color:rgba(0,221,184,0.2)">
+                <span style="color:var(--teal);font-size:1.2rem">⬡</span>
+              </div>
+              <div>
+                <div class="app-card-name">Staking Portal</div>
+                <div class="app-card-cat">Delegation · Rewards</div>
+              </div>
+            </div>
+            <div class="app-card-desc">Delegate your ASTER tokens to validators and earn staking rewards. Official AsterDex staking interface with real-time APY data.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:rgba(0,221,184,0.1);color:var(--teal);border:1px solid rgba(0,221,184,0.2)">Live</span>
+              <span class="app-card-link">Start Staking ↗</span>
+            </div>
+          </a>
+
+          <a class="app-card" href="https://www.asterdex.com/en/explorer" target="_blank" rel="noopener">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(240,168,48,0.08);border-color:rgba(240,168,48,0.2)">
+                <span style="color:var(--amber);font-size:1.2rem">⊞</span>
+              </div>
+              <div>
+                <div class="app-card-name">Block Explorer</div>
+                <div class="app-card-cat">Blocks · Transactions</div>
+              </div>
+            </div>
+            <div class="app-card-desc">Browse every block, transaction, and validator action on Aster Chain. Real-time data with full hash and proposer details.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:rgba(240,168,48,0.1);color:var(--amber);border:1px solid rgba(240,168,48,0.2)">Live</span>
+              <span class="app-card-link">Open Explorer ↗</span>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Section: Resources -->
+        <div style="margin-top:1.75rem;margin-bottom:0.6rem;font-size:0.65rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--g400)">Resources</div>
+        <div class="apps-grid">
+
+          <a class="app-card" href="https://docs.asterdex.com" target="_blank" rel="noopener">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25)">
+                <span style="color:#8b5cf6;font-size:1.2rem">◉</span>
+              </div>
+              <div>
+                <div class="app-card-name">Documentation</div>
+                <div class="app-card-cat">Guides · API · Devs</div>
+              </div>
+            </div>
+            <div class="app-card-desc">Official technical documentation for AsterDex and Aster Chain. API references, validator guides, integration tutorials and developer resources.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:rgba(139,92,246,0.1);color:#8b5cf6;border:1px solid rgba(139,92,246,0.2)">Docs</span>
+              <span class="app-card-link">Open Docs ↗</span>
+            </div>
+          </a>
+
+          <a class="app-card" href="https://astervalidators.com" target="_blank" rel="noopener" style="border-color:rgba(0,221,184,0.25);background:linear-gradient(135deg,rgba(0,221,184,0.04),rgba(66,133,244,0.04))">
+            <div class="app-card-header">
+              <div class="app-card-icon" style="background:rgba(0,221,184,0.1);border-color:rgba(0,221,184,0.3)">
+                <svg width="20" height="20" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="12" fill="#00ddb8"/>
+                  <circle cx="50" cy="13" r="7" fill="none" stroke="#00ddb8" stroke-width="4"/>
+                  <line x1="50" y1="20" x2="50" y2="38" stroke="#00ddb8" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="50" cy="87" r="7" fill="none" stroke="#00ddb8" stroke-width="4"/>
+                  <line x1="50" y1="62" x2="50" y2="80" stroke="#00ddb8" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="13" cy="50" r="7" fill="none" stroke="#00ddb8" stroke-width="4"/>
+                  <line x1="20" y1="50" x2="38" y2="50" stroke="#00ddb8" stroke-width="2.5" opacity="0.5"/>
+                  <circle cx="87" cy="50" r="7" fill="none" stroke="#00ddb8" stroke-width="4"/>
+                  <line x1="62" y1="50" x2="80" y2="50" stroke="#00ddb8" stroke-width="2.5" opacity="0.5"/>
+                </svg>
+              </div>
+              <div>
+                <div class="app-card-name">Aster Validators</div>
+                <div class="app-card-cat">You are here · BETA</div>
+              </div>
+            </div>
+            <div class="app-card-desc">Community analytics dashboard for Aster Chain genesis validators. Live APY, scores, Nakamoto coefficient, and decentralization metrics.</div>
+            <div class="app-card-footer">
+              <span class="app-card-tag" style="background:linear-gradient(135deg,rgba(0,221,184,0.15),rgba(66,133,244,0.15));color:var(--white);border:1px solid rgba(0,221,184,0.25);font-weight:800">BETA</span>
+              <span class="app-card-link" style="color:var(--teal)">astervalidators.com ↗</span>
+            </div>
+          </a>
+
+        </div>
+
       </div>
     </div>
 
