@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aster Validators — Real-Time Analytics & Staking Dashboard for Aster Chain</title>
-<meta name="description" content="The #1 analytics dashboard for Aster Chain validators. Track validator scores, uptime, stake distribution, commission rates, and decentralization metrics. Delegate $ASTER tokens and monitor your staking rewards in real-time.">
+<meta name="description" content="The #1 community analytics dashboard for Aster Chain validators. Track validator scores, APY, stake distribution, commission rates, and decentralization metrics. Live data directly from the AsterDex staking API.">
 <meta name="keywords" content="Aster Chain, ASTER, validators, staking, delegation, validator analytics, blockchain dashboard, DeFi, perpetual trading, validator score, uptime monitoring, decentralization, crypto staking, web3">
 <meta name="author" content="Aster Validators">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -46,7 +46,7 @@
   "@type": "WebApplication",
   "name": "Aster Validators",
   "url": "https://astervalidators.com",
-  "description": "Real-time validator analytics and staking dashboard for Aster Chain. Track validator performance, scores, uptime, and stake distribution.",
+  "description": "Community analytics dashboard for Aster Chain genesis validators. Live stake data, APY, scores, and decentralization metrics — directly from the AsterDex staking API.",
   "applicationCategory": "FinanceApplication",
   "operatingSystem": "Web",
   "offers": {
@@ -60,14 +60,14 @@
     "url": "https://astervalidators.com"
   },
   "featureList": [
-    "Real-time validator monitoring",
-    "Validator scoring algorithm",
-    "Uptime heatmaps",
+    "Live validator monitoring (15s refresh)",
+    "Validator scoring algorithm (APY + Stake + Network Share)",
+    "Nakamoto Coefficient — decentralization index",
     "Stake distribution analytics",
-    "Decentralization index tracking",
-    "Commission rate comparison",
-    "One-click staking delegation",
-    "Reward estimation calculator"
+    "APY and commission rate comparison",
+    "APY reward calculator",
+    "Live ASTER price (AsterDex perp)",
+    "Epoch countdown"
   ],
   "screenshot": "https://astervalidators.com/og-image.png"
 }
@@ -82,15 +82,15 @@
       "name": "What is Aster Validators?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Aster Validators is the reference analytics dashboard for the Aster Chain ecosystem. It provides real-time monitoring of validator performance, scoring, uptime tracking, stake distribution analysis, and staking delegation tools."
+        "text": "Aster Validators is a community analytics dashboard for the Aster Chain validator ecosystem. It provides live monitoring of validator performance, scoring, APY, stake distribution, and decentralization metrics using real on-chain data from the AsterDex staking API."
       }
     },
     {
       "@type": "Question",
-      "name": "When does Aster Chain mainnet launch?",
+      "name": "When did Aster Chain mainnet launch?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Aster Chain mainnet is targeting Q1 2026. The public testnet is currently live and open to all developers and validators for testing."
+        "text": "Aster Chain launched its genesis block on March 17, 2026. The network currently has 7 genesis validators running on Proof-of-Staked-Authority (PoSA) consensus with a 50ms block time."
       }
     },
     {
@@ -98,15 +98,15 @@
       "name": "How is the Validator Score calculated?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The Validator Score is a composite metric based on 30-day uptime (35%), missed block ratio (25%), commission rate (15%), decentralization factor (15%), and incident-free operation (10%). Scores range from 0 to 100."
+        "text": "The Validator Score is computed from 100% real on-chain data: APY (50% weight) + Network Share (30% weight) + Total Stake (20% weight). Each component is normalized against the best validator in the current set. Scores range from 10 to 99."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I delegate ASTER tokens through this dashboard?",
+      "name": "What is the Nakamoto Coefficient on Aster Chain?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Staking delegation will be available at mainnet launch. Currently, all data displayed is simulated for testing and demonstration purposes while the Aster Chain L1 is in testnet phase."
+        "text": "The Nakamoto Coefficient represents the minimum number of validators that would need to collude to control more than 33% of the staked supply. A higher coefficient means better decentralization. This dashboard computes it in real time from live network share data."
       }
     }
   ]
@@ -119,6 +119,7 @@
 <meta name="theme-color" content="#06090d">
 <meta name="color-scheme" content="dark">
 <meta name="msapplication-TileColor" content="#06090d">
+<link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
