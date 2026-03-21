@@ -119,8 +119,9 @@
 <meta name="theme-color" content="#06090d">
 <meta name="color-scheme" content="dark">
 <meta name="msapplication-TileColor" content="#06090d">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='14' fill='%234285f4'/%3E%3Ccircle cx='50' cy='14' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='22' x2='50' y2='36' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='50' cy='86' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='64' x2='50' y2='78' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='14' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='36' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='86' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='64' y1='50' x2='78' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='40' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='76' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='60' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='76' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='70' x2='40' y2='60' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='14' fill='%234285f4'/%3E%3Ccircle cx='50' cy='14' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='22' x2='50' y2='36' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='50' cy='86' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='50' y1='64' x2='50' y2='78' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='14' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='36' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='86' cy='50' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='64' y1='50' x2='78' y2='50' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='40' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='76' cy='24' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='60' y2='40' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3Ccircle cx='24' cy='76' r='8' fill='none' stroke='%234285f4' stroke-width='4'/%3E%3Cline x1='30' y1='70' x2='40' y2='60' stroke='%234285f4' stroke-width='2.5' opacity='0.5'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
 <!-- Preconnect -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -273,6 +274,16 @@ input,select,button{font-family:var(--font);}
 .nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--teal);border-radius:0 3px 3px 0;}
 .nav-icon{width:18px;text-align:center;font-size:0.85rem;flex-shrink:0;}
 .nav-badge{margin-left:auto;font-family:var(--mono);font-size:0.62rem;background:var(--teal-subtle);color:var(--teal);padding:0.15rem 0.45rem;border-radius:10px;font-weight:600;}
+/* More Apps external links */
+.nav-item-ext{
+  display:flex;align-items:center;gap:0.65rem;
+  padding:0.6rem 0.75rem;border-radius:var(--radius-sm);
+  color:var(--g300);font-size:0.82rem;text-decoration:none;
+  cursor:pointer;transition:all 0.15s;margin-bottom:2px;
+}
+.nav-item-ext:hover{background:rgba(66,133,244,0.08);color:var(--white);}
+.nav-item-ext .nav-ext-arrow{margin-left:auto;font-size:0.6rem;color:var(--g500);opacity:0.7;}
+.nav-item-ext:hover .nav-ext-arrow{color:var(--teal);opacity:1;}
 .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);font-size:0.7rem;color:var(--g400);}
 .sidebar-footer .net-status{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.3rem;}
 .sidebar-footer .net-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:pulse 2s infinite;}
@@ -627,6 +638,21 @@ tr:last-child td{border-bottom:none;}
       <div class="nav-item" data-tab="proposals"><span class="nav-icon">◎</span>Proposals<span class="nav-badge">3</span></div>
       <div class="nav-item" data-tab="explorer"><span class="nav-icon">⊞</span>Block Explorer</div>
       <div class="nav-item" data-tab="parameters"><span class="nav-icon">⚙</span>Parameters</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">More Apps</div>
+      <a class="nav-item-ext" href="https://www.asterdex.com" target="_blank" rel="noopener">
+        <span class="nav-icon">◈</span>AsterDex Exchange<span class="nav-ext-arrow">↗</span>
+      </a>
+      <a class="nav-item-ext" href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener">
+        <span class="nav-icon">⬡</span>Staking Portal<span class="nav-ext-arrow">↗</span>
+      </a>
+      <a class="nav-item-ext" href="https://www.asterdex.com/en/explorer" target="_blank" rel="noopener">
+        <span class="nav-icon">⊞</span>Block Explorer<span class="nav-ext-arrow">↗</span>
+      </a>
+      <a class="nav-item-ext" href="https://docs.asterdex.com" target="_blank" rel="noopener">
+        <span class="nav-icon">◉</span>Documentation<span class="nav-ext-arrow">↗</span>
+      </a>
     </div>
   </nav>
   <div class="sidebar-footer">
