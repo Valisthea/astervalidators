@@ -895,7 +895,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nav-section">
       <div class="nav-section-label">Overview</div>
       <div class="nav-item active" data-tab="overview"><span class="nav-icon">◈</span>Dashboard</div>
-      <div class="nav-item" data-tab="calculator"><span class="nav-icon">🧮</span>Récompenses</div>
+      <div class="nav-item" data-tab="calculator"><span class="nav-icon">🧮</span>Rewards</div>
       <div class="nav-item" data-tab="leaderboard"><span class="nav-icon">▤</span>Leaderboard<span class="nav-badge" id="valCountBadge">87</span></div>
       <div class="nav-item" data-tab="analytics"><span class="nav-icon">◐</span>Analytics</div>
     </div>
@@ -1227,16 +1227,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- ═══════ TAB: REWARDS CALCULATOR ═══════ -->
     <div class="tab-content" id="tc-calculator">
       <div style="margin-bottom:1.25rem">
-        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Calculateur de Récompenses</div>
-        <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Formules officielles AsterDEX · Base Rewards + Loyalty Rewards · Mis à jour en temps réel</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Rewards Calculator</div>
+        <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Official AsterDEX formulas · Base Rewards + Loyalty Rewards · Real-time calculation</div>
       </div>
       <div class="calc-grid">
         <!-- LEFT: Inputs -->
         <div style="display:flex;flex-direction:column;gap:1rem;">
           <div class="calc-card">
-            <div class="calc-card-title">◈ Paramètres de Staking</div>
+            <div class="calc-card-title">◈ Staking Parameters</div>
             <div class="calc-field">
-              <label>Montant à staker (ASTER)</label>
+              <label>Staking Amount (ASTER)</label>
               <input class="calc-input" id="calcV_stake" type="number" value="10000" min="0" oninput="_runCalc()">
               <div class="calc-validator-info" id="calcV_usd"></div>
             </div>
@@ -1251,27 +1251,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
           <div class="calc-card">
-            <div class="calc-card-title">⚡ Période de Lock (veASTER)</div>
-            <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.5rem">Plus le lock est long, plus le multiplicateur de Loyalty est élevé</div>
+            <div class="calc-card-title">⚡ Lock Period (veASTER)</div>
+            <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.5rem">Longer lock = higher Loyalty reward multiplier</div>
             <div class="calc-lock-wrap" id="calcV_lockBtns"></div>
           </div>
           <div class="calc-card">
-            <div class="calc-card-title">⚙ Paramètres Avancés</div>
+            <div class="calc-card-title">⚙ Advanced Settings</div>
             <div class="calc-field">
               <label>Volume Boost (trading volume)</label>
               <select class="calc-select" id="calcV_boost" onchange="_runCalc()">
-                <option value="1.0">1.0× — Pas de volume</option>
+                <option value="1.0">1.0× — No volume</option>
                 <option value="1.05">&gt;500K USDT — 1.05×</option>
                 <option value="1.15" selected>&gt;50M USDT — 1.15×</option>
                 <option value="1.25">&gt;200M USDT — 1.25×</option>
               </select>
             </div>
             <div class="calc-field">
-              <label>Part transactions du validateur (%)</label>
+              <label>Validator TX share (%)</label>
               <input class="calc-input" id="calcV_txshare" type="number" value="15" min="0" max="100" oninput="_runCalc()">
             </div>
             <div class="calc-field">
-              <label>Power total réseau (estimation)</label>
+              <label>Total Network Power (estimate)</label>
               <input class="calc-input" id="calcV_netpower" type="number" value="100000000" min="1" oninput="_runCalc()">
             </div>
           </div>
@@ -1280,7 +1280,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div style="display:flex;flex-direction:column;gap:1rem;">
           <!-- APY + Stats -->
           <div class="calc-card">
-            <div class="calc-card-title">◐ Projections de Récompenses</div>
+            <div class="calc-card-title">◐ Reward Projections</div>
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">
               <div>
                 <div style="font-size:0.65rem;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px">APY Estimé</div>
@@ -1290,29 +1290,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="calc-stat-row">
               <div class="calc-stat">
-                <div class="calc-stat-label">Par Epoch (7j)</div>
+                <div class="calc-stat-label">Per Epoch (7d)</div>
                 <div class="calc-stat-value" id="calcV_weekly">—</div>
               </div>
               <div class="calc-stat">
-                <div class="calc-stat-label">Par Mois</div>
+                <div class="calc-stat-label">Per Month</div>
                 <div class="calc-stat-value" id="calcV_monthly">—</div>
               </div>
               <div class="calc-stat">
-                <div class="calc-stat-label">Par An</div>
+                <div class="calc-stat-label">Per Year</div>
                 <div class="calc-stat-value" id="calcV_yearly">—</div>
               </div>
             </div>
           </div>
           <!-- Big stat -->
           <div class="calc-big">
-            <div class="calc-big-label">Récompenses Annuelles Totales</div>
+            <div class="calc-big-label">Total Annual Rewards</div>
             <div class="calc-big-value" id="calcV_yearlyBig">0 ASTER</div>
             <div class="calc-big-usd" id="calcV_yearlyBigUsd"></div>
-            <div class="calc-big-balance">Balance après 1 an : <span style="color:var(--white);font-weight:700" id="calcV_balance">0 ASTER</span></div>
+            <div class="calc-big-balance">Balance after 1 year: <span style="color:var(--white);font-weight:700" id="calcV_balance">0 ASTER</span></div>
           </div>
           <!-- Breakdown -->
           <div class="calc-card">
-            <div class="calc-card-title">📊 Décomposition par Epoch</div>
+            <div class="calc-card-title">📊 Per Epoch Breakdown</div>
             <div class="calc-breakdown-item">
               <div class="calc-breakdown-left">
                 <div class="calc-breakdown-icon" style="background:rgba(96,165,250,0.15)">🧊</div>
@@ -1337,7 +1337,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="calc-breakdown-left">
                 <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.15)">💰</div>
                 <div>
-                  <div class="calc-breakdown-title" style="color:var(--teal)">Total par Epoch</div>
+                  <div class="calc-breakdown-title" style="color:var(--teal)">Total per Epoch</div>
                   <div class="calc-breakdown-sub" id="calcV_commSub"></div>
                 </div>
               </div>
@@ -1346,14 +1346,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="calc-formula">
               <strong>Base</strong> = 150,000 × (% TX validateur) × (Stake ÷ Total Stake) × (1 − Commission)<br>
               <strong>Loyalty</strong> = 300,000 × (Power ÷ Power réseau)<br>
-              <strong>Power</strong> = Stake × (Semaines lock ÷ 208) × Volume Boost
+              <strong>Power</strong> = Stake × (Lock weeks ÷ 208) × Volume Boost
             </div>
           </div>
           <!-- Info -->
           <div class="calc-info">
-            <strong>ℹ Documentation officielle AsterDEX</strong><br>
+            <strong>ℹ Official AsterDEX Documentation</strong><br>
             Base Pool: 150,000 ASTER/epoch · Loyalty Pool: 300,000 ASTER/epoch<br>
-            Epochs: hebdomadaires (lundi 00:00 UTC) · Lock max: 208 semaines (4 ans)<br>
+            Epochs: weekly (Monday 00:00 UTC) · Max lock: 208 weeks (4 years)<br>
             <a href="https://docs.asterdex.com/product/aster-chain-staking/how-staking-works" target="_blank" rel="noopener">docs.asterdex.com →</a>
           </div>
         </div>
@@ -2106,7 +2106,7 @@ ${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="
 
 // ─── REWARDS CALCULATOR ───
 const _CALC_BASE_POOL=150000,_CALC_LOYALTY_POOL=300000,_CALC_MAX_LOCK=208;
-const _CALC_LOCKS=[{w:0,l:'Flexible'},{w:26,l:'6 mois'},{w:52,l:'1 an'},{w:104,l:'2 ans'},{w:156,l:'3 ans'},{w:208,l:'4 ans'}];
+const _CALC_LOCKS=[{w:0,l:'Flexible'},{w:26,l:'6 months'},{w:52,l:'1 year'},{w:104,l:'2 years'},{w:156,l:'3 years'},{w:208,l:'4 years'}];
 let _calcLock=52,_calcReady=false;
 
 function initCalculatorTab(){
@@ -2168,7 +2168,7 @@ function _runCalc(){
   set('calcV_loyalty',loyalty.toFixed(6));
   set('calcV_loyaltySub',`Power: ${fmt(stake*tw*boost,0)} (TW: ${tw.toFixed(3)} × ${boost}×)`);
   set('calcV_totalEpoch',epoch.toFixed(6));
-  set('calcV_commSub',`Après commission ${v.commission}%`);
+  set('calcV_commSub',`After ${v.commission}% commission`);
 }
 
 // ─── TAB SWITCHING ───
