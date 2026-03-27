@@ -485,6 +485,44 @@ input,select,button{font-family:var(--font);}
 .ov-sub .up{color:var(--green);font-weight:600;}
 .ov-sub .down{color:var(--red);font-weight:600;}
 
+/* ═══════ REWARDS CALCULATOR ═══════ */
+.calc-grid{display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;}
+@media(max-width:900px){.calc-grid{grid-template-columns:1fr;}}
+.calc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;}
+.calc-card-title{font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+.calc-field{margin-bottom:0.85rem;}
+.calc-field label{display:block;font-size:0.72rem;color:var(--g300);margin-bottom:0.3rem;font-weight:600;}
+.calc-input{width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;color:var(--white);font-size:0.85rem;font-family:var(--mono);}
+.calc-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 2px rgba(0,221,184,0.15);}
+.calc-select{width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;color:var(--white);font-size:0.82rem;}
+.calc-lock-wrap{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.3rem;}
+.calc-lock-btn{flex:1;min-width:80px;text-align:center;padding:0.4rem 0.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--g300);cursor:pointer;font-size:0.72rem;line-height:1.3;transition:all 0.15s;}
+.calc-lock-btn small{display:block;font-size:0.62rem;color:var(--g400);}
+.calc-lock-btn:hover{border-color:var(--teal);color:var(--teal);}
+.calc-lock-btn.active{background:var(--teal-subtle);border-color:var(--teal);color:var(--teal);font-weight:700;}
+.calc-lock-btn.active small{color:var(--teal);}
+.calc-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1rem;}
+.calc-stat{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;text-align:center;}
+.calc-stat-label{font-size:0.65rem;color:var(--g400);margin-bottom:0.25rem;text-transform:uppercase;letter-spacing:0.5px;}
+.calc-stat-value{font-size:0.85rem;font-weight:700;color:var(--white);font-family:var(--mono);}
+.calc-stat-sub{font-size:0.62rem;color:var(--g400);margin-top:0.2rem;}
+.calc-big{background:linear-gradient(135deg,rgba(0,221,184,0.12),rgba(59,130,246,0.08));border:1px solid rgba(0,221,184,0.25);border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:1rem;}
+.calc-big-label{font-size:0.7rem;color:var(--g300);margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:1px;}
+.calc-big-value{font-size:1.8rem;font-weight:800;color:var(--teal);font-family:var(--mono);line-height:1.1;}
+.calc-big-usd{font-size:0.9rem;color:var(--g200);margin-top:0.2rem;}
+.calc-big-balance{font-size:0.78rem;color:var(--g300);margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border);}
+.calc-breakdown-item{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid var(--border);}
+.calc-breakdown-item:last-child{border-bottom:none;}
+.calc-breakdown-left{display:flex;align-items:center;gap:0.6rem;}
+.calc-breakdown-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.calc-breakdown-title{font-size:0.78rem;font-weight:600;color:var(--white);}
+.calc-breakdown-sub{font-size:0.62rem;color:var(--g400);}
+.calc-breakdown-value{font-family:var(--mono);font-size:0.82rem;font-weight:700;}
+.calc-formula{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;font-size:0.7rem;color:var(--g300);line-height:1.7;margin-top:0.75rem;}
+.calc-formula strong{color:var(--teal);}
+.calc-info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-sm);padding:0.85rem;font-size:0.72rem;color:var(--g200);line-height:1.7;margin-top:1rem;}
+.calc-info a{color:var(--teal);text-decoration:none;}
+.calc-validator-info{font-size:0.72rem;color:var(--g400);margin-top:0.4rem;}
 /* ═══════ TABS ═══════ */
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
 .tab{padding:0.7rem 1.25rem;font-size:0.82rem;font-weight:600;color:var(--g300);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;}
@@ -857,6 +895,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nav-section">
       <div class="nav-section-label">Overview</div>
       <div class="nav-item active" data-tab="overview"><span class="nav-icon">◈</span>Dashboard</div>
+      <div class="nav-item" data-tab="calculator"><span class="nav-icon">🧮</span>Récompenses</div>
       <div class="nav-item" data-tab="leaderboard"><span class="nav-icon">▤</span>Leaderboard<span class="nav-badge" id="valCountBadge">87</span></div>
       <div class="nav-item" data-tab="analytics"><span class="nav-icon">◐</span>Analytics</div>
     </div>
@@ -1181,6 +1220,142 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             ⚠ Validator switch takes effect at the <strong>next epoch</strong> (Mon 00:00 UTC). New deposits follow the unified lock period of your existing position.
           </div>
           <button class="btn-connect" style="width:100%;justify-content:center;" onclick="window.open('https://www.asterdex.com/en/staking','_blank')">Redelegate on AsterDex →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ TAB: REWARDS CALCULATOR ═══════ -->
+    <div class="tab-content" id="tc-calculator">
+      <div style="margin-bottom:1.25rem">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Calculateur de Récompenses</div>
+        <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Formules officielles AsterDEX · Base Rewards + Loyalty Rewards · Mis à jour en temps réel</div>
+      </div>
+      <div class="calc-grid">
+        <!-- LEFT: Inputs -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="calc-card">
+            <div class="calc-card-title">◈ Paramètres de Staking</div>
+            <div class="calc-field">
+              <label>Montant à staker (ASTER)</label>
+              <input class="calc-input" id="calcV_stake" type="number" value="10000" min="0" oninput="_runCalc()">
+              <div class="calc-validator-info" id="calcV_usd"></div>
+            </div>
+            <div class="calc-field">
+              <label>Validateur</label>
+              <select class="calc-select" id="calcV_validator" onchange="_runCalc()"></select>
+              <div class="calc-validator-info" id="calcV_validatorInfo"></div>
+            </div>
+            <div class="calc-field">
+              <label>Prix ASTER (USD)</label>
+              <input class="calc-input" id="calcV_price" type="number" value="0" step="0.0001" min="0" oninput="_runCalc()">
+            </div>
+          </div>
+          <div class="calc-card">
+            <div class="calc-card-title">⚡ Période de Lock (veASTER)</div>
+            <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.5rem">Plus le lock est long, plus le multiplicateur de Loyalty est élevé</div>
+            <div class="calc-lock-wrap" id="calcV_lockBtns"></div>
+          </div>
+          <div class="calc-card">
+            <div class="calc-card-title">⚙ Paramètres Avancés</div>
+            <div class="calc-field">
+              <label>Volume Boost (trading volume)</label>
+              <select class="calc-select" id="calcV_boost" onchange="_runCalc()">
+                <option value="1.0">1.0× — Pas de volume</option>
+                <option value="1.05">&gt;500K USDT — 1.05×</option>
+                <option value="1.15" selected>&gt;50M USDT — 1.15×</option>
+                <option value="1.25">&gt;200M USDT — 1.25×</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label>Part transactions du validateur (%)</label>
+              <input class="calc-input" id="calcV_txshare" type="number" value="15" min="0" max="100" oninput="_runCalc()">
+            </div>
+            <div class="calc-field">
+              <label>Power total réseau (estimation)</label>
+              <input class="calc-input" id="calcV_netpower" type="number" value="100000000" min="1" oninput="_runCalc()">
+            </div>
+          </div>
+        </div>
+        <!-- RIGHT: Results -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <!-- APY + Stats -->
+          <div class="calc-card">
+            <div class="calc-card-title">◐ Projections de Récompenses</div>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div>
+                <div style="font-size:0.65rem;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px">APY Estimé</div>
+                <div style="font-size:1.6rem;font-weight:800;color:var(--teal);font-family:var(--mono)" id="calcV_apy">—</div>
+                <div style="font-size:0.65rem;color:var(--g400)" id="calcV_apyDetail"></div>
+              </div>
+            </div>
+            <div class="calc-stat-row">
+              <div class="calc-stat">
+                <div class="calc-stat-label">Par Epoch (7j)</div>
+                <div class="calc-stat-value" id="calcV_weekly">—</div>
+              </div>
+              <div class="calc-stat">
+                <div class="calc-stat-label">Par Mois</div>
+                <div class="calc-stat-value" id="calcV_monthly">—</div>
+              </div>
+              <div class="calc-stat">
+                <div class="calc-stat-label">Par An</div>
+                <div class="calc-stat-value" id="calcV_yearly">—</div>
+              </div>
+            </div>
+          </div>
+          <!-- Big stat -->
+          <div class="calc-big">
+            <div class="calc-big-label">Récompenses Annuelles Totales</div>
+            <div class="calc-big-value" id="calcV_yearlyBig">0 ASTER</div>
+            <div class="calc-big-usd" id="calcV_yearlyBigUsd"></div>
+            <div class="calc-big-balance">Balance après 1 an : <span style="color:var(--white);font-weight:700" id="calcV_balance">0 ASTER</span></div>
+          </div>
+          <!-- Breakdown -->
+          <div class="calc-card">
+            <div class="calc-card-title">📊 Décomposition par Epoch</div>
+            <div class="calc-breakdown-item">
+              <div class="calc-breakdown-left">
+                <div class="calc-breakdown-icon" style="background:rgba(96,165,250,0.15)">🧊</div>
+                <div>
+                  <div class="calc-breakdown-title">Base Rewards</div>
+                  <div class="calc-breakdown-sub">Pool: 150,000 ASTER / epoch</div>
+                </div>
+              </div>
+              <div class="calc-breakdown-value" style="color:#60a5fa" id="calcV_base">0</div>
+            </div>
+            <div class="calc-breakdown-item">
+              <div class="calc-breakdown-left">
+                <div class="calc-breakdown-icon" style="background:rgba(167,139,250,0.15)">⭐</div>
+                <div>
+                  <div class="calc-breakdown-title">Loyalty Rewards (veASTER)</div>
+                  <div class="calc-breakdown-sub" id="calcV_loyaltySub">Pool: 300,000 ASTER / epoch</div>
+                </div>
+              </div>
+              <div class="calc-breakdown-value" style="color:#a78bfa" id="calcV_loyalty">0</div>
+            </div>
+            <div class="calc-breakdown-item">
+              <div class="calc-breakdown-left">
+                <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.15)">💰</div>
+                <div>
+                  <div class="calc-breakdown-title" style="color:var(--teal)">Total par Epoch</div>
+                  <div class="calc-breakdown-sub" id="calcV_commSub"></div>
+                </div>
+              </div>
+              <div class="calc-breakdown-value" style="color:var(--teal)" id="calcV_totalEpoch">0</div>
+            </div>
+            <div class="calc-formula">
+              <strong>Base</strong> = 150,000 × (% TX validateur) × (Stake ÷ Total Stake) × (1 − Commission)<br>
+              <strong>Loyalty</strong> = 300,000 × (Power ÷ Power réseau)<br>
+              <strong>Power</strong> = Stake × (Semaines lock ÷ 208) × Volume Boost
+            </div>
+          </div>
+          <!-- Info -->
+          <div class="calc-info">
+            <strong>ℹ Documentation officielle AsterDEX</strong><br>
+            Base Pool: 150,000 ASTER/epoch · Loyalty Pool: 300,000 ASTER/epoch<br>
+            Epochs: hebdomadaires (lundi 00:00 UTC) · Lock max: 208 semaines (4 ans)<br>
+            <a href="https://docs.asterdex.com/product/aster-chain-staking/how-staking-works" target="_blank" rel="noopener">docs.asterdex.com →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1929,6 +2104,73 @@ ${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="
   switchTab('staking');
 }
 
+// ─── REWARDS CALCULATOR ───
+const _CALC_BASE_POOL=150000,_CALC_LOYALTY_POOL=300000,_CALC_MAX_LOCK=208;
+const _CALC_LOCKS=[{w:0,l:'Flexible'},{w:26,l:'6 mois'},{w:52,l:'1 an'},{w:104,l:'2 ans'},{w:156,l:'3 ans'},{w:208,l:'4 ans'}];
+let _calcLock=52,_calcReady=false;
+
+function initCalculatorTab(){
+  const activ=validators.filter(v=>v.status==='active');
+  if(!activ.length)return;
+  if(!_calcReady){
+    const sel=document.getElementById('calcV_validator');
+    if(sel)sel.innerHTML=activ.map((v,i)=>`<option value="${i}">${v.name} (${v.commission}% comm)</option>`).join('');
+    const lc=document.getElementById('calcV_lockBtns');
+    if(lc)lc.innerHTML=_CALC_LOCKS.map(p=>{
+      const tw=(p.w/_CALC_MAX_LOCK).toFixed(3);
+      return `<button class="calc-lock-btn${p.w===_calcLock?' active':''}" data-weeks="${p.w}" onclick="_calcSetLock(${p.w})">${p.l}<small>${tw}×</small></button>`;
+    }).join('');
+    if(asterPrice){const pe=document.getElementById('calcV_price');if(pe&&pe.value==='0')pe.value=asterPrice.toFixed(4);}
+    _calcReady=true;
+  }
+  _runCalc();
+}
+
+function _calcSetLock(w){
+  _calcLock=w;
+  document.querySelectorAll('.calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
+  _runCalc();
+}
+
+function _runCalc(){
+  const activ=validators.filter(v=>v.status==='active');
+  const sel=document.getElementById('calcV_validator');
+  if(!activ.length||!sel)return;
+  const v=activ[parseInt(sel.value)]||activ[0];
+  const stake=parseFloat(document.getElementById('calcV_stake')?.value)||0;
+  const price=parseFloat(document.getElementById('calcV_price')?.value)||0;
+  const boost=parseFloat(document.getElementById('calcV_boost')?.value)||1.0;
+  const txShare=parseFloat(document.getElementById('calcV_txshare')?.value)/100||0.15;
+  const netPow=parseFloat(document.getElementById('calcV_netpower')?.value)||100000000;
+  const tw=_calcLock/_CALC_MAX_LOCK;
+  const comm=v.commission/100;
+  const ts=v.totalStake||1;
+  const base=_CALC_BASE_POOL*txShare*(stake/ts)*(1-comm);
+  const loyalty=_CALC_LOYALTY_POOL*((stake*tw*boost)/netPow);
+  const epoch=base+loyalty;
+  const monthly=epoch*4.3;
+  const yearly=epoch*52;
+  const apy=stake>0?(yearly/stake)*100:0;
+  const fmt=(n,d=2)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
+  const usd=(n)=>price>0?` ($${fmt(n*price,2)})`:'';
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set('calcV_usd',price>0?`≈ $${fmt(stake*price,2)} USD`:'');
+  set('calcV_validatorInfo',`Commission: ${v.commission}% · Stake: ${fmt(ts,0)} ASTER · Score: ${v.score}/100`);
+  set('calcV_apy',apy.toFixed(2)+'%');
+  set('calcV_apyDetail',`Lock weight: ${tw.toFixed(3)} × Boost: ${boost}×`);
+  set('calcV_weekly',fmt(epoch,4)+' ASTER'+usd(epoch));
+  set('calcV_monthly',fmt(monthly,4)+' ASTER'+usd(monthly));
+  set('calcV_yearly',fmt(yearly,4)+' ASTER'+usd(yearly));
+  set('calcV_yearlyBig',fmt(yearly,2)+' ASTER');
+  set('calcV_yearlyBigUsd',price>0?`≈ $${fmt(yearly*price,2)} USD`:'');
+  set('calcV_balance',fmt(stake+yearly,2)+' ASTER');
+  set('calcV_base',base.toFixed(6));
+  set('calcV_loyalty',loyalty.toFixed(6));
+  set('calcV_loyaltySub',`Power: ${fmt(stake*tw*boost,0)} (TW: ${tw.toFixed(3)} × ${boost}×)`);
+  set('calcV_totalEpoch',epoch.toFixed(6));
+  set('calcV_commSub',`Après commission ${v.commission}%`);
+}
+
 // ─── TAB SWITCHING ───
 function switchTab(t){
   _activeTab=t;
@@ -1939,6 +2181,7 @@ function switchTab(t){
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
   if(t==='analytics')setTimeout(renderAnalyticsCharts,50);
   if(t==='explorer')renderExplorerBlocks();
+  if(t==='calculator')initCalculatorTab();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 document.querySelectorAll('.nav-item[data-tab]').forEach(n=>n.addEventListener('click',()=>switchTab(n.dataset.tab)));
