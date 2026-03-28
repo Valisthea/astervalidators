@@ -1226,10 +1226,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ═══════ TAB: REWARDS CALCULATOR ═══════ -->
     <div class="tab-content" id="tc-calculator">
-      <div style="margin-bottom:1.25rem">
-        <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Rewards Calculator</div>
-        <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Official AsterDEX formulas · Base Rewards + Loyalty Rewards · Real-time calculation</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem">
+        <div>
+          <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Rewards Calculator</div>
+          <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Official AsterDEX formulas · Base Rewards + Loyalty Rewards · Real-time calculation</div>
+        </div>
+        <div style="display:flex;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;gap:3px">
+          <button id="calcToggle_simple" onclick="_calcMode('simple')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:var(--teal);color:var(--bg);transition:all 0.15s">Single</button>
+          <button id="calcToggle_portfolio" onclick="_calcMode('portfolio')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">Portfolio</button>
+        </div>
       </div>
+      <div id="calcSection_simple">
       <div class="calc-grid">
         <!-- LEFT: Inputs -->
         <div style="display:flex;flex-direction:column;gap:1rem;">
@@ -1358,13 +1365,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
       </div>
+      </div><!-- /calcSection_simple -->
 
       <!-- ═══════ PORTFOLIO MODE ═══════ -->
-      <div style="margin-top:2rem;padding-top:1.75rem;border-top:1px solid var(--border)">
-        <div style="display:flex;align-items:baseline;gap:0.75rem;margin-bottom:1.25rem">
-          <div style="font-size:1.1rem;font-weight:800;color:var(--white)">💼 Portfolio Mode</div>
-          <div style="font-size:0.75rem;color:var(--g300)">Split your stake across multiple validators</div>
-        </div>
+      <div id="calcSection_portfolio" style="display:none">
         <div class="calc-grid">
           <!-- LEFT: Config + Add + List -->
           <div style="display:flex;flex-direction:column;gap:1rem;">
@@ -1462,7 +1466,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </div>
         </div>
-      </div>
+      </div><!-- /calcSection_portfolio -->
     </div>
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
@@ -2279,6 +2283,17 @@ function _runCalc(){
   set('calcV_loyaltySub',`Power: ${fmt(stake*tw*boost,0)} (TW: ${tw.toFixed(3)} × ${boost}×)`);
   set('calcV_totalEpoch',epoch.toFixed(6));
   set('calcV_commSub',`After ${v.commission}% commission`);
+}
+
+// ─── CALCULATOR MODE TOGGLE ───
+function _calcMode(mode){
+  const isPortfolio=mode==='portfolio';
+  document.getElementById('calcSection_simple').style.display=isPortfolio?'none':'';
+  document.getElementById('calcSection_portfolio').style.display=isPortfolio?'':'none';
+  document.getElementById('calcToggle_simple').style.background=isPortfolio?'transparent':'var(--teal)';
+  document.getElementById('calcToggle_simple').style.color=isPortfolio?'var(--g300)':'var(--bg)';
+  document.getElementById('calcToggle_portfolio').style.background=isPortfolio?'var(--teal)':'transparent';
+  document.getElementById('calcToggle_portfolio').style.color=isPortfolio?'var(--bg)':'var(--g300)';
 }
 
 // ─── MULTI-VALIDATOR PORTFOLIO ───
