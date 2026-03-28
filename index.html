@@ -1390,22 +1390,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <label>Validator</label>
                 <select class="calc-select" id="mv_addValidator"></select>
               </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
-                <div class="calc-field" style="margin:0">
-                  <label>Allocation (%)</label>
-                  <input class="calc-input" id="mv_addAlloc" type="number" value="50" min="1" max="100">
-                </div>
-                <div class="calc-field" style="margin:0">
-                  <label>Lock Period</label>
-                  <select class="calc-select" id="mv_addLock">
-                    <option value="0">Flexible</option>
-                    <option value="26">6 months</option>
-                    <option value="52" selected>1 year</option>
-                    <option value="104">2 years</option>
-                    <option value="156">3 years</option>
-                    <option value="208">4 years</option>
-                  </select>
-                </div>
+              <div class="calc-field">
+                <label>Lock Period</label>
+                <select class="calc-select" id="mv_addLock">
+                  <option value="0">Flexible</option>
+                  <option value="26">6 months</option>
+                  <option value="52" selected>1 year</option>
+                  <option value="104">2 years</option>
+                  <option value="156">3 years</option>
+                  <option value="208">4 years</option>
+                </select>
               </div>
               <button onclick="_mvAdd()" style="width:100%;background:var(--teal);color:var(--bg);border:none;border-radius:var(--radius-sm);padding:0.6rem;font-size:0.82rem;font-weight:700;cursor:pointer;letter-spacing:0.5px">+ Add to Portfolio</button>
             </div>
@@ -2299,27 +2293,39 @@ function _calcMode(mode){
 // ─── MULTI-VALIDATOR PORTFOLIO ───
 let _mvPortfolio=[];
 
+function _mvRebalance(){
+  // Always keep sum = 100, distributing equally
+  if(!_mvPortfolio.length)return;
+  const each=Math.floor(100/_mvPortfolio.length);
+  _mvPortfolio.forEach((e,i)=>e.alloc=i===_mvPortfolio.length-1?100-each*(_mvPortfolio.length-1):each);
+}
+
 function _mvAdd(){
   const activ=validators.filter(v=>v.status==='active');
   const idx=parseInt(document.getElementById('mv_addValidator')?.value)||0;
-  const alloc=parseFloat(document.getElementById('mv_addAlloc')?.value)||0;
   const lock=parseInt(document.getElementById('mv_addLock')?.value)||0;
-  if(!activ.length||alloc<=0)return;
-  _mvPortfolio.push({validatorIdx:idx,alloc,lock});
+  if(!activ.length)return;
+  _mvPortfolio.push({validatorIdx:idx,alloc:0,lock});
+  _mvRebalance();
   _mvRender();
   _mvCalc();
 }
 
 function _mvRemove(i){
   _mvPortfolio.splice(i,1);
+  if(_mvPortfolio.length){
+    const total=_mvPortfolio.reduce((s,e)=>s+e.alloc,0)||1;
+    _mvPortfolio.forEach(e=>e.alloc=Math.round(e.alloc/total*100));
+    const sum=_mvPortfolio.reduce((s,e)=>s+e.alloc,0);
+    if(sum!==100)_mvPortfolio[0].alloc+=100-sum;
+  }
   _mvRender();
   _mvCalc();
 }
 
 function _mvEqualSplit(){
   if(!_mvPortfolio.length)return;
-  const each=Math.floor(100/_mvPortfolio.length);
-  _mvPortfolio.forEach((e,i)=>e.alloc=i===_mvPortfolio.length-1?100-each*(_mvPortfolio.length-1):each);
+  _mvRebalance();
   _mvRender();
   _mvCalc();
 }
@@ -2331,9 +2337,17 @@ function _mvClear(){
 }
 
 function _mvAllocChange(i,val){
-  _mvPortfolio[i].alloc=Math.max(0,parseFloat(val)||0);
+  if(_mvPortfolio.length<2)return;
+  const newVal=Math.max(1,Math.min(99,Math.round(parseFloat(val)||1)));
+  _mvPortfolio[i].alloc=newVal;
+  const remaining=100-newVal;
+  const others=_mvPortfolio.filter((_,j)=>j!==i);
+  const othersTotal=others.reduce((s,e)=>s+e.alloc,0)||1;
+  others.forEach(e=>e.alloc=Math.round(e.alloc/othersTotal*remaining));
+  const sum=_mvPortfolio.reduce((s,e)=>s+e.alloc,0);
+  if(sum!==100){const f=_mvPortfolio.find((_,j)=>j!==i);if(f)f.alloc+=100-sum;}
+  _mvRender();
   _mvCalc();
-  _mvUpdateBadge();
 }
 
 function _mvLockChange(i,val){
@@ -2342,12 +2356,11 @@ function _mvLockChange(i,val){
 }
 
 function _mvUpdateBadge(){
-  const total=_mvPortfolio.reduce((s,e)=>s+e.alloc,0);
   const badge=document.getElementById('mv_allocBadge');
   if(!badge)return;
-  badge.textContent=total+'%';
-  badge.style.background=total===100?'rgba(0,221,184,0.15)':total>100?'rgba(239,68,68,0.15)':'rgba(251,191,36,0.15)';
-  badge.style.color=total===100?'var(--teal)':total>100?'#ef4444':'#fbbf24';
+  badge.textContent='100%';
+  badge.style.background='rgba(0,221,184,0.15)';
+  badge.style.color='var(--teal)';
 }
 
 function _mvRender(){
