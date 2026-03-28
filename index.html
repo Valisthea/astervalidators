@@ -1370,49 +1370,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- ═══════ PORTFOLIO MODE ═══════ -->
       <div id="calcSection_portfolio" style="display:none">
         <div class="calc-grid">
-          <!-- LEFT: Config + Add + List -->
+          <!-- LEFT: Add + List -->
           <div style="display:flex;flex-direction:column;gap:1rem;">
-            <div class="calc-card">
-              <div class="calc-card-title">◈ Portfolio Settings</div>
-              <div class="calc-field">
-                <label>Total Stake (ASTER)</label>
-                <input class="calc-input" id="mv_stake" type="number" value="10000" min="0" oninput="_mvCalc()">
-                <div class="calc-validator-info" id="mv_usd"></div>
-              </div>
-              <div class="calc-field">
-                <label>ASTER Price (USD)</label>
-                <input class="calc-input" id="mv_price" type="number" value="0" step="0.0001" min="0" oninput="_mvCalc()">
-              </div>
-            </div>
             <div class="calc-card">
               <div class="calc-card-title">⊕ Add Validator</div>
               <div class="calc-field">
                 <label>Validator</label>
                 <select class="calc-select" id="mv_addValidator"></select>
               </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+                <div class="calc-field" style="margin:0">
+                  <label>Stake (ASTER)</label>
+                  <input class="calc-input" id="mv_addStake" type="number" value="5000" min="0">
+                </div>
+                <div class="calc-field" style="margin:0">
+                  <label>Lock Period</label>
+                  <select class="calc-select" id="mv_addLock">
+                    <option value="0">Flexible</option>
+                    <option value="26">6 months</option>
+                    <option value="52" selected>1 year</option>
+                    <option value="104">2 years</option>
+                    <option value="156">3 years</option>
+                    <option value="208">4 years</option>
+                  </select>
+                </div>
+              </div>
               <div class="calc-field">
-                <label>Lock Period</label>
-                <select class="calc-select" id="mv_addLock">
-                  <option value="0">Flexible</option>
-                  <option value="26">6 months</option>
-                  <option value="52" selected>1 year</option>
-                  <option value="104">2 years</option>
-                  <option value="156">3 years</option>
-                  <option value="208">4 years</option>
-                </select>
+                <label>ASTER Price (USD)</label>
+                <input class="calc-input" id="mv_price" type="number" value="0" step="0.0001" min="0" oninput="_mvCalc()">
               </div>
               <button onclick="_mvAdd()" style="width:100%;background:var(--teal);color:var(--bg);border:none;border-radius:var(--radius-sm);padding:0.6rem;font-size:0.82rem;font-weight:700;cursor:pointer;letter-spacing:0.5px">+ Add to Portfolio</button>
             </div>
             <div class="calc-card" id="mv_listCard" style="display:none">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <div class="calc-card-title" style="margin:0">◈ My Portfolio</div>
-                <div id="mv_allocBadge" style="font-size:0.7rem;font-family:var(--mono);padding:0.2rem 0.6rem;border-radius:4px;background:rgba(251,191,36,0.15);color:#fbbf24">0%</div>
+                <div id="mv_totalBadge" style="font-size:0.7rem;font-family:var(--mono);padding:0.2rem 0.6rem;border-radius:4px;background:rgba(0,221,184,0.15);color:var(--teal)">0 ASTER</div>
               </div>
               <div id="mv_list"></div>
-              <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
-                <button onclick="_mvEqualSplit()" style="flex:1;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.4rem;font-size:0.7rem;color:var(--g300);cursor:pointer">⚖ Equal split</button>
-                <button onclick="_mvClear()" style="background:transparent;border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:0.4rem 0.75rem;font-size:0.7rem;color:#ef4444;cursor:pointer">✕ Clear all</button>
-              </div>
+              <button onclick="_mvClear()" style="margin-top:0.75rem;width:100%;background:transparent;border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:0.4rem 0.75rem;font-size:0.7rem;color:#ef4444;cursor:pointer">✕ Clear all</button>
             </div>
           </div>
           <!-- RIGHT: Results -->
@@ -2291,41 +2286,22 @@ function _calcMode(mode){
 }
 
 // ─── MULTI-VALIDATOR PORTFOLIO ───
+// Each entry: {validatorIdx, stake, lock} — fully independent, adding one never changes others
 let _mvPortfolio=[];
-
-function _mvRebalance(){
-  // Always keep sum = 100, distributing equally
-  if(!_mvPortfolio.length)return;
-  const each=Math.floor(100/_mvPortfolio.length);
-  _mvPortfolio.forEach((e,i)=>e.alloc=i===_mvPortfolio.length-1?100-each*(_mvPortfolio.length-1):each);
-}
 
 function _mvAdd(){
   const activ=validators.filter(v=>v.status==='active');
   const idx=parseInt(document.getElementById('mv_addValidator')?.value)||0;
+  const stake=parseFloat(document.getElementById('mv_addStake')?.value)||0;
   const lock=parseInt(document.getElementById('mv_addLock')?.value)||0;
-  if(!activ.length)return;
-  _mvPortfolio.push({validatorIdx:idx,alloc:0,lock});
-  _mvRebalance();
+  if(!activ.length||stake<=0)return;
+  _mvPortfolio.push({validatorIdx:idx,stake,lock});
   _mvRender();
   _mvCalc();
 }
 
 function _mvRemove(i){
   _mvPortfolio.splice(i,1);
-  if(_mvPortfolio.length){
-    const total=_mvPortfolio.reduce((s,e)=>s+e.alloc,0)||1;
-    _mvPortfolio.forEach(e=>e.alloc=Math.round(e.alloc/total*100));
-    const sum=_mvPortfolio.reduce((s,e)=>s+e.alloc,0);
-    if(sum!==100)_mvPortfolio[0].alloc+=100-sum;
-  }
-  _mvRender();
-  _mvCalc();
-}
-
-function _mvEqualSplit(){
-  if(!_mvPortfolio.length)return;
-  _mvRebalance();
   _mvRender();
   _mvCalc();
 }
@@ -2336,18 +2312,10 @@ function _mvClear(){
   _mvCalc();
 }
 
-function _mvAllocChange(i,val){
-  if(_mvPortfolio.length<2)return;
-  const newVal=Math.max(1,Math.min(99,Math.round(parseFloat(val)||1)));
-  _mvPortfolio[i].alloc=newVal;
-  const remaining=100-newVal;
-  const others=_mvPortfolio.filter((_,j)=>j!==i);
-  const othersTotal=others.reduce((s,e)=>s+e.alloc,0)||1;
-  others.forEach(e=>e.alloc=Math.round(e.alloc/othersTotal*remaining));
-  const sum=_mvPortfolio.reduce((s,e)=>s+e.alloc,0);
-  if(sum!==100){const f=_mvPortfolio.find((_,j)=>j!==i);if(f)f.alloc+=100-sum;}
-  _mvRender();
+function _mvStakeChange(i,val){
+  _mvPortfolio[i].stake=Math.max(0,parseFloat(val)||0);
   _mvCalc();
+  _mvUpdateBadge();
 }
 
 function _mvLockChange(i,val){
@@ -2356,11 +2324,11 @@ function _mvLockChange(i,val){
 }
 
 function _mvUpdateBadge(){
-  const badge=document.getElementById('mv_allocBadge');
+  const total=_mvPortfolio.reduce((s,e)=>s+e.stake,0);
+  const badge=document.getElementById('mv_totalBadge');
   if(!badge)return;
-  badge.textContent='100%';
-  badge.style.background='rgba(0,221,184,0.15)';
-  badge.style.color='var(--teal)';
+  const fmt=(n)=>n.toLocaleString('fr-FR',{maximumFractionDigits:0});
+  badge.textContent=fmt(total)+' ASTER';
 }
 
 function _mvRender(){
@@ -2378,11 +2346,11 @@ function _mvRender(){
     const v=activ[e.validatorIdx]||activ[0];
     return `<div class="calc-breakdown-item">
       <div class="calc-breakdown-left">
-        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.62rem;font-weight:800;color:var(--teal)">${e.alloc}%</div>
+        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.55rem;font-weight:800;color:var(--teal);flex-shrink:0">V${i+1}</div>
         <div>
           <div class="calc-breakdown-title">${v.name}</div>
           <div class="calc-breakdown-sub" style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;margin-top:0.2rem">
-            <input type="number" value="${e.alloc}" min="0" max="100" oninput="_mvAllocChange(${i},this.value)" style="width:46px;background:var(--bg-surface);border:1px solid var(--border);border-radius:4px;padding:0.15rem 0.3rem;font-size:0.7rem;color:var(--white);font-family:var(--mono)">%
+            <input type="number" value="${e.stake}" min="0" oninput="_mvStakeChange(${i},this.value)" style="width:72px;background:var(--bg-surface);border:1px solid var(--border);border-radius:4px;padding:0.15rem 0.3rem;font-size:0.7rem;color:var(--white);font-family:var(--mono)"> ASTER
             <select onchange="_mvLockChange(${i},this.value)" style="background:var(--bg-surface);border:1px solid var(--border);border-radius:4px;padding:0.15rem 0.3rem;font-size:0.65rem;color:var(--g200)">${_CALC_LOCKS.map(l=>`<option value="${l.w}"${l.w===e.lock?' selected':''}>${l.l}</option>`).join('')}</select>
           </div>
         </div>
@@ -2396,20 +2364,17 @@ function _mvRender(){
 function _mvCalc(){
   const activ=validators.filter(v=>v.status==='active');
   if(!activ.length||!_mvPortfolio.length)return;
-  const totalStake=parseFloat(document.getElementById('mv_stake')?.value)||0;
   const price=parseFloat(document.getElementById('mv_price')?.value)||0;
   const netPow=100000000;
   const fmt=(n,d=2)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
   const usd=(n)=>price>0?` ($${fmt(n*price,2)})`:'';
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
-  set('mv_usd',price>0?`≈ $${fmt(totalStake*price,2)} USD`:'');
   let totalYearly=0;
+  let totalStake=0;
   const breakdown=[];
-  const sumAlloc=_mvPortfolio.reduce((s,e)=>s+e.alloc,0)||1;
-  _mvPortfolio.forEach(e=>{
+  _mvPortfolio.forEach((e,i)=>{
     const v=activ[e.validatorIdx]||activ[0];
-    const weight=e.alloc/sumAlloc; // normalize so total always = 100%
-    const stake=totalStake*weight;
+    const stake=e.stake;
     const tw=e.lock/_CALC_MAX_LOCK;
     const comm=v.commission/100;
     const ts=v.totalStake||1;
@@ -2418,8 +2383,8 @@ function _mvCalc(){
     const yearly=(base+loyalty)*52;
     const apy=stake>0?(yearly/stake)*100:0;
     totalYearly+=yearly;
-    const effectivePct=Math.round(weight*100);
-    breakdown.push({v,stake,apy,yearly,alloc:effectivePct,lock:e.lock});
+    totalStake+=stake;
+    breakdown.push({v,stake,apy,yearly,lock:e.lock,idx:i});
   });
   const epoch=totalYearly/52;
   const monthly=epoch*4.3;
@@ -2432,17 +2397,19 @@ function _mvCalc(){
   set('mv_yearlyBigUsd',price>0?`≈ $${fmt(totalYearly*price,2)} USD`:'');
   set('mv_balance',fmt(totalStake+totalYearly,2)+' ASTER');
   const bd=document.getElementById('mv_breakdown');
-  if(bd)bd.innerHTML=breakdown.map(b=>`
-    <div class="calc-breakdown-item">
+  if(bd)bd.innerHTML=breakdown.map(b=>{
+    const pct=totalStake>0?Math.round(b.stake/totalStake*100):0;
+    return `<div class="calc-breakdown-item">
       <div class="calc-breakdown-left">
-        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.62rem;font-weight:800;color:var(--teal)">${b.alloc}%</div>
+        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.62rem;font-weight:800;color:var(--teal)">${pct}%</div>
         <div>
-          <div class="calc-breakdown-title">${b.v.name}</div>
+          <div class="calc-breakdown-title">V${b.idx+1} · ${b.v.name}</div>
           <div class="calc-breakdown-sub">${fmt(b.stake,0)} ASTER · ${b.apy.toFixed(2)}% APY · ${_CALC_LOCKS.find(l=>l.w===b.lock)?.l||'Flexible'}</div>
         </div>
       </div>
-      <div class="calc-breakdown-value" style="color:var(--teal)">${fmt(b.yearly,2)} /yr</div>
-    </div>`).join('');
+      <div class="calc-breakdown-value" style="color:var(--teal)">+${fmt(b.yearly,2)} /yr</div>
+    </div>`;
+  }).join('');
   _mvUpdateBadge();
 }
 
