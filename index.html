@@ -2331,7 +2331,7 @@ function _mvClear(){
 }
 
 function _mvAllocChange(i,val){
-  _mvPortfolio[i].alloc=Math.max(0,Math.min(100,parseFloat(val)||0));
+  _mvPortfolio[i].alloc=Math.max(0,parseFloat(val)||0);
   _mvCalc();
   _mvUpdateBadge();
 }
@@ -2392,9 +2392,11 @@ function _mvCalc(){
   set('mv_usd',price>0?`≈ $${fmt(totalStake*price,2)} USD`:'');
   let totalYearly=0;
   const breakdown=[];
+  const sumAlloc=_mvPortfolio.reduce((s,e)=>s+e.alloc,0)||1;
   _mvPortfolio.forEach(e=>{
     const v=activ[e.validatorIdx]||activ[0];
-    const stake=totalStake*(e.alloc/100);
+    const weight=e.alloc/sumAlloc; // normalize so total always = 100%
+    const stake=totalStake*weight;
     const tw=e.lock/_CALC_MAX_LOCK;
     const comm=v.commission/100;
     const ts=v.totalStake||1;
@@ -2403,7 +2405,8 @@ function _mvCalc(){
     const yearly=(base+loyalty)*52;
     const apy=stake>0?(yearly/stake)*100:0;
     totalYearly+=yearly;
-    breakdown.push({v,stake,apy,yearly,alloc:e.alloc,lock:e.lock});
+    const effectivePct=Math.round(weight*100);
+    breakdown.push({v,stake,apy,yearly,alloc:effectivePct,lock:e.lock});
   });
   const epoch=totalYearly/52;
   const monthly=epoch*4.3;
