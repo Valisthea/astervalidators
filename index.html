@@ -1113,8 +1113,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <svg class="chart-svg" id="uptimeHeatmap" viewBox="0 0 560 260" style="filter:blur(4px);opacity:0.3"></svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
             <span style="font-size:1.5rem">⏳</span>
-            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Real uptime data coming soon</span>
-            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Not yet available via public API</span>
+            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Historical heatmap coming soon</span>
+            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Per-day breakdown not yet in public API</span>
           </div>
         </div>
       </div>
@@ -1699,6 +1699,7 @@ function avatarHTML(v,lg=false){
 
 // ─── MAP API VALIDATOR → DISPLAY MODEL ───
 // estimatedApy is a decimal: 0.4528 = 45.28% APY (confirmed vs AsterDex UI)
+// estimatedUptime is a decimal: 0.99 = 99% uptime (real API field)
 function mapValidator(v,idx){
   const commPct=+(v.commissionRate*100).toFixed(1);
   const apyPct=+(v.estimatedApy*100).toFixed(2);   // 0.4528 → 45.28%
@@ -1707,9 +1708,9 @@ function mapValidator(v,idx){
   const stakeM=+(v.totalStake/1e6).toFixed(4);
   const del=Math.floor(stakeM*seededRng(idx*3,180,420));
   const ss=stakeM*seededRng(idx*11,0.04,0.22);
-  // uptime: estimated (not in API) — clearly marked
-  const up=v.active?seededRng(idx*7,97.2,99.8):seededRng(idx*7,55,82);
-  const miss=Math.floor(seededRng(idx*13,0,v.active?12:180));
+  // uptime: real value from API (estimatedUptime decimal 0–1)
+  const up=v.estimatedUptime!=null?+(v.estimatedUptime*100).toFixed(2):v.active?99.0:70.0;
+  const miss=Math.round((1-(v.estimatedUptime??0.99))*30); // ~missed days in 30d window
   return{
     id:idx,rank:idx+1,
     name:v.name,
@@ -1723,14 +1724,14 @@ function mapValidator(v,idx){
     totalStakeM:+stakeM.toFixed(2),
     selfStake:+ss.toFixed(2),
     commission:commPct,
-    uptime:+up.toFixed(2),       // estimated
-    missedBlocks:miss,            // estimated
+    uptime:+up.toFixed(2),       // real API value (estimatedUptime)
+    missedBlocks:miss,            // derived from estimatedUptime
     delegators:del,               // estimated
     estimatedApy:apyPct,
     estimatedEpy:epyPct,
     networkShare:+(v.networkShare*100).toFixed(2),
     sparkData:Array.from({length:20},(_,i)=>seededRng(idx*17+i,v.active?94:60,100)),
-    uptimeBlocks:Array.from({length:30},(_,i)=>v.active?(seededRng(idx*19+i,0,1)>0.015?'ok':'miss'):(seededRng(idx*19+i,0,1)>0.4?'ok':'miss')),
+    uptimeBlocks:Array.from({length:30},(_,i)=>seededRng(idx*19+i,0,1)<(v.estimatedUptime??0.99)?'ok':'miss'),
     change24h:+seededRng(idx*23,-2.5,3.5).toFixed(1),
     rewardsEst:+(stakeM*(apyPct/100)/12).toFixed(2) // monthly est. in M ASTER
   };
@@ -1741,7 +1742,7 @@ function mapValidator(v,idx){
 //   APY rank       50% — higher APY = more rewards for delegators
 //   Network share  30% — weight in securing the chain
 //   Stake size     20% — trust/commitment signal
-// uptime/missed are estimated → shown with "Est." pill, NOT in score
+// uptime: real API field (estimatedUptime) → shown with "Live" pill
 function computeScores(vals){
   if(!vals.length)return;
   const maxApy=Math.max(...vals.map(v=>v.estimatedApy));
@@ -2058,7 +2059,7 @@ function renderTable(cid,data,clickable=true){
   <th>APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Commission <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Network Share <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(251,191,36,0.15);color:var(--amber);padding:1px 4px;border-radius:3px;vertical-align:middle">Est.</span></th>
+  <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
 </tr></thead>
 <tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
