@@ -1296,8 +1296,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </select>
             </div>
             <div class="calc-field">
-              <label>Validator TX share (%)</label>
-              <input class="calc-input" id="calcV_txshare" type="number" value="15" min="0" max="100" oninput="_runCalc()">
+              <label>Est. Base APY (AsterDEX API) <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px">Live</span></label>
+              <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.85rem;color:var(--teal);font-weight:700" id="calcV_baseApyDisplay">—</div>
             </div>
             <div class="calc-field">
               <label>Total Network Power (estimate)</label>
@@ -1312,7 +1312,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="calc-card-title">◐ Reward Projections</div>
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">
               <div>
-                <div style="font-size:0.65rem;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px">APY Estimé</div>
+                <div style="font-size:0.65rem;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px">Est. Total APY (Base + Loyalty)</div>
                 <div style="font-size:1.6rem;font-weight:800;color:var(--teal);font-family:var(--mono)" id="calcV_apy">—</div>
                 <div style="font-size:0.65rem;color:var(--g400)" id="calcV_apyDetail"></div>
               </div>
@@ -1346,8 +1346,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="calc-breakdown-left">
                 <div class="calc-breakdown-icon" style="background:rgba(96,165,250,0.15)">🧊</div>
                 <div>
-                  <div class="calc-breakdown-title">Base Rewards</div>
-                  <div class="calc-breakdown-sub">Pool: 150,000 ASTER / epoch</div>
+                  <div class="calc-breakdown-title">Base Rewards (Est. Base APY)</div>
+                  <div class="calc-breakdown-sub" id="calcV_baseSub">From AsterDEX API</div>
                 </div>
               </div>
               <div class="calc-breakdown-value" style="color:#60a5fa" id="calcV_base">0</div>
@@ -1484,7 +1484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Input -->
         <div class="calc-card" style="max-width:540px;margin:0 auto 1.25rem">
           <div class="calc-card-title">🎯 AI Staking Optimizer <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:2px 8px;border-radius:6px;font-size:0.62rem;font-weight:700;margin-left:0.5rem">BETA</span></div>
-          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">AI scores ALL validators on 4 factors — APY · Commission · Uptime · Decentralization</div>
+          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">Uses real AsterDEX API data — Est. Base APY + Loyalty by lock period · Uptime · Commission · Decentralization</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
             <div class="calc-field" style="margin:0">
               <label>Amount to stake (ASTER)</label>
@@ -2070,7 +2070,7 @@ function renderTable(cid,data,clickable=true){
   <th class="sorted" style="white-space:nowrap">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span><span class="score-info">ⓘ<div class="score-tooltip"><div class="score-tooltip-title">⬡ Validator Score Formula</div><div class="score-tooltip-row"><span class="score-tooltip-label">APY (base yield)</span><span class="score-tooltip-val">50%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Network Share</span><span class="score-tooltip-val">30%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Total Stake</span><span class="score-tooltip-val">20%</span></div><div class="score-tooltip-note">Each component is normalized against the best validator in the set. Score = 10–99.<br>✦ 100% real on-chain data — no estimation.</div></div></span></th>
   <th>Status</th>
   <th>Total Stake <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Est. Base APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Commission <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Network Share <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
@@ -2326,35 +2326,37 @@ function _runCalc(){
   const stake=parseFloat(document.getElementById('calcV_stake')?.value)||0;
   const price=parseFloat(document.getElementById('calcV_price')?.value)||0;
   const boost=parseFloat(document.getElementById('calcV_boost')?.value)||1.0;
-  const txShare=parseFloat(document.getElementById('calcV_txshare')?.value)/100||0.15;
   const netPow=parseFloat(document.getElementById('calcV_netpower')?.value)||100000000;
   const tw=_calcLock/_CALC_MAX_LOCK;
-  const comm=v.commission/100;
-  const ts=v.totalStake||1;
-  const base=_CALC_BASE_POOL*txShare*(stake/ts)*(1-comm);
-  const loyalty=_CALC_LOYALTY_POOL*((stake*tw*boost)/netPow);
-  const epoch=base+loyalty;
+  const baseApy=v.estimatedApy;          // Est. Base APY — real value from AsterDEX API (%)
+  const baseEpoch=stake*(baseApy/100)/52; // base rewards per epoch from API APY
+  const loyalty=_CALC_LOYALTY_POOL*((stake*tw*boost)/netPow); // loyalty per epoch
+  const epoch=baseEpoch+loyalty;
   const monthly=epoch*4.3;
   const yearly=epoch*52;
-  const apy=stake>0?(yearly/stake)*100:0;
+  const loyaltyApy=stake>0?(loyalty*52/stake)*100:0;
+  const totalApy=baseApy+loyaltyApy;
+  const lockLabel=_CALC_LOCKS.find(l=>l.w===_calcLock)?.l||'Flexible';
   const fmt=(n,d=2)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
   const usd=(n)=>price>0?` ($${fmt(n*price,2)})`:'';
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
   set('calcV_usd',price>0?`≈ $${fmt(stake*price,2)} USD`:'');
-  set('calcV_validatorInfo',`Commission: ${v.commission}% · Stake: ${fmt(ts,0)} ASTER · Score: ${v.score}/100`);
-  set('calcV_apy',apy.toFixed(2)+'%');
-  set('calcV_apyDetail',`Lock weight: ${tw.toFixed(3)} × Boost: ${boost}×`);
+  set('calcV_validatorInfo',`Base APY: ${baseApy}% · Commission: ${v.commission}% · Stake: ${fmt(v.totalStake||0,0)} ASTER`);
+  set('calcV_apy',totalApy.toFixed(2)+'%');
+  set('calcV_apyDetail',`Base: ${baseApy}% + Loyalty: ${loyaltyApy.toFixed(2)}% (${lockLabel})`);
+  set('calcV_baseApyDisplay',baseApy+'%');
   set('calcV_weekly',fmt(epoch,4)+' ASTER'+usd(epoch));
   set('calcV_monthly',fmt(monthly,4)+' ASTER'+usd(monthly));
   set('calcV_yearly',fmt(yearly,4)+' ASTER'+usd(yearly));
   set('calcV_yearlyBig',fmt(yearly,2)+' ASTER');
   set('calcV_yearlyBigUsd',price>0?`≈ $${fmt(yearly*price,2)} USD`:'');
   set('calcV_balance',fmt(stake+yearly,2)+' ASTER');
-  set('calcV_base',base.toFixed(6));
+  set('calcV_base',baseEpoch.toFixed(6));
+  set('calcV_baseSub',`Est. Base APY ${baseApy}% (AsterDEX API)`);
   set('calcV_loyalty',loyalty.toFixed(6));
-  set('calcV_loyaltySub',`Power: ${fmt(stake*tw*boost,0)} (TW: ${tw.toFixed(3)} × ${boost}×)`);
+  set('calcV_loyaltySub',`veASTER weight: ${tw.toFixed(3)}× · Boost: ${boost}× · Pool: 300K/epoch`);
   set('calcV_totalEpoch',epoch.toFixed(6));
-  set('calcV_commSub',`After ${v.commission}% commission`);
+  set('calcV_commSub',`Commission: ${v.commission}% · Uptime: ${v.uptime}%`);
 }
 
 // ─── CALCULATOR MODE TOGGLE ───
@@ -2459,11 +2461,9 @@ function _mvCalc(){
     const v=activ[e.validatorIdx]||activ[0];
     const stake=e.stake;
     const tw=e.lock/_CALC_MAX_LOCK;
-    const comm=v.commission/100;
-    const ts=v.totalStake||1;
-    const base=_CALC_BASE_POOL*0.15*(stake/ts)*(1-comm);
+    const baseEpoch=stake*(v.estimatedApy/100)/52; // base from real API APY
     const loyalty=_CALC_LOYALTY_POOL*((stake*tw)/netPow);
-    const yearly=(base+loyalty)*52;
+    const yearly=(baseEpoch+loyalty)*52;
     const apy=stake>0?(yearly/stake)*100:0;
     totalYearly+=yearly;
     totalStake+=stake;
@@ -2500,11 +2500,11 @@ function _mvCalc(){
 let _optStrategies=null;
 
 function _optScore(v,tw){
-  const testStake=10000,txShare=0.15,boost=1.15,netPow=100000000;
-  const comm=v.commission/100,ts=v.totalStake||1;
-  const base=_CALC_BASE_POOL*txShare*(testStake/ts)*(1-comm);
-  const loyalty=_CALC_LOYALTY_POOL*((testStake*tw*boost)/netPow);
-  const apy=((base+loyalty)*52/testStake)*100;
+  const netPow=100000000;
+  // Base APY: real value from AsterDEX API (estimatedApy in %)
+  // Loyalty APY: uniform across validators, depends only on lock period
+  const loyaltyApy=(_CALC_LOYALTY_POOL*tw/netPow)*52*100;
+  const apy=v.estimatedApy+loyaltyApy; // Est. Total APY = Base + Loyalty
   const totalStaked=validators.filter(x=>x.status==='active').reduce((s,x)=>s+(x.totalStake||0),0)||1;
   const netShare=(v.totalStake||0)/totalStaked*100;
   // Weights: APY 35% · Commission 25% · Uptime 25% · Performance 10% · Decentralization 5%
@@ -2615,7 +2615,7 @@ function _optSelect(idx){
       </div>
       <div class="calc-card-title">📊 Allocation Breakdown</div>
       <table class="opt-table">
-        <thead><tr><th>Validator</th><th>Alloc</th><th>Amount</th><th>APY</th><th>Commission</th><th>Uptime</th><th>Score</th><th>Yearly</th></tr></thead>
+        <thead><tr><th>Validator</th><th>Alloc</th><th>Amount</th><th>Est. Total APY</th><th>Commission</th><th>Uptime</th><th>Score</th><th>Yearly</th></tr></thead>
         <tbody>${s.alloc.map(a=>{
           const amt=amount*a.pct/100;
           const yr=amt*a.apy/100;
