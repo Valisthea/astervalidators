@@ -1527,15 +1527,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="tab-content" id="tc-explorer">
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:0.75rem;text-align:center;padding:2rem">
         <span style="font-size:2.5rem">⊞</span>
-        <span style="font-size:1rem;font-weight:700;color:var(--white)">Block Explorer — Coming Soon</span>
+        <span style="font-size:1rem;font-weight:700;color:var(--white)">Aster Chain Block Explorer</span>
         <span style="font-size:0.82rem;color:var(--g300);line-height:1.7;max-width:440px">
-          Real-time block data (TX counts, proposers) is not available via public API yet.<br>
-          In the meantime, use the official Aster Chain block explorer.
+          Browse live blocks, transactions, and validator addresses<br>directly on AsterScan.
         </span>
-        <a href="https://www.asterdex.com/en/explorer" target="_blank" rel="noopener" class="btn-connect" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;margin-top:0.5rem">
-          Open Official Explorer →
-        </a>
-        <span style="font-size:0.7rem;color:var(--g500);margin-top:0.25rem">⚠ Previous block list was simulated — removed for transparency</span>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;margin-top:0.5rem">
+          <a href="https://asterscan-gamma.vercel.app/" target="_blank" rel="noopener" class="btn-connect" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem">
+            ⊞ Open AsterScan →
+          </a>
+          <a href="https://asterscan-gamma.vercel.app/validators" target="_blank" rel="noopener" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;background:var(--bg-surface);color:var(--g200);border:1px solid var(--border);border-radius:var(--radius-sm);font-weight:600">
+            Validators List →
+          </a>
+          <a href="https://asterscan-gamma.vercel.app/blocks" target="_blank" rel="noopener" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;background:var(--bg-surface);color:var(--g200);border:1px solid var(--border);border-radius:var(--radius-sm);font-weight:600">
+            Latest Blocks →
+          </a>
+          <a href="https://asterscan-gamma.vercel.app/txs" target="_blank" rel="noopener" style="text-decoration:none;padding:0.55rem 1.5rem;font-size:0.85rem;background:var(--bg-surface);color:var(--g200);border:1px solid var(--border);border-radius:var(--radius-sm);font-weight:600">
+            Transactions →
+          </a>
+        </div>
+        <span style="font-size:0.7rem;color:var(--g500);margin-top:0.5rem">Powered by AsterScan · asterscan-gamma.vercel.app</span>
       </div>
     </div>
 
@@ -2063,7 +2073,8 @@ function renderTable(cid,data,clickable=true){
 </tr></thead>
 <tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
-<td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr">${v.address}</div></div></div></td>
+<td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr" style="display:flex;align-items:center;gap:0.3rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:0.55rem;color:var(--teal);text-decoration:none;opacity:0.7" title="View on AsterScan">⊞</a>`:''}
+</div></div></div></td>
 <td><div class="cell-score" title="Score = APY×50% + Network Share×30% + Stake×20% (normalized, real data only)"><span class="score-val ${sc(v.score)}">${v.score}</span><div class="score-bar"><div class="score-fill ${sc(v.score)}" style="width:${v.score}%"></div></div></div></td>
 <td>${stHTML(v.status)}</td>
 <td class="cell-mono">${Number(v.totalStake).toLocaleString('en-US',{maximumFractionDigits:2})} ASTER</td>
@@ -2116,7 +2127,8 @@ function showDetail(id){
   const descHTML=v.description?`<div style="font-size:0.78rem;color:var(--g300);line-height:1.6;margin-top:0.75rem;padding:0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">${v.description}</div>`:'';
   p.innerHTML=`
 <div class="detail-header">
-  <div class="detail-header-left">${avatarHTML(v,true)}<div><div class="detail-name">${v.name}</div><div class="detail-addr">${v.address}</div></div>${stHTML(v.status)}</div>
+  <div class="detail-header-left">${avatarHTML(v,true)}<div><div class="detail-name">${v.name}</div><div class="detail-addr" style="display:flex;align-items:center;gap:0.4rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" style="font-size:0.6rem;color:var(--teal);text-decoration:none;border:1px solid rgba(0,221,184,0.3);border-radius:3px;padding:1px 5px;white-space:nowrap" title="View on AsterScan">⊞ Explorer</a>`:''}
+</div></div>${stHTML(v.status)}</div>
   <button class="detail-close" onclick="closeDetail()">✕</button>
 </div>
 ${descHTML}
