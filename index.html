@@ -2480,9 +2480,10 @@ function _optScore(v){
   const apy=((base+loyalty)*52/testStake)*100;
   const totalStaked=validators.filter(x=>x.status==='active').reduce((s,x)=>s+(x.totalStake||0),0)||1;
   const netShare=(v.totalStake||0)/totalStaked*100;
-  // Weights: APY 35% · Commission 25% · Performance 15% · Uptime 15% · Decentralization 10%
-  const score=(apy*3.5)+((100-v.commission)*2.5)+((v.score||50)*1.5)+((v.uptime||99)*1.5)+(Math.max(0,100-netShare));
-  return{v,apy,score,netShare};
+  // Weights: APY 35% · Commission 25% · Uptime 25% · Performance 10% · Decentralization 5%
+  const score=(apy*3.5)+((100-v.commission)*2.5)+((v.uptime||99)*2.5)+((v.score||50)*1.0)+(Math.max(0,100-netShare)*0.5);
+  const reliabilityGrade=v.uptime>=99.5?'excellent':v.uptime>=98?'good':v.uptime>=95?'average':'poor';
+  return{v,apy,score,netShare,reliabilityGrade};
 }
 
 function _optGenerate(amount){
@@ -2491,36 +2492,43 @@ function _optGenerate(amount){
   const scored=activ.map(v=>_optScore(v)).sort((a,b)=>b.score-a.score);
   const byApy=[...scored].sort((a,b)=>b.apy-a.apy);
 
-  const conservative=scored.filter(x=>(x.v.score||0)>=60).slice(0,Math.min(5,scored.length));
-  if(!conservative.length)conservative.push(...scored.slice(0,Math.min(5,scored.length)));
+  // Conservative: uptime ≥99% + score ≥60, equal split top 5
+  let conservative=scored.filter(x=>(x.v.uptime||99)>=99.0&&(x.v.score||0)>=60).slice(0,5);
+  if(!conservative.length)conservative=scored.slice(0,Math.min(5,scored.length));
   const pct1=Math.floor(100/conservative.length);
-  const conservAlloc=conservative.map((x,i)=>({v:x.v,pct:i===conservative.length-1?100-pct1*(conservative.length-1):pct1,apy:x.apy}));
+  const conservAlloc=conservative.map((x,i)=>({v:x.v,pct:i===conservative.length-1?100-pct1*(conservative.length-1):pct1,apy:x.apy,reliabilityGrade:x.reliabilityGrade}));
 
-  const bal=scored.slice(0,Math.min(4,scored.length));
+  // Balanced: uptime ≥98%, top 4 by composite score, 35/30/20/15
+  let bal=scored.filter(x=>(x.v.uptime||99)>=98.0).slice(0,4);
+  if(!bal.length)bal=scored.slice(0,Math.min(4,scored.length));
   const balPcts=[35,30,20,15].slice(0,bal.length);
-  const sum=balPcts.reduce((s,p)=>s+p,0);
-  const balAlloc=bal.map((x,i)=>({v:x.v,pct:Math.round(balPcts[i]/sum*100),apy:x.apy}));
+  const balSum=balPcts.reduce((s,p)=>s+p,0);
+  const balAlloc=bal.map((x,i)=>({v:x.v,pct:Math.round(balPcts[i]/balSum*100),apy:x.apy,reliabilityGrade:x.reliabilityGrade}));
 
-  const agg=byApy.slice(0,Math.min(3,byApy.length));
+  // Aggressive: uptime ≥97%, top 3 by APY, 50/30/20
+  let agg=byApy.filter(x=>(x.v.uptime||99)>=97.0).slice(0,3);
+  if(!agg.length)agg=byApy.slice(0,Math.min(3,byApy.length));
   const aggPcts=[50,30,20].slice(0,agg.length);
   const aggSum=aggPcts.reduce((s,p)=>s+p,0);
-  const aggAlloc=agg.map((x,i)=>({v:x.v,pct:Math.round(aggPcts[i]/aggSum*100),apy:x.apy}));
+  const aggAlloc=agg.map((x,i)=>({v:x.v,pct:Math.round(aggPcts[i]/aggSum*100),apy:x.apy,reliabilityGrade:x.reliabilityGrade}));
 
   const calc=(alloc,name,desc,risk)=>{
     const wAPY=alloc.reduce((s,a)=>s+(a.apy*a.pct/100),0);
     const yearly=amount*wAPY/100;
+    const weekly=yearly/52;
     const avgComm=alloc.reduce((s,a)=>s+a.v.commission,0)/alloc.length;
     const avgPerf=alloc.reduce((s,a)=>s+(a.v.score||50),0)/alloc.length;
-    return{name,desc,risk,alloc,wAPY,yearly,avgComm,avgPerf};
+    const avgUptime=alloc.reduce((s,a)=>s+(a.v.uptime||99),0)/alloc.length;
+    return{name,desc,risk,alloc,wAPY,yearly,weekly,avgComm,avgPerf,avgUptime};
   };
 
-  const baseline={apy:scored[0].apy,yearly:amount*scored[0].apy/100,name:scored[0].v.name};
+  const baseline={apy:scored[0].apy,yearly:amount*scored[0].apy/100,weekly:(amount*scored[0].apy/100)/52,name:scored[0].v.name};
   const strats=[
-    calc(conservAlloc,'Conservative','Equal distribution across top-performing validators for maximum stability','low'),
-    calc(balAlloc,'Balanced','Optimal blend of high APY and smart diversification','medium'),
-    calc(aggAlloc,'Aggressive','Maximum APY focus with concentrated allocation','high')
+    calc(conservAlloc,'Conservative','High uptime validators (99%+) for maximum reliability and stability','low'),
+    calc(balAlloc,'Balanced','Optimal mix of high APY, low commission, and excellent uptime','medium'),
+    calc(aggAlloc,'Aggressive','Maximum APY with acceptable uptime (97%+) for higher risk tolerance','high')
   ];
-  strats.forEach(s=>{s.gain=s.yearly-baseline.yearly;s.gainPct=(s.gain/baseline.yearly*100);});
+  strats.forEach(s=>{s.gain=s.yearly-baseline.yearly;s.weeklyGain=s.weekly-baseline.weekly;s.gainPct=(s.gain/baseline.yearly*100);});
   strats.baseline=baseline;
   return strats;
 }
@@ -2541,9 +2549,9 @@ function _optRun(){
       <div class="opt-gain">+${fmt(s.gain)} ASTER/year vs single validator</div>
       <div class="opt-metrics">
         <div class="opt-metric"><div class="opt-metric-label">Validators</div><div class="opt-metric-value">${s.alloc.length}</div></div>
+        <div class="opt-metric"><div class="opt-metric-label">Weekly Rewards</div><div class="opt-metric-value">${fmt(s.weekly)} ASTER</div></div>
+        <div class="opt-metric"><div class="opt-metric-label">Avg Uptime</div><div class="opt-metric-value">${(s.avgUptime||99).toFixed(1)}%</div></div>
         <div class="opt-metric"><div class="opt-metric-label">Avg Commission</div><div class="opt-metric-value">${s.avgComm.toFixed(1)}%</div></div>
-        <div class="opt-metric"><div class="opt-metric-label">Yearly Total</div><div class="opt-metric-value">${fmt(s.yearly)} ASTER</div></div>
-        <div class="opt-metric"><div class="opt-metric-label">Avg Score</div><div class="opt-metric-value">${s.avgPerf.toFixed(0)}/100</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:0.4rem;margin-top:0.75rem">
         <div style="width:7px;height:7px;border-radius:50%;background:${s.risk==='low'?'#22c55e':s.risk==='medium'?'#60a5fa':'#ef4444'}"></div>
