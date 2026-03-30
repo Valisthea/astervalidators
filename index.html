@@ -731,44 +731,79 @@ tr:last-child td{border-bottom:none;}
 }
 /* ── Mobile ≤ 800px ── */
 @media(max-width:800px){
+  /* Sidebar */
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);z-index:51;}
   .main{margin-left:0;}
   .mobile-toggle{display:flex !important;}
+  /* Header */
   .header{padding:0 0.85rem;}
   .header-search{display:none;}
   .header-title{font-size:0.88rem;}
   .header-breadcrumb{font-size:0.7rem;}
-  .content{padding:1rem 0.85rem calc(66px + env(safe-area-inset-bottom,0));}
-  .overview-grid{grid-template-columns:repeat(2,1fr);gap:0.65rem;margin-bottom:1rem;}
-  .ov-card{padding:0.85rem 1rem;}
-  .ov-value{font-size:1.2rem;}
-  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  /* Content spacing */
+  .content{padding:0.75rem 0.75rem calc(66px + env(safe-area-inset-bottom,0));}
+  /* Sim banner — scrollable strip, no page overflow */
+  .sim-banner{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;white-space:nowrap;scrollbar-width:none;font-size:0.7rem;padding:0.45rem 0.75rem;gap:0.35rem;margin-bottom:0.75rem;}
+  .sim-banner::-webkit-scrollbar{display:none;}
+  /* KPI cards — compact 2 columns */
+  .overview-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem;margin-bottom:0.85rem;}
+  .ov-card{padding:0.7rem 0.85rem;}
+  .ov-value{font-size:1.15rem;}
+  .ov-label{font-size:0.62rem;}
+  .ov-sub{font-size:0.62rem;}
+  /* Tabs — horizontal scroll */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:0.85rem;}
   .tabs::-webkit-scrollbar{display:none;}
-  .tab{white-space:nowrap;padding:0.6rem 0.9rem;font-size:0.78rem;}
-  .toolbar{flex-direction:column;align-items:stretch;gap:0.5rem;}
-  .toolbar-left{flex-wrap:wrap;}
-  .toolbar-right{flex-wrap:wrap;}
-  .detail-panel{padding:1rem 0.85rem;}
-  .sim-banner{font-size:0.72rem;padding:0.5rem 0.85rem;}
+  .tab{white-space:nowrap;padding:0.55rem 0.85rem;font-size:0.77rem;}
+  /* Toolbar — stack filter chips above sort */
+  .toolbar{flex-direction:column;align-items:stretch;gap:0.45rem;margin-bottom:0.65rem;}
+  .toolbar-left{flex-wrap:wrap;gap:0.35rem;}
+  .toolbar-right select.filter-select{width:100%;}
+  /* Table — hide low-priority columns, keep # Validator Score APY Uptime */
+  .table-wrap{-webkit-overflow-scrolling:touch;}
+  .table-wrap table th:nth-child(4),.table-wrap table td:nth-child(4),
+  .table-wrap table th:nth-child(5),.table-wrap table td:nth-child(5),
+  .table-wrap table th:nth-child(7),.table-wrap table td:nth-child(7),
+  .table-wrap table th:nth-child(8),.table-wrap table td:nth-child(8){display:none !important;}
+  table{min-width:460px !important;}
+  /* Compact table cells */
+  td,th{padding:0.5rem 0.65rem;}
+  .val-name{font-size:0.78rem;}
+  .val-addr{font-size:0.58rem;}
+  /* Analytics grids — 1 column */
+  .analytics-grid,.analytics-grid.full{grid-template-columns:1fr !important;}
+  /* Detail panel */
+  .detail-panel{padding:0.85rem 0.75rem;}
+  .detail-header{flex-wrap:wrap;gap:0.5rem;}
+  .detail-stats{grid-template-columns:repeat(2,1fr);}
+  .detail-charts{grid-template-columns:1fr;}
+  /* Bottom nav */
   .mobile-bottom-nav{display:block;}
+  /* Calc toggle */
   #calcModeToggle{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   #calcModeToggle::-webkit-scrollbar{display:none;}
+  /* Staking */
+  .staking-container{grid-template-columns:1fr;}
 }
 /* ── Very small ≤ 480px ── */
 @media(max-width:480px){
-  .overview-grid{grid-template-columns:repeat(2,1fr);}
-  .ov-value{font-size:1.05rem;}
-  .ov-label{font-size:0.6rem;}
+  .content{padding:0.5rem 0.5rem calc(62px + env(safe-area-inset-bottom,0));}
+  .overview-grid{grid-template-columns:repeat(2,1fr);gap:0.4rem;}
+  .ov-value{font-size:1rem;}
+  .ov-label{font-size:0.58rem;}
+  .ov-card{padding:0.6rem 0.7rem;}
   .calc-stat-row{grid-template-columns:1fr 1fr;}
   .opt-metrics{grid-template-columns:1fr 1fr;}
   .opt-compare{grid-template-columns:1fr;}
   .detail-stats{grid-template-columns:1fr 1fr;}
-  .detail-header{flex-wrap:wrap;gap:0.5rem;}
   .detail-header-left{flex:1;}
   .apps-grid{grid-template-columns:1fr;}
   .header-breadcrumb{display:none;}
-  .popup-box{padding:1.5rem 1.25rem;}
+  .popup-box{padding:1.5rem 1rem;}
+  .tab{padding:0.5rem 0.7rem;font-size:0.72rem;}
+  td,th{padding:0.4rem 0.5rem;}
+  .val-name{font-size:0.74rem;}
 }
 </style>
 </head>
