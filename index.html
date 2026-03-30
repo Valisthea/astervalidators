@@ -1484,7 +1484,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Input -->
         <div class="calc-card" style="max-width:540px;margin:0 auto 1.25rem">
           <div class="calc-card-title">🎯 AI Staking Optimizer <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:2px 8px;border-radius:6px;font-size:0.62rem;font-weight:700;margin-left:0.5rem">BETA</span></div>
-          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">AI scores ALL validators on 4 factors — APY · Commission · Performance · Decentralization</div>
+          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">AI scores ALL validators on 4 factors — APY · Commission · Uptime · Decentralization</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
             <div class="calc-field" style="margin:0">
               <label>Amount to stake (ASTER)</label>
@@ -1494,6 +1494,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <label>ASTER Price (USD)</label>
               <input class="calc-input" id="opt_price" type="number" value="0" step="0.0001" min="0">
             </div>
+          </div>
+          <div class="calc-field" style="margin-bottom:0.75rem">
+            <label>⏳ Lock Period (veASTER) <span style="font-size:0.65rem;color:var(--amber);font-weight:400">— Longer lock = higher Loyalty rewards</span></label>
+            <div class="calc-lock-wrap" id="opt_lockBtns"></div>
           </div>
           <button onclick="_optRun()" style="width:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;border:none;border-radius:var(--radius-sm);padding:0.7rem;font-size:0.88rem;font-weight:700;cursor:pointer;letter-spacing:0.5px">⚡ Optimize My Portfolio</button>
         </div>
@@ -2272,7 +2276,7 @@ ${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="
 // ─── REWARDS CALCULATOR ───
 const _CALC_BASE_POOL=150000,_CALC_LOYALTY_POOL=300000,_CALC_MAX_LOCK=208;
 const _CALC_LOCKS=[{w:0,l:'Flexible'},{w:26,l:'6 months'},{w:52,l:'1 year'},{w:104,l:'2 years'},{w:156,l:'3 years'},{w:208,l:'4 years'}];
-let _calcLock=52,_calcReady=false;
+let _calcLock=52,_optLock=52,_calcReady=false;
 
 function initCalculatorTab(){
   const activ=validators.filter(v=>v.status==='active');
@@ -2293,6 +2297,12 @@ function initCalculatorTab(){
     if(mp&&mp.value==='0'&&asterPrice) mp.value=asterPrice.toFixed(4);
     const op=document.getElementById('opt_price');
     if(op&&op.value==='0'&&asterPrice) op.value=asterPrice.toFixed(4);
+    // Optimizer lock buttons
+    const ol=document.getElementById('opt_lockBtns');
+    if(ol)ol.innerHTML=_CALC_LOCKS.map(p=>{
+      const tw=(p.w/_CALC_MAX_LOCK).toFixed(3);
+      return `<button class="calc-lock-btn${p.w===_optLock?' active':''}" data-weeks="${p.w}" onclick="_optSetLock(${p.w})">${p.l}<small>${tw}×</small></button>`;
+    }).join('');
     _calcReady=true;
   }
   _runCalc();
@@ -2300,8 +2310,12 @@ function initCalculatorTab(){
 
 function _calcSetLock(w){
   _calcLock=w;
-  document.querySelectorAll('.calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
+  document.querySelectorAll('#calcV_lockBtns .calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
   _runCalc();
+}
+function _optSetLock(w){
+  _optLock=w;
+  document.querySelectorAll('#opt_lockBtns .calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
 }
 
 function _runCalc(){
@@ -2485,8 +2499,8 @@ function _mvCalc(){
 // ─── STAKING OPTIMIZER ───
 let _optStrategies=null;
 
-function _optScore(v){
-  const testStake=10000,tw=52/208,txShare=0.15,boost=1.15,netPow=100000000;
+function _optScore(v,tw){
+  const testStake=10000,txShare=0.15,boost=1.15,netPow=100000000;
   const comm=v.commission/100,ts=v.totalStake||1;
   const base=_CALC_BASE_POOL*txShare*(testStake/ts)*(1-comm);
   const loyalty=_CALC_LOYALTY_POOL*((testStake*tw*boost)/netPow);
@@ -2499,10 +2513,10 @@ function _optScore(v){
   return{v,apy,score,netShare,reliabilityGrade};
 }
 
-function _optGenerate(amount){
+function _optGenerate(amount,tw){
   const activ=validators.filter(v=>v.status==='active');
   if(!activ.length)return null;
-  const scored=activ.map(v=>_optScore(v)).sort((a,b)=>b.score-a.score);
+  const scored=activ.map(v=>_optScore(v,tw)).sort((a,b)=>b.score-a.score);
   const byApy=[...scored].sort((a,b)=>b.apy-a.apy);
 
   // Conservative: uptime ≥99% + score ≥60, equal split top 5
@@ -2549,7 +2563,9 @@ function _optGenerate(amount){
 function _optRun(){
   const amount=parseFloat(document.getElementById('opt_amount')?.value)||0;
   if(!amount||!validators.filter(v=>v.status==='active').length)return;
-  _optStrategies=_optGenerate(amount);
+  const tw=_optLock/_CALC_MAX_LOCK;
+  const lockLabel=_CALC_LOCKS.find(l=>l.w===_optLock)?.l||'1 year';
+  _optStrategies=_optGenerate(amount,tw);
   if(!_optStrategies)return;
   const fmt=(n,d=0)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
   const grid=document.getElementById('opt_strategyGrid');
@@ -2558,6 +2574,7 @@ function _optRun(){
       <div class="opt-risk ${s.risk}">${s.risk} risk</div>
       <div style="font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.25rem;padding-right:4rem">${s.name}</div>
       <div style="font-size:0.7rem;color:var(--g300);line-height:1.5">${s.desc}</div>
+      <div style="font-size:0.62rem;color:var(--amber);margin-top:0.25rem">⏳ Lock: ${lockLabel} · veASTER weight: ${tw.toFixed(3)}×</div>
       <div class="opt-apy">${s.wAPY.toFixed(2)}%</div>
       <div class="opt-gain">+${fmt(s.gain)} ASTER/year vs single validator</div>
       <div class="opt-metrics">
