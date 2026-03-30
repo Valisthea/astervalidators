@@ -2597,7 +2597,9 @@ function _optGenerate(amount,tw){
     return{name,desc,risk,alloc,wAPY,yearly,weekly,avgComm,avgPerf,avgUptime};
   };
 
-  const baseline={apy:scored[0].apy,yearly:amount*scored[0].apy/100,weekly:(amount*scored[0].apy/100)/52,name:scored[0].v.name};
+  // Baseline = average APY across all active validators (realistic random pick)
+  const avgBaselineApy=scored.reduce((s,x)=>s+x.apy,0)/scored.length;
+  const baseline={apy:avgBaselineApy,yearly:amount*avgBaselineApy/100,weekly:(amount*avgBaselineApy/100)/52,name:'Avg. Single Validator'};
   const strats=[
     calc(conservAlloc,'Conservative','High uptime validators (99%+) for maximum reliability and stability','low'),
     calc(balAlloc,'Balanced','Optimal mix of high APY, low commission, and excellent uptime','medium'),
@@ -2624,7 +2626,7 @@ function _optRun(){
       <div style="font-size:0.7rem;color:var(--g300);line-height:1.5">${s.desc}</div>
       <div style="font-size:0.62rem;color:var(--amber);margin-top:0.25rem">⏳ Lock: ${lockLabel} · veASTER weight: ${tw.toFixed(3)}×</div>
       <div class="opt-apy">${s.wAPY.toFixed(2)}%</div>
-      <div class="opt-gain">+${fmt(s.gain)} ASTER/year vs single validator</div>
+      <div class="opt-gain" style="background:${s.gain>=0?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)'};border:1px solid ${s.gain>=0?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)'};color:${s.gain>=0?'#22c55e':'#ef4444'}">${s.gain>=0?'+':''}${fmt(s.gain)} ASTER/year vs avg single validator</div>
       <div class="opt-metrics">
         <div class="opt-metric"><div class="opt-metric-label">Validators</div><div class="opt-metric-value">${s.alloc.length}</div></div>
         <div class="opt-metric"><div class="opt-metric-label">Weekly Rewards</div><div class="opt-metric-value">${fmt(s.weekly)} ASTER</div></div>
@@ -2684,17 +2686,17 @@ function _optSelect(idx){
         </tbody>
       </table>
       <div style="margin-top:1rem">
-        <div style="font-size:0.78rem;font-weight:700;color:var(--white);margin-bottom:0.5rem">📈 vs Single Best Validator</div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--white);margin-bottom:0.5rem">📈 vs Avg. Single Validator <span style="font-size:0.65rem;color:var(--g400);font-weight:400">(random pick baseline)</span></div>
         <div class="opt-compare">
           <div class="opt-compare-box" style="border:2px solid var(--border)">
             <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.35rem">Single · ${_optStrategies.baseline.name}</div>
             <div style="font-size:1.4rem;font-weight:700;color:var(--g200)">${_optStrategies.baseline.apy.toFixed(2)}% APY</div>
             <div style="font-size:0.82rem;color:var(--g300);margin-top:0.25rem">${fmt(_optStrategies.baseline.yearly)} ASTER/yr</div>
           </div>
-          <div class="opt-compare-box" style="border:2px solid rgba(34,197,94,0.4);background:rgba(34,197,94,0.05)">
+          <div class="opt-compare-box" style="border:2px solid ${s.gain>=0?'rgba(34,197,94,0.4)':'rgba(239,68,68,0.4)'};background:${s.gain>=0?'rgba(34,197,94,0.05)':'rgba(239,68,68,0.05)'}">
             <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.35rem">${s.name} Strategy</div>
-            <div style="font-size:1.4rem;font-weight:700;color:#22c55e">${s.wAPY.toFixed(2)}% APY</div>
-            <div style="font-size:0.82rem;color:#22c55e;margin-top:0.25rem">${fmt(s.yearly)} ASTER/yr <span style="font-size:0.72rem">(+${fmt(s.gain)})</span></div>
+            <div style="font-size:1.4rem;font-weight:700;color:${s.gain>=0?'#22c55e':'#ef4444'}">${s.wAPY.toFixed(2)}% APY</div>
+            <div style="font-size:0.82rem;color:${s.gain>=0?'#22c55e':'#ef4444'};margin-top:0.25rem">${fmt(s.yearly)} ASTER/yr <span style="font-size:0.72rem">(${s.gain>=0?'+':''}${fmt(s.gain)})</span></div>
           </div>
         </div>
       </div>
