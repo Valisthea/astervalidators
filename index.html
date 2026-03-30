@@ -703,27 +703,72 @@ tr:last-child td{border-bottom:none;}
 .d1{animation-delay:0.05s;}.d2{animation-delay:0.1s;}.d3{animation-delay:0.15s;}
 .d4{animation-delay:0.2s;}.d5{animation-delay:0.25s;}.d6{animation-delay:0.3s;}
 
+/* ═══════ MOBILE BOTTOM NAV ═══════ */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:55;background:var(--bg-sidebar);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom,0);}
+.mobile-bnav-inner{display:flex;justify-content:space-around;}
+.mobile-bnav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex:1;height:56px;cursor:pointer;color:var(--g400);transition:color 0.15s;-webkit-tap-highlight-color:transparent;user-select:none;}
+.mobile-bnav-item.active{color:var(--teal);}
+.mobile-bnav-icon{font-size:1.1rem;line-height:1;}
+.mobile-bnav-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.mobile-bnav-label{font-size:0.58rem;font-weight:600;letter-spacing:0.2px;}
+/* Sidebar overlay */
+#sidebarOverlay{display:none;position:fixed;inset:0;z-index:49;background:rgba(0,0,0,0.65);backdrop-filter:blur(3px);}
+#sidebarOverlay.visible{display:block;}
+/* Hamburger */
+.mobile-toggle{display:none;background:none;border:none;color:var(--white);font-size:1.3rem;cursor:pointer;padding:0.4rem;-webkit-tap-highlight-color:transparent;line-height:1;}
+
 /* ═══════ RESPONSIVE ═══════ */
 @media(max-width:1200px){.overview-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:700px){.overview-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:1000px){
   .detail-stats{grid-template-columns:repeat(2,1fr);}
   .detail-charts{grid-template-columns:1fr;}
   .analytics-grid,.analytics-grid.full{grid-template-columns:1fr;}
   .staking-container{grid-template-columns:1fr;}
 }
+@media(max-width:900px){
+  .calc-grid{grid-template-columns:1fr;}
+  .opt-grid{grid-template-columns:1fr;}
+}
+/* ── Mobile ≤ 800px ── */
 @media(max-width:800px){
   .sidebar{transform:translateX(-100%);}
-  .sidebar.open{transform:translateX(0);}
+  .sidebar.open{transform:translateX(0);z-index:51;}
   .main{margin-left:0;}
-  .overview-grid{grid-template-columns:repeat(2,1fr);}
-  .header{padding:0 1rem;}
-  .content{padding:1rem;}
   .mobile-toggle{display:flex !important;}
+  .header{padding:0 0.85rem;}
+  .header-search{display:none;}
+  .header-title{font-size:0.88rem;}
+  .header-breadcrumb{font-size:0.7rem;}
+  .content{padding:1rem 0.85rem calc(66px + env(safe-area-inset-bottom,0));}
+  .overview-grid{grid-template-columns:repeat(2,1fr);gap:0.65rem;margin-bottom:1rem;}
+  .ov-card{padding:0.85rem 1rem;}
+  .ov-value{font-size:1.2rem;}
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{white-space:nowrap;padding:0.6rem 0.9rem;font-size:0.78rem;}
+  .toolbar{flex-direction:column;align-items:stretch;gap:0.5rem;}
+  .toolbar-left{flex-wrap:wrap;}
+  .toolbar-right{flex-wrap:wrap;}
+  .detail-panel{padding:1rem 0.85rem;}
+  .sim-banner{font-size:0.72rem;padding:0.5rem 0.85rem;}
+  .mobile-bottom-nav{display:block;}
+  #calcModeToggle{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  #calcModeToggle::-webkit-scrollbar{display:none;}
 }
-.mobile-toggle{
-  display:none;background:none;border:none;color:var(--white);
-  font-size:1.2rem;cursor:pointer;padding:0.3rem;
+/* ── Very small ≤ 480px ── */
+@media(max-width:480px){
+  .overview-grid{grid-template-columns:repeat(2,1fr);}
+  .ov-value{font-size:1.05rem;}
+  .ov-label{font-size:0.6rem;}
+  .calc-stat-row{grid-template-columns:1fr 1fr;}
+  .opt-metrics{grid-template-columns:1fr 1fr;}
+  .opt-compare{grid-template-columns:1fr;}
+  .detail-stats{grid-template-columns:1fr 1fr;}
+  .detail-header{flex-wrap:wrap;gap:0.5rem;}
+  .detail-header-left{flex:1;}
+  .apps-grid{grid-template-columns:1fr;}
+  .header-breadcrumb{display:none;}
+  .popup-box{padding:1.5rem 1.25rem;}
 }
 </style>
 </head>
@@ -944,12 +989,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="blockInfo">Block #1,204,887 · 0.4s ago</div>
   </div>
 </aside>
+<div id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- ═══════ MAIN ═══════ -->
 <main class="main">
   <header class="header">
     <div class="header-left">
-      <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
       <div class="header-title">Validator Dashboard</div>
       <div class="header-breadcrumb"><span class="live-dot" id="liveDot"></span><span id="breadcrumbText">Aster Chain · Loading...</span></div>
     </div>
@@ -1254,7 +1300,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div style="font-size:1.1rem;font-weight:800;color:var(--white)">🧮 Rewards Calculator</div>
           <div style="font-size:0.8rem;color:var(--g300);margin-top:0.2rem">Official AsterDEX formulas · Base Rewards + Loyalty Rewards · Real-time calculation</div>
         </div>
-        <div style="display:flex;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;gap:3px">
+        <div id="calcModeToggle" style="display:flex;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;gap:3px">
           <button id="calcToggle_simple" onclick="_calcMode('simple')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:var(--teal);color:var(--bg);transition:all 0.15s">Single</button>
           <button id="calcToggle_portfolio" onclick="_calcMode('portfolio')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">Portfolio</button>
           <button id="calcToggle_optimizer" onclick="_calcMode('optimizer')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s;position:relative">🎯 Optimizer<span style="position:absolute;top:-7px;right:-4px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;font-size:0.45rem;font-weight:800;padding:1px 4px;border-radius:6px;letter-spacing:0.5px;animation:pulse 2s infinite">NEW</span></button>
@@ -1713,6 +1759,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div>
 </main>
+
+<!-- ═══════ MOBILE BOTTOM NAV ═══════ -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav">
+  <div class="mobile-bnav-inner">
+    <div class="mobile-bnav-item active" data-tab="overview" onclick="switchTab('overview')">
+      <span class="mobile-bnav-icon">◈</span>
+      <span class="mobile-bnav-label">Dashboard</span>
+    </div>
+    <div class="mobile-bnav-item" data-tab="calculator" onclick="switchTab('calculator')">
+      <span class="mobile-bnav-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      <span class="mobile-bnav-label">Rewards</span>
+    </div>
+    <div class="mobile-bnav-item" data-tab="leaderboard" onclick="switchTab('leaderboard')">
+      <span class="mobile-bnav-icon">▤</span>
+      <span class="mobile-bnav-label">Validators</span>
+    </div>
+    <div class="mobile-bnav-item" data-tab="analytics" onclick="switchTab('analytics')">
+      <span class="mobile-bnav-icon">◐</span>
+      <span class="mobile-bnav-label">Analytics</span>
+    </div>
+    <div class="mobile-bnav-item" id="mobileMoreBtn" onclick="toggleSidebar()">
+      <span class="mobile-bnav-icon">☰</span>
+      <span class="mobile-bnav-label">More</span>
+    </div>
+  </div>
+</nav>
+
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -2776,6 +2849,18 @@ function _optReset(){
   document.getElementById('opt_detail').style.display='none';
 }
 
+// ─── SIDEBAR HELPERS ───
+function toggleSidebar(){
+  const s=document.getElementById('sidebar');
+  const ov=document.getElementById('sidebarOverlay');
+  const open=s.classList.toggle('open');
+  ov.classList.toggle('visible',open);
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('visible');
+}
+
 // ─── TAB SWITCHING ───
 function switchTab(t){
   _activeTab=t;
@@ -2783,10 +2868,12 @@ function switchTab(t){
   document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
   document.getElementById('tc-'+t)?.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
+  document.querySelectorAll('.mobile-bnav-item[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
   if(t==='analytics')setTimeout(renderAnalyticsCharts,50);
   if(t==='explorer')renderExplorerBlocks();
   if(t==='calculator')initCalculatorTab();
+  if(window.innerWidth<=800)closeSidebar();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 document.querySelectorAll('.nav-item[data-tab]').forEach(n=>n.addEventListener('click',()=>switchTab(n.dataset.tab)));
