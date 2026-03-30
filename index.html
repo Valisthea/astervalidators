@@ -519,6 +519,27 @@ input,select,button{font-family:var(--font);}
 .calc-breakdown-sub{font-size:0.62rem;color:var(--g400);}
 .calc-breakdown-value{font-family:var(--mono);font-size:0.82rem;font-weight:700;}
 .calc-formula{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;font-size:0.7rem;color:var(--g300);line-height:1.7;margin-top:0.75rem;}
+.opt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;}
+@media(max-width:900px){.opt-grid{grid-template-columns:1fr;}}
+.opt-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius);padding:1.25rem;cursor:pointer;transition:all 0.2s;position:relative;}
+.opt-card:hover{border-color:rgba(245,158,11,0.5);transform:translateY(-2px);}
+.opt-card.selected{border-color:#f59e0b;background:rgba(245,158,11,0.08);box-shadow:0 8px 24px rgba(245,158,11,0.2);}
+.opt-risk{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:8px;font-size:0.62rem;font-weight:700;text-transform:uppercase;}
+.opt-risk.low{background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);}
+.opt-risk.medium{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);}
+.opt-risk.high{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);}
+.opt-apy{font-size:2.2rem;font-weight:800;color:#f59e0b;font-family:var(--mono);text-align:center;margin:0.75rem 0;}
+.opt-gain{text-align:center;padding:0.5rem;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;margin:0.5rem 0;font-size:0.78rem;color:#22c55e;font-weight:700;}
+.opt-metrics{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.75rem;}
+.opt-metric{background:var(--bg-surface);padding:0.5rem;border-radius:6px;}
+.opt-metric-label{font-size:0.62rem;color:var(--g400);margin-bottom:2px;}
+.opt-metric-value{font-size:0.85rem;font-weight:700;color:var(--white);}
+.opt-table{width:100%;border-collapse:collapse;font-size:0.75rem;margin-top:0.75rem;}
+.opt-table th{padding:0.5rem;text-align:left;color:var(--g400);font-size:0.65rem;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.opt-table td{padding:0.6rem 0.5rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+.opt-table tr:hover td{background:rgba(245,158,11,0.04);}
+.opt-compare{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;}
+.opt-compare-box{padding:1rem;border-radius:var(--radius-sm);text-align:center;}
 .calc-formula strong{color:var(--teal);}
 .calc-info{background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-sm);padding:0.85rem;font-size:0.72rem;color:var(--g200);line-height:1.7;margin-top:1rem;}
 .calc-info a{color:var(--teal);text-decoration:none;}
@@ -1234,6 +1255,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div style="display:flex;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;gap:3px">
           <button id="calcToggle_simple" onclick="_calcMode('simple')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:var(--teal);color:var(--bg);transition:all 0.15s">Single</button>
           <button id="calcToggle_portfolio" onclick="_calcMode('portfolio')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">Portfolio</button>
+          <button id="calcToggle_optimizer" onclick="_calcMode('optimizer')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">🎯 Optimizer</button>
         </div>
       </div>
       <div id="calcSection_simple">
@@ -1456,6 +1478,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
       </div><!-- /calcSection_portfolio -->
+
+      <!-- ═══════ OPTIMIZER MODE ═══════ -->
+      <div id="calcSection_optimizer" style="display:none">
+        <!-- Input -->
+        <div class="calc-card" style="max-width:540px;margin:0 auto 1.25rem">
+          <div class="calc-card-title">🎯 AI Staking Optimizer <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:2px 8px;border-radius:6px;font-size:0.62rem;font-weight:700;margin-left:0.5rem">BETA</span></div>
+          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">AI scores ALL validators on 4 factors — APY · Commission · Performance · Decentralization</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
+            <div class="calc-field" style="margin:0">
+              <label>Amount to stake (ASTER)</label>
+              <input class="calc-input" id="opt_amount" type="number" value="50000" min="0" step="1000">
+            </div>
+            <div class="calc-field" style="margin:0">
+              <label>ASTER Price (USD)</label>
+              <input class="calc-input" id="opt_price" type="number" value="0" step="0.0001" min="0">
+            </div>
+          </div>
+          <button onclick="_optRun()" style="width:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;border:none;border-radius:var(--radius-sm);padding:0.7rem;font-size:0.88rem;font-weight:700;cursor:pointer;letter-spacing:0.5px">⚡ Optimize My Portfolio</button>
+        </div>
+        <!-- Strategies -->
+        <div id="opt_strategiesWrap" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+            <div style="font-size:0.85rem;font-weight:700;color:var(--white)">📊 Recommended Strategies — click to see detail</div>
+            <button onclick="_optReset()" style="background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.3rem 0.7rem;font-size:0.7rem;color:var(--g300);cursor:pointer">↩ Reset</button>
+          </div>
+          <div class="opt-grid" id="opt_strategyGrid"></div>
+          <!-- Detailed view -->
+          <div id="opt_detail" style="display:none"></div>
+        </div>
+      </div><!-- /calcSection_optimizer -->
     </div>
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
@@ -2224,6 +2276,8 @@ function initCalculatorTab(){
     if(ms&&!ms.options.length) ms.innerHTML=activ.map((v,i)=>`<option value="${i}">${v.name} (${v.commission}% comm)</option>`).join('');
     const mp=document.getElementById('mv_price');
     if(mp&&mp.value==='0'&&asterPrice) mp.value=asterPrice.toFixed(4);
+    const op=document.getElementById('opt_price');
+    if(op&&op.value==='0'&&asterPrice) op.value=asterPrice.toFixed(4);
     _calcReady=true;
   }
   _runCalc();
@@ -2276,13 +2330,13 @@ function _runCalc(){
 
 // ─── CALCULATOR MODE TOGGLE ───
 function _calcMode(mode){
-  const isPortfolio=mode==='portfolio';
-  document.getElementById('calcSection_simple').style.display=isPortfolio?'none':'';
-  document.getElementById('calcSection_portfolio').style.display=isPortfolio?'':'none';
-  document.getElementById('calcToggle_simple').style.background=isPortfolio?'transparent':'var(--teal)';
-  document.getElementById('calcToggle_simple').style.color=isPortfolio?'var(--g300)':'var(--bg)';
-  document.getElementById('calcToggle_portfolio').style.background=isPortfolio?'var(--teal)':'transparent';
-  document.getElementById('calcToggle_portfolio').style.color=isPortfolio?'var(--bg)':'var(--g300)';
+  ['simple','portfolio','optimizer'].forEach(m=>{
+    const sec=document.getElementById('calcSection_'+m);
+    const btn=document.getElementById('calcToggle_'+m);
+    if(sec)sec.style.display=m===mode?'':'none';
+    if(btn){btn.style.background=m===mode?'var(--teal)':'transparent';btn.style.color=m===mode?'var(--bg)':'var(--g300)';}
+  });
+  if(mode==='optimizer'&&asterPrice){const p=document.getElementById('opt_price');if(p&&p.value==='0')p.value=asterPrice.toFixed(4);}
 }
 
 // ─── MULTI-VALIDATOR PORTFOLIO ───
@@ -2411,6 +2465,155 @@ function _mvCalc(){
     </div>`;
   }).join('');
   _mvUpdateBadge();
+}
+
+// ─── STAKING OPTIMIZER ───
+let _optStrategies=null;
+
+function _optScore(v){
+  const testStake=10000,tw=52/208,txShare=0.15,boost=1.15,netPow=100000000;
+  const comm=v.commission/100,ts=v.totalStake||1;
+  const base=_CALC_BASE_POOL*txShare*(testStake/ts)*(1-comm);
+  const loyalty=_CALC_LOYALTY_POOL*((testStake*tw*boost)/netPow);
+  const apy=((base+loyalty)*52/testStake)*100;
+  const totalStaked=validators.filter(x=>x.status==='active').reduce((s,x)=>s+(x.totalStake||0),0)||1;
+  const netShare=(v.totalStake||0)/totalStaked*100;
+  const score=(apy*4)+((100-v.commission)*2.5)+((v.score||50)*2)+(Math.max(0,100-netShare)*1.5);
+  return{v,apy,score,netShare};
+}
+
+function _optGenerate(amount){
+  const activ=validators.filter(v=>v.status==='active');
+  if(!activ.length)return null;
+  const scored=activ.map(v=>_optScore(v)).sort((a,b)=>b.score-a.score);
+  const byApy=[...scored].sort((a,b)=>b.apy-a.apy);
+
+  const conservative=scored.filter(x=>(x.v.score||0)>=60).slice(0,Math.min(5,scored.length));
+  if(!conservative.length)conservative.push(...scored.slice(0,Math.min(5,scored.length)));
+  const pct1=Math.floor(100/conservative.length);
+  const conservAlloc=conservative.map((x,i)=>({v:x.v,pct:i===conservative.length-1?100-pct1*(conservative.length-1):pct1,apy:x.apy}));
+
+  const bal=scored.slice(0,Math.min(4,scored.length));
+  const balPcts=[35,30,20,15].slice(0,bal.length);
+  const sum=balPcts.reduce((s,p)=>s+p,0);
+  const balAlloc=bal.map((x,i)=>({v:x.v,pct:Math.round(balPcts[i]/sum*100),apy:x.apy}));
+
+  const agg=byApy.slice(0,Math.min(3,byApy.length));
+  const aggPcts=[50,30,20].slice(0,agg.length);
+  const aggSum=aggPcts.reduce((s,p)=>s+p,0);
+  const aggAlloc=agg.map((x,i)=>({v:x.v,pct:Math.round(aggPcts[i]/aggSum*100),apy:x.apy}));
+
+  const calc=(alloc,name,desc,risk)=>{
+    const wAPY=alloc.reduce((s,a)=>s+(a.apy*a.pct/100),0);
+    const yearly=amount*wAPY/100;
+    const avgComm=alloc.reduce((s,a)=>s+a.v.commission,0)/alloc.length;
+    const avgPerf=alloc.reduce((s,a)=>s+(a.v.score||50),0)/alloc.length;
+    return{name,desc,risk,alloc,wAPY,yearly,avgComm,avgPerf};
+  };
+
+  const baseline={apy:scored[0].apy,yearly:amount*scored[0].apy/100,name:scored[0].v.name};
+  const strats=[
+    calc(conservAlloc,'Conservative','Equal distribution across top-performing validators for maximum stability','low'),
+    calc(balAlloc,'Balanced','Optimal blend of high APY and smart diversification','medium'),
+    calc(aggAlloc,'Aggressive','Maximum APY focus with concentrated allocation','high')
+  ];
+  strats.forEach(s=>{s.gain=s.yearly-baseline.yearly;s.gainPct=(s.gain/baseline.yearly*100);});
+  strats.baseline=baseline;
+  return strats;
+}
+
+function _optRun(){
+  const amount=parseFloat(document.getElementById('opt_amount')?.value)||0;
+  if(!amount||!validators.filter(v=>v.status==='active').length)return;
+  _optStrategies=_optGenerate(amount);
+  if(!_optStrategies)return;
+  const fmt=(n,d=0)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
+  const grid=document.getElementById('opt_strategyGrid');
+  grid.innerHTML=_optStrategies.map((s,i)=>`
+    <div class="opt-card" data-idx="${i}" onclick="_optSelect(${i})">
+      <div class="opt-risk ${s.risk}">${s.risk} risk</div>
+      <div style="font-size:0.9rem;font-weight:700;color:var(--white);margin-bottom:0.25rem;padding-right:4rem">${s.name}</div>
+      <div style="font-size:0.7rem;color:var(--g300);line-height:1.5">${s.desc}</div>
+      <div class="opt-apy">${s.wAPY.toFixed(2)}%</div>
+      <div class="opt-gain">+${fmt(s.gain)} ASTER/year vs single validator</div>
+      <div class="opt-metrics">
+        <div class="opt-metric"><div class="opt-metric-label">Validators</div><div class="opt-metric-value">${s.alloc.length}</div></div>
+        <div class="opt-metric"><div class="opt-metric-label">Avg Commission</div><div class="opt-metric-value">${s.avgComm.toFixed(1)}%</div></div>
+        <div class="opt-metric"><div class="opt-metric-label">Yearly Total</div><div class="opt-metric-value">${fmt(s.yearly)} ASTER</div></div>
+        <div class="opt-metric"><div class="opt-metric-label">Avg Score</div><div class="opt-metric-value">${s.avgPerf.toFixed(0)}/100</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;margin-top:0.75rem">
+        <div style="width:7px;height:7px;border-radius:50%;background:${s.risk==='low'?'#22c55e':s.risk==='medium'?'#60a5fa':'#ef4444'}"></div>
+        <span style="font-size:0.68rem;color:var(--g400)">Risk: ${s.risk.toUpperCase()}</span>
+      </div>
+    </div>`).join('');
+  document.getElementById('opt_strategiesWrap').style.display='';
+  document.getElementById('opt_detail').style.display='none';
+}
+
+function _optSelect(idx){
+  document.querySelectorAll('.opt-card').forEach(c=>c.classList.toggle('selected',parseInt(c.dataset.idx)===idx));
+  const s=_optStrategies[idx];
+  const amount=parseFloat(document.getElementById('opt_amount')?.value)||0;
+  const price=parseFloat(document.getElementById('opt_price')?.value)||0;
+  const fmt=(n,d=0)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
+  const usd=(n)=>price>0?`<span style="color:var(--g300);font-size:0.8rem"> ≈ $${fmt(n*price,2)}</span>`:'';
+  const riskCol=s.risk==='low'?'#22c55e':s.risk==='medium'?'#60a5fa':'#ef4444';
+  const detail=document.getElementById('opt_detail');
+  detail.innerHTML=`
+    <div class="calc-card" style="border-color:rgba(245,158,11,0.3)">
+      <div style="text-align:center;padding:1rem;background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(239,68,68,0.08));border-radius:var(--radius-sm);margin-bottom:1rem">
+        <div style="font-size:0.75rem;color:var(--g300);margin-bottom:0.25rem">${s.name} Strategy — Weighted APY</div>
+        <div style="font-size:2.5rem;font-weight:800;color:#f59e0b;font-family:var(--mono)">${s.wAPY.toFixed(2)}%</div>
+        <div style="font-size:0.8rem;color:var(--g300)">${s.desc}</div>
+      </div>
+      <div class="calc-stat-row" style="margin-bottom:1rem">
+        <div class="calc-stat"><div class="calc-stat-label">Yearly</div><div class="calc-stat-value" style="color:#f59e0b">${fmt(s.yearly)} ASTER${usd(s.yearly)}</div></div>
+        <div class="calc-stat"><div class="calc-stat-label">Monthly</div><div class="calc-stat-value">${fmt(s.yearly/12)} ASTER${usd(s.yearly/12)}</div></div>
+        <div class="calc-stat"><div class="calc-stat-label">Risk</div><div class="calc-stat-value" style="color:${riskCol}">${s.risk.toUpperCase()}</div></div>
+      </div>
+      <div class="calc-card-title">📊 Allocation Breakdown</div>
+      <table class="opt-table">
+        <thead><tr><th>Validator</th><th>Alloc</th><th>Amount</th><th>APY</th><th>Commission</th><th>Score</th><th>Yearly</th></tr></thead>
+        <tbody>${s.alloc.map(a=>{
+          const amt=amount*a.pct/100;
+          const yr=amt*a.apy/100;
+          const sc=a.v.score||50;
+          const scCol=sc>=80?'#22c55e':sc>=60?'#60a5fa':'#f59e0b';
+          return `<tr>
+            <td style="font-weight:600;color:var(--white)">${a.v.name}</td>
+            <td style="font-weight:700;color:#f59e0b">${a.pct}%</td>
+            <td style="font-family:var(--mono)">${fmt(amt)} ASTER</td>
+            <td style="font-weight:700;color:#f59e0b">${a.apy.toFixed(2)}%</td>
+            <td>${a.v.commission}%</td>
+            <td><span style="background:${scCol}22;color:${scCol};padding:2px 6px;border-radius:4px;font-size:0.65rem;font-weight:700">${sc}/100</span></td>
+            <td style="font-weight:700;color:var(--teal)">${fmt(yr)}</td>
+          </tr>`;}).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:1rem">
+        <div style="font-size:0.78rem;font-weight:700;color:var(--white);margin-bottom:0.5rem">📈 vs Single Best Validator</div>
+        <div class="opt-compare">
+          <div class="opt-compare-box" style="border:2px solid var(--border)">
+            <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.35rem">Single · ${_optStrategies.baseline.name}</div>
+            <div style="font-size:1.4rem;font-weight:700;color:var(--g200)">${_optStrategies.baseline.apy.toFixed(2)}% APY</div>
+            <div style="font-size:0.82rem;color:var(--g300);margin-top:0.25rem">${fmt(_optStrategies.baseline.yearly)} ASTER/yr</div>
+          </div>
+          <div class="opt-compare-box" style="border:2px solid rgba(34,197,94,0.4);background:rgba(34,197,94,0.05)">
+            <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.35rem">${s.name} Strategy</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#22c55e">${s.wAPY.toFixed(2)}% APY</div>
+            <div style="font-size:0.82rem;color:#22c55e;margin-top:0.25rem">${fmt(s.yearly)} ASTER/yr <span style="font-size:0.72rem">(+${fmt(s.gain)})</span></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  detail.style.display='';
+}
+
+function _optReset(){
+  _optStrategies=null;
+  document.getElementById('opt_strategiesWrap').style.display='none';
+  document.getElementById('opt_detail').style.display='none';
 }
 
 // ─── TAB SWITCHING ───
