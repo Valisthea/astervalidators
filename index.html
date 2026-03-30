@@ -1255,7 +1255,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div style="display:flex;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;gap:3px">
           <button id="calcToggle_simple" onclick="_calcMode('simple')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:var(--teal);color:var(--bg);transition:all 0.15s">Single</button>
           <button id="calcToggle_portfolio" onclick="_calcMode('portfolio')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">Portfolio</button>
-          <button id="calcToggle_optimizer" onclick="_calcMode('optimizer')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s">🎯 Optimizer</button>
+          <button id="calcToggle_optimizer" onclick="_calcMode('optimizer')" style="border:none;border-radius:4px;padding:0.35rem 0.9rem;font-size:0.75rem;font-weight:600;cursor:pointer;background:transparent;color:var(--g300);transition:all 0.15s;position:relative">🎯 Optimizer<span style="position:absolute;top:-7px;right:-4px;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;font-size:0.45rem;font-weight:800;padding:1px 4px;border-radius:6px;letter-spacing:0.5px;animation:pulse 2s infinite">NEW</span></button>
         </div>
       </div>
       <div id="calcSection_simple">
@@ -1373,9 +1373,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="calc-breakdown-value" style="color:var(--teal)" id="calcV_totalEpoch">0</div>
             </div>
             <div class="calc-formula">
-              <strong>Base</strong> = 150,000 × (% TX validateur) × (Stake ÷ Total Stake) × (1 − Commission)<br>
-              <strong>Loyalty</strong> = 300,000 × (Power ÷ Power réseau)<br>
-              <strong>Power</strong> = Stake × (Lock weeks ÷ 208) × Volume Boost
+              <strong>Base</strong> = Est. Base APY (AsterDEX API) × Stake ÷ 52<br>
+              <strong>Loyalty</strong> = 300,000 × (Stake × Lock weight × Boost ÷ Network Power)<br>
+              <strong>Lock weight</strong> = Lock weeks ÷ 208 &nbsp;·&nbsp; <strong>Total APY</strong> = Base APY + Loyalty APY
             </div>
           </div>
           <!-- Info -->
@@ -1385,6 +1385,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             Epochs: weekly (Monday 00:00 UTC) · Max lock: 208 weeks (4 years)<br>
             <a href="https://docs.asterdex.com/product/aster-chain-staking/how-staking-works" target="_blank" rel="noopener">docs.asterdex.com →</a>
           </div>
+        </div>
+      </div>
+      <!-- ⚠ PENALTY CALCULATOR -->
+      <div class="calc-card" style="margin-top:1rem;border:1px solid rgba(240,168,48,0.25);background:rgba(240,168,48,0.04)">
+        <div class="calc-card-title" style="color:var(--amber)">⚠ Early Exit Penalty Calculator</div>
+        <div style="font-size:0.72rem;color:var(--g300);margin-bottom:0.85rem">Formula: <code style="color:var(--amber)">penalty = stake × max(2%, min(60%, weeks_remaining ÷ 208))</code></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;align-items:end;margin-bottom:0.85rem">
+          <div class="calc-field" style="margin:0">
+            <label>Stake (ASTER)</label>
+            <input class="calc-input" id="pen_stake" type="number" value="10000" min="0" step="1000" oninput="_penCalc()">
+          </div>
+          <div class="calc-field" style="margin:0">
+            <label>Lock Duration</label>
+            <select class="calc-select" id="pen_lock" onchange="_penCalc()">
+              <option value="52">1 year (52w)</option>
+              <option value="104">2 years (104w)</option>
+              <option value="156">3 years (156w)</option>
+              <option value="208" selected>4 years (208w)</option>
+            </select>
+          </div>
+          <div class="calc-field" style="margin:0">
+            <label>Weeks elapsed</label>
+            <input class="calc-input" id="pen_elapsed" type="number" value="0" min="0" oninput="_penCalc()">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem" id="pen_results">
+          <div class="calc-stat"><div class="calc-stat-label">Weeks Remaining</div><div class="calc-stat-value" id="pen_remaining" style="color:var(--amber)">—</div></div>
+          <div class="calc-stat"><div class="calc-stat-label">Penalty Rate</div><div class="calc-stat-value" id="pen_rate" style="color:var(--red)">—</div></div>
+          <div class="calc-stat"><div class="calc-stat-label">Penalty Amount</div><div class="calc-stat-value" id="pen_amount" style="color:var(--red)">—</div></div>
+          <div class="calc-stat"><div class="calc-stat-label">You Receive</div><div class="calc-stat-value" id="pen_receive" style="color:var(--teal)">—</div></div>
         </div>
       </div>
       </div><!-- /calcSection_simple -->
@@ -1408,8 +1438,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <div class="calc-field" style="margin:0">
                   <label>Lock Period</label>
                   <select class="calc-select" id="mv_addLock">
-                    <option value="0">Flexible</option>
-                    <option value="26">6 months</option>
                     <option value="52" selected>1 year</option>
                     <option value="104">2 years</option>
                     <option value="156">3 years</option>
@@ -2275,7 +2303,7 @@ ${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="
 
 // ─── REWARDS CALCULATOR ───
 const _CALC_BASE_POOL=150000,_CALC_LOYALTY_POOL=300000,_CALC_MAX_LOCK=208;
-const _CALC_LOCKS=[{w:0,l:'Flexible'},{w:26,l:'6 months'},{w:52,l:'1 year'},{w:104,l:'2 years'},{w:156,l:'3 years'},{w:208,l:'4 years'}];
+const _CALC_LOCKS=[{w:52,l:'1 year'},{w:104,l:'2 years'},{w:156,l:'3 years'},{w:208,l:'4 years'}];
 let _calcLock=52,_optLock=52,_calcReady=false;
 
 function initCalculatorTab(){
@@ -2306,6 +2334,7 @@ function initCalculatorTab(){
     _calcReady=true;
   }
   _runCalc();
+  _penCalc();
 }
 
 function _calcSetLock(w){
@@ -2316,6 +2345,25 @@ function _calcSetLock(w){
 function _optSetLock(w){
   _optLock=w;
   document.querySelectorAll('#opt_lockBtns .calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
+}
+
+function _penCalc(){
+  const stake=parseFloat(document.getElementById('pen_stake')?.value)||0;
+  const lockW=parseInt(document.getElementById('pen_lock')?.value)||208;
+  const elapsed=Math.min(Math.max(parseInt(document.getElementById('pen_elapsed')?.value)||0,0),lockW);
+  const remaining=lockW-elapsed;
+  const rawRate=remaining/208; // weeks_remaining ÷ 208 (max 4yr)
+  const penRate=Math.max(0.02,Math.min(0.60,rawRate)); // max(2%, min(60%, ratio))
+  const penAmount=stake*penRate;
+  const receive=stake-penAmount;
+  const fmt=(n,d=2)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  // cap elapsed at lockW visually
+  const el=document.getElementById('pen_elapsed');if(el&&elapsed!==parseInt(el.value))el.value=elapsed;
+  set('pen_remaining',remaining+' weeks');
+  set('pen_rate',(penRate*100).toFixed(1)+'%');
+  set('pen_amount',fmt(penAmount,2)+' ASTER');
+  set('pen_receive',fmt(receive,2)+' ASTER');
 }
 
 function _runCalc(){
@@ -2336,7 +2384,7 @@ function _runCalc(){
   const yearly=epoch*52;
   const loyaltyApy=stake>0?(loyalty*52/stake)*100:0;
   const totalApy=baseApy+loyaltyApy;
-  const lockLabel=_CALC_LOCKS.find(l=>l.w===_calcLock)?.l||'Flexible';
+  const lockLabel=_CALC_LOCKS.find(l=>l.w===_calcLock)?.l||'1 year';
   const fmt=(n,d=2)=>n.toLocaleString('fr-FR',{maximumFractionDigits:d});
   const usd=(n)=>price>0?` ($${fmt(n*price,2)})`:'';
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
@@ -2487,7 +2535,7 @@ function _mvCalc(){
         <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.62rem;font-weight:800;color:var(--teal)">${pct}%</div>
         <div>
           <div class="calc-breakdown-title">V${b.idx+1} · ${b.v.name}</div>
-          <div class="calc-breakdown-sub">${fmt(b.stake,0)} ASTER · ${b.apy.toFixed(2)}% APY · ${_CALC_LOCKS.find(l=>l.w===b.lock)?.l||'Flexible'}</div>
+          <div class="calc-breakdown-sub">${fmt(b.stake,0)} ASTER · ${b.apy.toFixed(2)}% APY · ${_CALC_LOCKS.find(l=>l.w===b.lock)?.l||'1 year'}</div>
         </div>
       </div>
       <div class="calc-breakdown-value" style="color:var(--teal)">+${fmt(b.yearly,2)} /yr</div>
