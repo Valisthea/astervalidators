@@ -1510,34 +1510,62 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <!-- ═══════ OPTIMIZER MODE ═══════ -->
       <div id="calcSection_optimizer" style="display:none">
-        <!-- Input -->
-        <div class="calc-card" style="max-width:540px;margin:0 auto 1.25rem">
-          <div class="calc-card-title">🎯 AI Staking Optimizer <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:2px 8px;border-radius:6px;font-size:0.62rem;font-weight:700;margin-left:0.5rem">BETA</span></div>
-          <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1rem">Uses real AsterDEX API data — Est. Base APY + Loyalty by lock period · Uptime · Commission · Decentralization</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem">
-            <div class="calc-field" style="margin:0">
+        <div class="calc-grid">
+          <!-- LEFT: Inputs -->
+          <div class="calc-card">
+            <div class="calc-card-title">🎯 AI Staking Optimizer <span style="background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:2px 8px;border-radius:6px;font-size:0.62rem;font-weight:700;margin-left:0.5rem">BETA</span></div>
+            <div style="font-size:0.75rem;color:var(--g300);margin-bottom:1.1rem;line-height:1.6">Analyzes all active validators on real AsterDEX data and generates 3 optimized allocation strategies.</div>
+            <div class="calc-field">
               <label>Amount to stake (ASTER)</label>
               <input class="calc-input" id="opt_amount" type="number" value="50000" min="0" step="1000">
             </div>
-            <div class="calc-field" style="margin:0">
+            <div class="calc-field">
               <label>ASTER Price (USD)</label>
               <input class="calc-input" id="opt_price" type="number" value="0" step="0.0001" min="0">
             </div>
+            <div class="calc-field" style="margin-bottom:1rem">
+              <label>⏳ Lock Period (veASTER) <span style="font-size:0.65rem;color:var(--amber);font-weight:400">— Longer = more Loyalty rewards</span></label>
+              <div class="calc-lock-wrap" id="opt_lockBtns"></div>
+            </div>
+            <button onclick="_optRun()" style="width:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;border:none;border-radius:var(--radius-sm);padding:0.75rem;font-size:0.88rem;font-weight:700;cursor:pointer;letter-spacing:0.5px;margin-bottom:1rem">⚡ Optimize My Portfolio</button>
+            <!-- Scoring weights -->
+            <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem">
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--g400);margin-bottom:0.5rem">Scoring Weights</div>
+              <div style="display:flex;flex-direction:column;gap:0.35rem">
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem"><span style="color:var(--g200)">Est. Total APY</span><span style="color:var(--teal);font-weight:700;font-family:var(--mono)">35%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem"><span style="color:var(--g200)">Commission</span><span style="color:var(--teal);font-weight:700;font-family:var(--mono)">25%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem"><span style="color:var(--g200)">Uptime (30d)</span><span style="color:var(--teal);font-weight:700;font-family:var(--mono)">25%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem"><span style="color:var(--g200)">Performance Score</span><span style="color:var(--teal);font-weight:700;font-family:var(--mono)">10%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.72rem"><span style="color:var(--g200)">Decentralization</span><span style="color:var(--teal);font-weight:700;font-family:var(--mono)">5%</span></div>
+              </div>
+            </div>
           </div>
-          <div class="calc-field" style="margin-bottom:0.75rem">
-            <label>⏳ Lock Period (veASTER) <span style="font-size:0.65rem;color:var(--amber);font-weight:400">— Longer lock = higher Loyalty rewards</span></label>
-            <div class="calc-lock-wrap" id="opt_lockBtns"></div>
+          <!-- RIGHT: Live validator pool -->
+          <div style="display:flex;flex-direction:column;gap:1rem">
+            <div class="calc-card">
+              <div class="calc-card-title">📡 Live Validator Pool <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>
+              <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.75rem">Data used by the optimizer — from AsterDEX API</div>
+              <div id="opt_validatorPool">
+                <div style="text-align:center;padding:1rem;color:var(--g400);font-size:0.78rem">Loading validators…</div>
+              </div>
+            </div>
+            <div class="calc-card" style="background:rgba(245,158,11,0.04);border-color:rgba(245,158,11,0.2)">
+              <div style="font-size:0.62rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--amber);margin-bottom:0.6rem">⚡ 3 Generated Strategies</div>
+              <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.78rem;color:var(--g200)">
+                <div style="display:flex;gap:0.5rem;align-items:flex-start"><span style="color:#22c55e;font-weight:700;flex-shrink:0">●</span><div><strong style="color:var(--white)">Conservative</strong> — Top validators with uptime ≥99%, equal split. Max reliability.</div></div>
+                <div style="display:flex;gap:0.5rem;align-items:flex-start"><span style="color:#60a5fa;font-weight:700;flex-shrink:0">●</span><div><strong style="color:var(--white)">Balanced</strong> — Best composite score, uptime ≥98%, weighted 35/30/20/15.</div></div>
+                <div style="display:flex;gap:0.5rem;align-items:flex-start"><span style="color:#ef4444;font-weight:700;flex-shrink:0">●</span><div><strong style="color:var(--white)">Aggressive</strong> — Highest APY validators, uptime ≥97%, weighted 50/30/20.</div></div>
+              </div>
+            </div>
           </div>
-          <button onclick="_optRun()" style="width:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;border:none;border-radius:var(--radius-sm);padding:0.7rem;font-size:0.88rem;font-weight:700;cursor:pointer;letter-spacing:0.5px">⚡ Optimize My Portfolio</button>
         </div>
-        <!-- Strategies -->
-        <div id="opt_strategiesWrap" style="display:none">
+        <!-- Strategies results (full width below grid) -->
+        <div id="opt_strategiesWrap" style="display:none;margin-top:1.25rem">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
             <div style="font-size:0.85rem;font-weight:700;color:var(--white)">📊 Recommended Strategies — click to see detail</div>
             <button onclick="_optReset()" style="background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.3rem 0.7rem;font-size:0.7rem;color:var(--g300);cursor:pointer">↩ Reset</button>
           </div>
           <div class="opt-grid" id="opt_strategyGrid"></div>
-          <!-- Detailed view -->
           <div id="opt_detail" style="display:none"></div>
         </div>
       </div><!-- /calcSection_optimizer -->
@@ -2346,6 +2374,7 @@ function _calcSetLock(w){
 function _optSetLock(w){
   _optLock=w;
   document.querySelectorAll('#opt_lockBtns .calc-lock-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.weeks)===w));
+  _optRenderPool();
 }
 
 function _penCalc(){
@@ -2416,8 +2445,43 @@ function _calcMode(mode){
     if(sec)sec.style.display=m===mode?'':'none';
     if(btn){btn.style.background=m===mode?'var(--teal)':'transparent';btn.style.color=m===mode?'var(--bg)':'var(--g300)';}
   });
-  if(mode==='optimizer'&&asterPrice){const p=document.getElementById('opt_price');if(p&&p.value==='0')p.value=asterPrice.toFixed(4);}
+  if(mode==='optimizer'){
+    if(asterPrice){const p=document.getElementById('opt_price');if(p&&p.value==='0')p.value=asterPrice.toFixed(4);}
+    _optRenderPool();
+  }
 }
+function _optRenderPool(){
+  const pool=document.getElementById('opt_validatorPool');
+  if(!pool)return;
+  const activ=validators.filter(v=>v.status==='active');
+  if(!activ.length){pool.innerHTML='<div style="text-align:center;padding:1rem;color:var(--g400);font-size:0.78rem">Loading…</div>';return;}
+  const tw=_optLock/_CALC_MAX_LOCK;
+  const netPow=100000000;
+  const loyaltyApy=(_CALC_LOYALTY_POOL*tw/netPow)*52*100;
+  pool.innerHTML=`
+  <table style="width:100%;border-collapse:collapse;font-size:0.72rem">
+    <thead><tr style="border-bottom:1px solid var(--border)">
+      <th style="text-align:left;padding:0.3rem 0.4rem;color:var(--g400);font-weight:600">Validator</th>
+      <th style="text-align:right;padding:0.3rem 0.4rem;color:var(--g400);font-weight:600">Base APY</th>
+      <th style="text-align:right;padding:0.3rem 0.4rem;color:var(--g400);font-weight:600">+Loyalty</th>
+      <th style="text-align:right;padding:0.3rem 0.4rem;color:var(--g400);font-weight:600">Uptime</th>
+      <th style="text-align:right;padding:0.3rem 0.4rem;color:var(--g400);font-weight:600">Score</th>
+    </tr></thead>
+    <tbody>${activ.sort((a,b)=>b.estimatedApy-a.estimatedApy).map((v,i)=>{
+      const totalApy=(v.estimatedApy+loyaltyApy).toFixed(2);
+      const upCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';
+      const scCol=v.score>=80?'#22c55e':v.score>=60?'#60a5fa':'#f59e0b';
+      return`<tr style="border-bottom:1px solid rgba(255,255,255,0.04)">
+        <td style="padding:0.4rem 0.4rem;color:var(--white);font-weight:600">${v.name}</td>
+        <td style="text-align:right;padding:0.4rem 0.4rem;font-family:var(--mono);color:#f59e0b">${v.estimatedApy}%</td>
+        <td style="text-align:right;padding:0.4rem 0.4rem;font-family:var(--mono);color:var(--teal);font-weight:700">${totalApy}%</td>
+        <td style="text-align:right;padding:0.4rem 0.4rem;font-family:var(--mono);color:${upCol}">${v.uptime.toFixed(1)}%</td>
+        <td style="text-align:right;padding:0.4rem 0.4rem"><span style="background:${scCol}22;color:${scCol};padding:1px 5px;border-radius:4px;font-size:0.65rem;font-weight:700">${v.score}</span></td>
+      </tr>`;}).join('')}
+    </tbody>
+  </table>
+  <div style="font-size:0.62rem;color:var(--g500);margin-top:0.5rem">+Loyalty APY with ${_CALC_LOCKS.find(l=>l.w===_optLock)?.l||'1 year'} lock · updates on lock change</div>`
+;}
 
 // ─── MULTI-VALIDATOR PORTFOLIO ───
 // Each entry: {validatorIdx, stake, lock} — fully independent, adding one never changes others
