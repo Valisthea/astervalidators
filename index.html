@@ -389,6 +389,7 @@ input,select,button{font-family:var(--font);}
 .nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;background:var(--teal);border-radius:0 3px 3px 0;}
 .nav-icon{width:18px;text-align:center;font-size:0.85rem;flex-shrink:0;}
 .nav-badge{margin-left:auto;font-family:var(--mono);font-size:0.62rem;background:var(--teal-subtle);color:var(--teal);padding:0.15rem 0.45rem;border-radius:10px;font-weight:600;}
+.nav-badge-new{margin-left:auto;font-size:0.58rem;font-weight:800;letter-spacing:0.5px;background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.35);padding:0.12rem 0.5rem;border-radius:10px;animation:pulse 2s infinite;}
 /* ═══════ MORE APPS PAGE ═══════ */
 .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-top:1.5rem;}
 .app-card{
@@ -916,7 +917,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="nav-section">
       <div class="nav-section-label">Overview</div>
       <div class="nav-item active" data-tab="overview"><span class="nav-icon">◈</span>Dashboard</div>
-      <div class="nav-item" data-tab="calculator"><span class="nav-icon">🧮</span>Rewards</div>
+      <div class="nav-item" data-tab="calculator"><span class="nav-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>Rewards<span class="nav-badge-new">NEW</span></div>
       <div class="nav-item" data-tab="leaderboard"><span class="nav-icon">▤</span>Leaderboard<span class="nav-badge" id="valCountBadge">87</span></div>
       <div class="nav-item" data-tab="analytics"><span class="nav-icon">◐</span>Analytics</div>
     </div>
