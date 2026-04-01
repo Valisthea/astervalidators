@@ -249,34 +249,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
    DESIGN SYSTEM — ASTER VALIDATORS
    ═══════════════════════════════════════════════════ */
 :root {
-  --bg-base: #06090d;
-  --bg-surface: #0b1017;
-  --bg-card: #0f151d;
-  --bg-card-hover: #131b25;
-  --bg-elevated: #162030;
-  --bg-sidebar: #080c12;
-  --teal: #00ddb8;
-  --teal-mid: #00b89a;
-  --teal-dim: #008f78;
-  --teal-glow: rgba(0,221,184,0.12);
-  --teal-subtle: rgba(0,221,184,0.05);
-  --amber: #f0a830;
-  --amber-dim: #c08520;
-  --amber-glow: rgba(240,168,48,0.12);
+  --bg-base: #0f0b09;
+  --bg-surface: #161210;
+  --bg-card: #1a1512;
+  --bg-card-hover: #1e1915;
+  --bg-elevated: #231f1a;
+  --bg-sidebar: #0f0b09;
+  --teal: #d85a30;
+  --teal-mid: #c04e28;
+  --teal-dim: #a84020;
+  --teal-glow: rgba(216,90,48,0.14);
+  --teal-subtle: rgba(216,90,48,0.07);
+  --amber: #f59e0b;
+  --amber-dim: #d97706;
+  --amber-glow: rgba(245,158,11,0.12);
   --red: #ef4444;
   --red-glow: rgba(239,68,68,0.12);
   --green: #22c55e;
   --green-glow: rgba(34,197,94,0.12);
-  --blue: #3b82f6;
-  --white: #e8f0f0;
-  --g100: #c0d0d4;
-  --g200: #8a9caa;
-  --g300: #5a6e7e;
-  --g400: #3a4a58;
-  --g500: #253040;
-  --border: rgba(0,221,184,0.08);
-  --border-mid: rgba(0,221,184,0.15);
-  --border-active: rgba(0,221,184,0.3);
+  --blue: #60a5fa;
+  --white: #f5f0ec;
+  --g100: #d4cdc6;
+  --g200: #9c938a;
+  --g300: #6b625a;
+  --g400: #3a302a;
+  --g500: #2a221c;
+  --border: #2a221c;
+  --border-mid: rgba(216,90,48,0.2);
+  --border-active: rgba(216,90,48,0.45);
   --font: 'DM Sans', sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --radius: 10px;
@@ -355,7 +355,7 @@ input,select,button{font-family:var(--font);}
 }
 .btn-enter:hover{
   transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(0,221,184,0.25);
+  box-shadow:0 8px 30px rgba(216,90,48,0.28);
 }
 
 /* ═══════ LAYOUT ═══════ */
@@ -467,7 +467,7 @@ input,select,button{font-family:var(--font);}
 
 /* ═══════ OVERVIEW CARDS ═══════ */
 .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
-.epoch-bar-wrap{height:3px;background:var(--g600);border-radius:2px;overflow:hidden;margin:0.45rem 0 0.2rem;}
+.epoch-bar-wrap{height:3px;background:var(--g500);border-radius:2px;overflow:hidden;margin:0.45rem 0 0.2rem;}
 .epoch-bar-fill{height:100%;background:var(--teal);border-radius:2px;transition:width 1s linear;}
 .ov-card{
   background:var(--bg-card);border:1px solid var(--border);
@@ -495,7 +495,7 @@ input,select,button{font-family:var(--font);}
 .calc-field{margin-bottom:0.85rem;}
 .calc-field label{display:block;font-size:0.72rem;color:var(--g300);margin-bottom:0.3rem;font-weight:600;}
 .calc-input{width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;color:var(--white);font-size:0.85rem;font-family:var(--mono);}
-.calc-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 2px rgba(0,221,184,0.15);}
+.calc-input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 2px rgba(216,90,48,0.15);}
 .calc-select{width:100%;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;color:var(--white);font-size:0.82rem;}
 .calc-lock-wrap{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.3rem;}
 .calc-lock-btn{flex:1;min-width:80px;text-align:center;padding:0.4rem 0.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--g300);cursor:pointer;font-size:0.72rem;line-height:1.3;transition:all 0.15s;}
@@ -508,7 +508,7 @@ input,select,button{font-family:var(--font);}
 .calc-stat-label{font-size:0.65rem;color:var(--g400);margin-bottom:0.25rem;text-transform:uppercase;letter-spacing:0.5px;}
 .calc-stat-value{font-size:0.85rem;font-weight:700;color:var(--white);font-family:var(--mono);}
 .calc-stat-sub{font-size:0.62rem;color:var(--g400);margin-top:0.2rem;}
-.calc-big{background:linear-gradient(135deg,rgba(0,221,184,0.12),rgba(59,130,246,0.08));border:1px solid rgba(0,221,184,0.25);border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:1rem;}
+.calc-big{background:linear-gradient(135deg,rgba(216,90,48,0.12),rgba(245,158,11,0.07));border:1px solid rgba(216,90,48,0.28);border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:1rem;}
 .calc-big-label{font-size:0.7rem;color:var(--g300);margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:1px;}
 .calc-big-value{font-size:1.8rem;font-weight:800;color:var(--teal);font-family:var(--mono);line-height:1.1;}
 .calc-big-usd{font-size:0.9rem;color:var(--g200);margin-top:0.2rem;}
@@ -602,7 +602,7 @@ tr:last-child td{border-bottom:none;}
 .score-val.s-mid{color:var(--amber);}
 .score-val.s-low{color:var(--red);}
 /* ═══════ SCORE TOOLTIP ═══════ */
-.score-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(0,221,184,0.15);color:var(--teal);font-size:9px;font-weight:700;cursor:help;vertical-align:middle;margin-left:4px;border:1px solid rgba(0,221,184,0.3);line-height:1;position:relative;}
+.score-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(216,90,48,0.15);color:var(--teal);font-size:9px;font-weight:700;cursor:help;vertical-align:middle;margin-left:4px;border:1px solid rgba(216,90,48,0.35);line-height:1;position:relative;}
 .score-info:hover .score-tooltip{opacity:1;pointer-events:auto;transform:translateY(0);}
 .score-tooltip{
   position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-4px);
@@ -944,9 +944,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Community analytics dashboard for Aster Chain Genesis
     </p>
     <div class="popup-tags">
-      <span class="popup-tag" style="background:rgba(0,221,184,0.12);color:var(--teal);border-color:rgba(0,221,184,0.25)">✦ Mainnet Live</span>
-      <span class="popup-tag" style="background:rgba(0,221,184,0.12);color:var(--teal);border-color:rgba(0,221,184,0.25)">◈ Real-Time Data</span>
-      <span class="popup-tag" style="background:linear-gradient(135deg,rgba(0,221,184,0.15),rgba(59,130,246,0.15));color:#fff;border-color:rgba(0,221,184,0.2);font-weight:800;letter-spacing:1px">BETA</span>
+      <span class="popup-tag" style="background:rgba(216,90,48,0.13);color:var(--teal);border-color:rgba(216,90,48,0.28)">✦ Mainnet Live</span>
+      <span class="popup-tag" style="background:rgba(216,90,48,0.13);color:var(--teal);border-color:rgba(216,90,48,0.28)">◈ Real-Time Data</span>
+      <span class="popup-tag" style="background:linear-gradient(135deg,rgba(216,90,48,0.2),rgba(245,158,11,0.15));color:#fff;border-color:rgba(216,90,48,0.3);font-weight:800;letter-spacing:1px">BETA</span>
     </div>
     <p style="font-size:0.85rem;color:var(--g200);line-height:1.65;">
       Aster Chain launched its genesis block on <strong style="color:var(--teal)">March 17, 2026</strong>.<br>
@@ -992,7 +992,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <line x1="29" y1="71" x2="40" y2="60" stroke="#4285f4" stroke-width="2.5" opacity="0.5"/>
     </svg>
     <h1>Aster<span>Validators</span></h1>
-    <span style="font-size:0.58rem;font-weight:700;letter-spacing:0.8px;background:linear-gradient(135deg,var(--teal),#3b82f6);color:#000;padding:2px 6px;border-radius:4px;margin-left:2px;line-height:1">BETA</span>
+    <span style="font-size:0.58rem;font-weight:700;letter-spacing:0.8px;background:linear-gradient(135deg,var(--teal),var(--amber));color:#000;padding:2px 6px;border-radius:4px;margin-left:2px;line-height:1">BETA</span>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">
@@ -1010,7 +1010,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Governance</div>
-      <div class="nav-item" data-tab="proposals"><span class="nav-icon">◎</span>Proposals<span class="nav-badge">3</span></div>
+      <div class="nav-item" data-tab="proposals"><span class="nav-icon">◎</span>Proposals</div>
       <div class="nav-item" data-tab="explorer"><span class="nav-icon">⊞</span>Block Explorer</div>
       <div class="nav-item" data-tab="parameters"><span class="nav-icon">⚙</span>Parameters</div>
     </div>
@@ -1039,7 +1039,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="search-icon">⌕</span>
         <input type="text" placeholder="Search validator, address..." id="globalSearch" aria-label="Search validators">
       </div>
-      <button class="btn-connect" id="btnConnect" onclick="connectWallet()">Connect Wallet</button>
+      <button class="btn-connect" id="btnConnect" onclick="connectWallet()">Stake on AsterDex →</button>
     </div>
   </header>
 
@@ -1157,22 +1157,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="analytics-grid full" style="margin-bottom:1rem">
         <!-- LIVE: Stake distribution (real data) -->
         <div class="analytics-card">
-          <h3>⬡ Stake Distribution <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <h3>⬡ Stake Distribution <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
           <svg class="chart-svg" id="stakeChart2" viewBox="0 0 500 180"></svg>
         </div>
         <!-- LIVE: APY Comparison (real data) -->
         <div class="analytics-card">
-          <h3>◐ APY by Validator <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <h3>◐ APY by Validator <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
           <svg class="chart-svg" id="apyChart" viewBox="0 0 500 180"></svg>
         </div>
         <!-- LIVE: Score Distribution (computed from real data) -->
         <div class="analytics-card">
-          <h3>⬡ Validator Score Distribution <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <h3>⬡ Validator Score Distribution <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
           <svg class="chart-svg" id="scoreDistChart" viewBox="0 0 500 180"></svg>
         </div>
         <!-- LIVE: Decentralization (real networkShare) -->
         <div class="analytics-card">
-          <h3>◎ Decentralization Index <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
+          <h3>◎ Decentralization Index <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:2px 6px;border-radius:4px;vertical-align:middle">Live</span></h3>
           <svg class="chart-svg" id="decentralChart" viewBox="0 0 500 220"></svg>
           <div class="legend" id="decentLegend"></div>
         </div>
@@ -1235,12 +1235,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ═══════ TAB: DELEGATE ═══════ -->
     <div class="tab-content" id="tc-delegate">
-      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">⧉</span><span>Connect your wallet on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a> to delegate ASTER tokens</span></div>
+      <div class="sim-banner" style="background:rgba(216,90,48,0.07);border-color:rgba(216,90,48,0.15);color:var(--teal)"><span class="sim-icon">⧉</span><span>Connect your wallet on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a> to delegate ASTER tokens</span></div>
 
       <!-- ─── APY REWARD CALCULATOR ─── -->
       <div style="max-width:560px;margin:1.5rem auto 0;">
         <div class="analytics-card">
-          <h3 style="margin-bottom:1rem;">◐ APY Reward Calculator <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:2px 7px;border-radius:4px;vertical-align:middle">Live APY</span></h3>
+          <h3 style="margin-bottom:1rem;">◐ APY Reward Calculator <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:2px 7px;border-radius:4px;vertical-align:middle">Live APY</span></h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
             <div>
               <label style="font-size:0.7rem;color:var(--g300);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:0.4rem;">Amount (ASTER)</label>
@@ -1288,7 +1288,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             ⚠ <strong>Early exit penalty:</strong> 2%–60% of principal depending on remaining lock time.<br>
             <span style="color:var(--g300);">Formula: penalty = amount × max(2%, min(60%, lock_left ÷ 4yr))</span>
           </div>
-          <div style="padding:0.75rem 1rem;background:rgba(0,221,184,0.04);border:1px solid rgba(0,221,184,0.12);border-radius:var(--radius-sm);margin-bottom:1.25rem;font-size:0.76rem;color:var(--g200);">
+          <div style="padding:0.75rem 1rem;background:rgba(216,90,48,0.05);border:1px solid rgba(216,90,48,0.13);border-radius:var(--radius-sm);margin-bottom:1.25rem;font-size:0.76rem;color:var(--g200);">
             ✦ <strong>Loyalty Rewards:</strong> additional 300K ASTER/week distributed via veASTER weight.<br>
             Longer lock = higher veASTER = larger share of loyalty pool.
           </div>
@@ -1299,7 +1299,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ═══════ TAB: REDELEGATE ═══════ -->
     <div class="tab-content" id="tc-redelegate">
-      <div class="sim-banner" style="background:rgba(0,221,184,0.05);border-color:rgba(0,221,184,0.15);color:var(--teal)"><span class="sim-icon">↻</span><span>Redelegation available on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a></span></div>
+      <div class="sim-banner" style="background:rgba(216,90,48,0.07);border-color:rgba(216,90,48,0.15);color:var(--teal)"><span class="sim-icon">↻</span><span>Redelegation available on <a href="https://www.asterdex.com/en/staking" target="_blank" rel="noopener" style="color:var(--teal)">AsterDex Staking →</a></span></div>
       <div style="max-width:560px;margin:1.5rem auto;">
         <div class="analytics-card">
           <h3 style="margin-bottom:1rem;">↻ Redelegate $ASTER</h3>
@@ -1379,7 +1379,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               </select>
             </div>
             <div class="calc-field">
-              <label>Est. Base APY (AsterDEX API) <span style="font-size:0.6rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px">Live</span></label>
+              <label>Est. Base APY (AsterDEX API) <span style="font-size:0.6rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 5px;border-radius:3px">Live</span></label>
               <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.5rem 0.75rem;font-family:var(--mono);font-size:0.85rem;color:var(--teal);font-weight:700" id="calcV_baseApyDisplay">—</div>
             </div>
             <div class="calc-field">
@@ -1447,7 +1447,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
             <div class="calc-breakdown-item">
               <div class="calc-breakdown-left">
-                <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.15)">💰</div>
+                <div class="calc-breakdown-icon" style="background:rgba(216,90,48,0.15)">💰</div>
                 <div>
                   <div class="calc-breakdown-title" style="color:var(--teal)">Total per Epoch</div>
                   <div class="calc-breakdown-sub" id="calcV_commSub"></div>
@@ -1537,7 +1537,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="calc-card" id="mv_listCard" style="display:none">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
                 <div class="calc-card-title" style="margin:0">◈ My Portfolio</div>
-                <div id="mv_totalBadge" style="font-size:0.7rem;font-family:var(--mono);padding:0.2rem 0.6rem;border-radius:4px;background:rgba(0,221,184,0.15);color:var(--teal)">0 ASTER</div>
+                <div id="mv_totalBadge" style="font-size:0.7rem;font-family:var(--mono);padding:0.2rem 0.6rem;border-radius:4px;background:rgba(216,90,48,0.15);color:var(--teal)">0 ASTER</div>
               </div>
               <div id="mv_list"></div>
               <button onclick="_mvClear()" style="margin-top:0.75rem;width:100%;background:transparent;border:1px solid rgba(239,68,68,0.3);border-radius:var(--radius-sm);padding:0.4rem 0.75rem;font-size:0.7rem;color:#ef4444;cursor:pointer">✕ Clear all</button>
@@ -1625,7 +1625,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <!-- RIGHT: Live validator pool -->
           <div style="display:flex;flex-direction:column;gap:1rem">
             <div class="calc-card">
-              <div class="calc-card-title">📡 Live Validator Pool <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>
+              <div class="calc-card-title">📡 Live Validator Pool <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>
               <div style="font-size:0.7rem;color:var(--g400);margin-bottom:0.75rem">Data used by the optimizer — from AsterDEX API</div>
               <div id="opt_validatorPool">
                 <div style="text-align:center;padding:1rem;color:var(--g400);font-size:0.78rem">Loading validators…</div>
@@ -1851,7 +1851,7 @@ function closeDisclaimer(){
 
 // ─── CONFIG ───
 const API_BASE='/api/staking'; // proxy via netlify.toml → asterdex.com/bapi/staking/v3/public/staking
-const COLORS=['#00ddb8','#f0a830','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#06b6d4','#a855f7','#10b981'];
+const COLORS=['#d85a30','#f59e0b','#3b82f6','#8b5cf6','#ec4899','#e07348','#f97316','#a78bfa','#60a5fa','#22c55e'];
 function rng(a,b){return Math.random()*(b-a)+a;}
 // Seeded pseudo-random for stable per-validator values
 function seededRng(seed,a,b){const x=Math.sin(seed+1)*10000;return a+(x-Math.floor(x))*(b-a);}
@@ -1973,7 +1973,7 @@ async function fetchPrice(){
       if(subEl){
         const volStr=vol>0?' · Vol: '+(vol/1e6).toFixed(1)+'M':'';
         const rangeStr=lo&&hi?'24h $'+lo.toFixed(4)+'–$'+hi.toFixed(4):'';
-        subEl.innerHTML='<span style="color:var(--sub)">'+rangeStr+volStr+'</span>';
+        subEl.innerHTML='<span style="color:var(--g300)">'+rangeStr+volStr+'</span>';
       }
       updateCalc(); // refresh calculator with live price
     }
@@ -2128,7 +2128,7 @@ function updateOverviewStats(){
 
   // Top banner → live
   const banner=document.getElementById('topBanner');
-  if(banner){banner.style.background='linear-gradient(90deg,rgba(0,221,184,0.06),rgba(0,221,184,0.02))';banner.style.borderColor='rgba(0,221,184,0.15)';banner.style.color='var(--teal)';}
+  if(banner){banner.style.background='linear-gradient(90deg,rgba(216,90,48,0.07),rgba(216,90,48,0.03))';banner.style.borderColor='rgba(216,90,48,0.15)';banner.style.color='var(--teal)';}
   const bannerIcon=document.getElementById('topBannerIcon');
   if(bannerIcon)bannerIcon.textContent='✦';
   const bannerText=document.getElementById('topBannerText');
@@ -2233,13 +2233,13 @@ function renderTable(cid,data,clickable=true){
 <thead><tr>
   <th style="width:40px">#</th>
   <th>Validator</th>
-  <th class="sorted" style="white-space:nowrap">Score ▼ <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span><span class="score-info">ⓘ<div class="score-tooltip"><div class="score-tooltip-title">⬡ Validator Score Formula</div><div class="score-tooltip-row"><span class="score-tooltip-label">APY (base yield)</span><span class="score-tooltip-val">50%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Network Share</span><span class="score-tooltip-val">30%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Total Stake</span><span class="score-tooltip-val">20%</span></div><div class="score-tooltip-note">Each component is normalized against the best validator in the set. Score = 10–99.<br>✦ 100% real on-chain data — no estimation.</div></div></span></th>
+  <th class="sorted" style="white-space:nowrap">Score ▼ <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span><span class="score-info">ⓘ<div class="score-tooltip"><div class="score-tooltip-title">⬡ Validator Score Formula</div><div class="score-tooltip-row"><span class="score-tooltip-label">APY (base yield)</span><span class="score-tooltip-val">50%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Network Share</span><span class="score-tooltip-val">30%</span></div><div class="score-tooltip-row"><span class="score-tooltip-label">Total Stake</span><span class="score-tooltip-val">20%</span></div><div class="score-tooltip-note">Each component is normalized against the best validator in the set. Score = 10–99.<br>✦ 100% real on-chain data — no estimation.</div></div></span></th>
   <th>Status</th>
-  <th>Total Stake <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>Est. Base APY <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>Commission <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>Network Share <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Total Stake <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Est. Base APY <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Commission <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Network Share <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
 </tr></thead>
 <tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
@@ -2297,7 +2297,7 @@ function showDetail(id){
   const descHTML=v.description?`<div style="font-size:0.78rem;color:var(--g300);line-height:1.6;margin-top:0.75rem;padding:0.75rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border)">${v.description}</div>`:'';
   p.innerHTML=`
 <div class="detail-header">
-  <div class="detail-header-left">${avatarHTML(v,true)}<div><div class="detail-name">${v.name}</div><div class="detail-addr" style="display:flex;align-items:center;gap:0.4rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" style="font-size:0.6rem;color:var(--teal);text-decoration:none;border:1px solid rgba(0,221,184,0.3);border-radius:3px;padding:1px 5px;white-space:nowrap" title="View on AsterScan">⊞ Explorer</a>`:''}
+  <div class="detail-header-left">${avatarHTML(v,true)}<div><div class="detail-name">${v.name}</div><div class="detail-addr" style="display:flex;align-items:center;gap:0.4rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" style="font-size:0.6rem;color:var(--teal);text-decoration:none;border:1px solid rgba(216,90,48,0.35);border-radius:3px;padding:1px 5px;white-space:nowrap" title="View on AsterScan">⊞ Explorer</a>`:''}
 </div></div>${stHTML(v.status)}</div>
   <button class="detail-close" onclick="closeDetail()">✕</button>
 </div>
@@ -2312,8 +2312,8 @@ ${descHTML}
   <div class="detail-stat"><div class="detail-stat-label">Network Share</div><div class="detail-stat-value">${v.networkShare}%</div></div>
 </div>
 <div class="detail-charts" style="align-items:flex-start">
-  <div class="detail-chart-box"><div class="detail-chart-title">APY vs Network Average <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>${apyChartSVG}</div>
-  <div class="detail-chart-box"><div class="detail-chart-title">Network Share <span style="font-size:0.55rem;background:rgba(0,221,184,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>${donutSVG}</div>
+  <div class="detail-chart-box"><div class="detail-chart-title">APY vs Network Average <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>${apyChartSVG}</div>
+  <div class="detail-chart-box"><div class="detail-chart-title">Network Share <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 5px;border-radius:3px;vertical-align:middle">Live</span></div>${donutSVG}</div>
 </div>
 <div style="margin:0.75rem 0 0.4rem;font-size:0.65rem;font-weight:700;letter-spacing:1.5px;color:var(--amber);text-transform:uppercase">⏳ Metrics — Coming Soon</div>
 <div style="position:relative;border-radius:var(--radius-sm);overflow:hidden">
@@ -2347,7 +2347,7 @@ function renderStakeChart(){
 }
 function renderCommissionChart(){
   const svg=document.getElementById('commissionChart'),lg=document.getElementById('commLegend');
-  const bk=[{l:'0-2%',c:0,cl:'#00ddb8'},{l:'3-5%',c:0,cl:'#14b8a6'},{l:'6-10%',c:0,cl:'#f0a830'},{l:'11-15%',c:0,cl:'#f97316'},{l:'16-20%',c:0,cl:'#ef4444'}];
+  const bk=[{l:'0-2%',c:0,cl:'#d85a30'},{l:'3-5%',c:0,cl:'#c04e28'},{l:'6-10%',c:0,cl:'#f59e0b'},{l:'11-15%',c:0,cl:'#f97316'},{l:'16-20%',c:0,cl:'#ef4444'}];
   validators.forEach(v=>{if(v.commission<=2)bk[0].c++;else if(v.commission<=5)bk[1].c++;else if(v.commission<=10)bk[2].c++;else if(v.commission<=15)bk[3].c++;else bk[4].c++;});
   const tot=validators.length,cx=140,cy=90,r=70,ir=45;let a=0,html='';
   bk.forEach(b=>{if(!b.c)return;const p=b.c/tot,a1=a,a2=a+p*Math.PI*2,lg2=p>0.5?1:0;
@@ -2403,7 +2403,7 @@ function renderAnalyticsCharts(){
   // Score distribution
   const bk=Array(10).fill(0);validators.forEach(v=>{const idx=Math.min(9,Math.floor((v.score-20)/8));if(idx>=0)bk[idx]++;});
   const mxB=Math.max(...bk),bw=w/10-4;
-  const cols=['#ef4444','#ef4444','#f97316','#f0a830','#f0a830','#14b8a6','#00ddb8','#00ddb8','#00ddb8','#00ddb8'];
+  const cols=['#ef4444','#ef4444','#f97316','#f59e0b','#f59e0b','#c04e28','#d85a30','#d85a30','#d85a30','#d85a30'];
   let sh=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/>`;
   bk.forEach((b,i)=>{const bh=(b/mxB)*h*0.85,x=i*(bw+4);sh+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" rx="3" fill="${cols[i]}" opacity="0.7"/>`;sh+=`<text x="${x+bw/2}" y="${h+12}" text-anchor="middle" class="chart-label">${20+i*8}</text>`;sh+=`<text x="${x+bw/2}" y="${h-bh-4}" text-anchor="middle" class="chart-label">${b}</text>`;});
   document.getElementById('scoreDistChart').innerHTML=sh;
@@ -2426,17 +2426,7 @@ function renderAnalyticsCharts(){
 
 // ─── STAKING ───
 function connectWallet(){
-  const btn=document.getElementById('btnConnect');btn.textContent='0x7a3F...c91E';btn.classList.add('connected');
-  const mk=[{v:validators[0],a:12400,r:182.3},{v:validators[2],a:8200,r:91.7},{v:validators[5],a:3500,r:44.1}];
-  const tD=mk.reduce((s,d)=>s+d.a,0),tR=mk.reduce((s,d)=>s+d.r,0);
-  document.getElementById('stakingContent').innerHTML=`<div class="sim-banner"><span class="sim-icon">⚠</span><span>Simulated staking data — wallet connection is a preview of the mainnet experience.</span></div>
-<div class="staking-container"><div class="staking-card"><h3>⬡ Total Delegated</h3><div class="staking-metric">${tD.toLocaleString()} ASTER</div><div style="color:var(--g300);font-size:0.78rem;margin-top:0.25rem">≈ $${(tD*0.499).toLocaleString()} USD</div></div>
-<div class="staking-card"><h3>◐ Pending Rewards</h3><div class="staking-metric amber">${tR.toFixed(1)} ASTER</div><div style="margin-top:0.75rem"><button class="btn-action" style="padding:0.5rem 1.25rem">Claim All Rewards</button></div></div></div>
-<div style="margin-top:1rem"><div class="analytics-card"><h3>My Delegations</h3>
-${mk.map(d=>`<div class="delegation-row"><div class="del-validator"><div class="del-avatar" style="background:${d.v.color}22;color:${d.v.color};border:1px solid ${d.v.color}44">${d.v.name.slice(0,2)}</div><div><div class="del-name">${d.v.name}</div><div style="font-size:0.68rem;color:var(--g400)">Score: <span style="color:${d.v.score>=80?'var(--teal)':'var(--amber)'}">${d.v.score}</span> · Commission: ${d.v.commission}%</div></div></div><div class="del-amount">${d.a.toLocaleString()} ASTER<small>Rewards: +${d.r} ASTER</small></div><div style="display:flex;gap:0.4rem"><button class="btn-action">Claim</button><button class="btn-action danger">Undelegate</button></div></div>`).join('')}
-</div></div>`;
-  // Also switch to staking tab
-  switchTab('staking');
+  window.open('https://www.asterdex.com/en/staking','_blank');
 }
 
 // ─── REWARDS CALCULATOR ───
@@ -2653,7 +2643,7 @@ function _mvRender(){
     const v=activ[e.validatorIdx]||activ[0];
     return `<div class="calc-breakdown-item">
       <div class="calc-breakdown-left">
-        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.55rem;font-weight:800;color:var(--teal);flex-shrink:0">V${i+1}</div>
+        <div class="calc-breakdown-icon" style="background:rgba(216,90,48,0.13);font-size:0.55rem;font-weight:800;color:var(--teal);flex-shrink:0">V${i+1}</div>
         <div>
           <div class="calc-breakdown-title">${v.name}</div>
           <div class="calc-breakdown-sub" style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;margin-top:0.2rem">
@@ -2706,7 +2696,7 @@ function _mvCalc(){
     const pct=totalStake>0?Math.round(b.stake/totalStake*100):0;
     return `<div class="calc-breakdown-item">
       <div class="calc-breakdown-left">
-        <div class="calc-breakdown-icon" style="background:rgba(0,221,184,0.12);font-size:0.62rem;font-weight:800;color:var(--teal)">${pct}%</div>
+        <div class="calc-breakdown-icon" style="background:rgba(216,90,48,0.13);font-size:0.62rem;font-weight:800;color:var(--teal)">${pct}%</div>
         <div>
           <div class="calc-breakdown-title">V${b.idx+1} · ${b.v.name}</div>
           <div class="calc-breakdown-sub">${fmt(b.stake,0)} ASTER · ${b.apy.toFixed(2)}% APY · ${_CALC_LOCKS.find(l=>l.w===b.lock)?.l||'1 year'}</div>
