@@ -805,6 +805,60 @@ tr:last-child td{border-bottom:none;}
   td,th{padding:0.4rem 0.5rem;}
   .val-name{font-size:0.74rem;}
 }
+/* ═══════ STAKING ACTIVITY ═══════ */
+.beta-pill{display:inline-flex;align-items:center;font-size:0.55rem;font-weight:800;letter-spacing:0.8px;padding:1px 6px;border-radius:4px;background:rgba(216,90,48,0.15);color:var(--teal);border:1px solid rgba(216,90,48,0.3);vertical-align:middle;margin-left:5px;}
+.sa-metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem;margin-bottom:1rem;}
+.sa-metric{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;text-align:center;}
+.sa-metric-val{font-family:var(--mono);font-size:1.15rem;font-weight:700;line-height:1.2;}
+.sa-metric-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--g400);margin-top:0.2rem;}
+.sa-metric-sub{font-size:0.6rem;color:var(--g400);margin-top:0.1rem;}
+.feed-header{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;}
+.feed-live-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite;flex-shrink:0;}
+.feed-live-dot.paused{background:var(--amber);animation:none;}
+.feed-count{margin-left:auto;font-size:0.62rem;color:var(--g400);font-family:var(--mono);}
+.btn-feed{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.2rem 0.55rem;font-size:0.62rem;color:var(--g200);cursor:pointer;transition:all 0.15s;}
+.btn-feed:hover{border-color:var(--teal);color:var(--teal);}
+.sa-feed{max-height:290px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;scrollbar-width:thin;scrollbar-color:var(--g400) transparent;}
+.sa-item{display:flex;align-items:flex-start;gap:0.45rem;padding:0.42rem 0.55rem;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid transparent;font-size:0.71rem;animation:saIn 0.22s ease;transition:border-color 0.15s;}
+.sa-item:hover{border-color:var(--border-mid);}
+.sa-item.sa-new{border-color:rgba(216,90,48,0.25);}
+@keyframes saIn{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
+.sa-icon{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:0.68rem;flex-shrink:0;margin-top:1px;}
+.sa-icon.c-stake{background:rgba(34,197,94,0.15);color:#22c55e;}
+.sa-icon.c-add{background:rgba(34,197,94,0.08);color:#86efac;}
+.sa-icon.c-extend{background:rgba(96,165,250,0.12);color:#60a5fa;}
+.sa-icon.c-withdraw{background:rgba(239,68,68,0.12);color:var(--red);}
+.sa-icon.c-claim{background:rgba(245,158,11,0.12);color:var(--amber);}
+.sa-icon.c-switch{background:rgba(216,90,48,0.12);color:var(--teal);}
+.sa-icon.c-other{background:rgba(90,110,126,0.1);color:var(--g300);}
+.sa-body{flex:1;min-width:0;}
+.sa-body-main{color:var(--white);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sa-body-sub{font-size:0.6rem;color:var(--g400);margin-top:1px;}
+.sa-time{font-size:0.6rem;color:var(--g500);flex-shrink:0;text-align:right;min-width:36px;}
+.sa-flow-bars{display:flex;flex-direction:column;gap:5px;margin-top:0.5rem;}
+.sa-flow-row{display:flex;align-items:center;gap:0.45rem;font-size:0.7rem;}
+.sa-flow-label{width:78px;color:var(--g300);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sa-flow-track{flex:1;position:relative;height:12px;background:var(--bg-elevated);border-radius:3px;overflow:hidden;}
+.sa-flow-in{position:absolute;left:50%;top:0;height:100%;background:rgba(34,197,94,0.5);border-radius:0 3px 3px 0;transition:width 0.4s ease;}
+.sa-flow-out{position:absolute;right:50%;top:0;height:100%;background:rgba(239,68,68,0.45);border-radius:3px 0 0 3px;transition:width 0.4s ease;}
+.sa-flow-mid{position:absolute;left:50%;top:0;width:1px;height:100%;background:var(--g400);}
+.sa-flow-net{width:52px;font-family:var(--mono);font-size:0.62rem;text-align:right;flex-shrink:0;}
+.sa-lock-cols{display:flex;gap:0.5rem;align-items:flex-end;height:64px;margin-top:0.5rem;}
+.sa-lock-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;height:100%;justify-content:flex-end;}
+.sa-lock-bar{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height 0.5s ease;}
+.sa-lock-lbl{font-size:0.55rem;color:var(--g400);text-align:center;line-height:1.2;}
+.sa-lock-pct{font-size:0.62rem;font-family:var(--mono);font-weight:700;}
+.sa-gauge-row{display:flex;align-items:center;gap:0.6rem;margin-top:0.5rem;font-size:0.73rem;}
+.sa-gauge-bar{flex:1;height:8px;background:var(--bg-elevated);border-radius:4px;overflow:hidden;}
+.sa-gauge-fill{height:100%;border-radius:4px;transition:width 0.5s ease;}
+.sa-offline{text-align:center;padding:1.5rem;color:var(--g400);font-size:0.75rem;}
+/* leaderboard flow column */
+.flow-badge{display:inline-flex;align-items:center;gap:3px;font-size:0.65rem;font-family:var(--mono);font-weight:700;}
+.flow-badge.up{color:#22c55e;}.flow-badge.down{color:var(--red);}
+@media(max-width:800px){
+  .sa-metric-row{grid-template-columns:repeat(2,1fr);}
+  .sa-flow-label{width:60px;}
+}
 </style>
 </head>
 <body>
@@ -1181,24 +1235,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- Coming soon row (blurred) -->
       <div class="analytics-grid full">
         <!-- COMING SOON: Network Stake Over Time -->
-        <div class="analytics-card" style="position:relative;overflow:hidden">
-          <h3>◐ Network Stake Over Time (30d) <span style="font-size:0.6rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:2px 6px;border-radius:4px;vertical-align:middle">Coming Soon</span></h3>
-          <svg class="chart-svg" id="stakeTimeChart" viewBox="0 0 500 180" style="filter:blur(4px);opacity:0.3"></svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
-            <span style="font-size:1.5rem">⏳</span>
-            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Historical data coming soon</span>
-            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Requires on-chain indexer for stake history</span>
-          </div>
+        <!-- MODULE 3: Staking Flow Dashboard -->
+        <div class="analytics-card" id="sa-flow-card">
+          <h3>⚡ Staking Flow <span class="beta-pill">BETA</span>
+            <span style="font-size:0.62rem;font-weight:400;color:var(--g400);margin-left:0.5rem" id="saFlowAge"></span>
+          </h3>
+          <div id="sa-flow-content"><div class="sa-offline">Connecting to on-chain data…</div></div>
         </div>
-        <!-- COMING SOON: Uptime Heatmap -->
-        <div class="analytics-card" style="position:relative;overflow:hidden">
-          <h3>↕ Uptime Heatmap (30d) <span style="font-size:0.6rem;background:rgba(240,168,48,0.15);color:var(--amber);padding:2px 6px;border-radius:4px;vertical-align:middle">Coming Soon</span></h3>
-          <svg class="chart-svg" id="uptimeHeatmap" viewBox="0 0 560 260" style="filter:blur(4px);opacity:0.3"></svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem">
-            <span style="font-size:1.5rem">⏳</span>
-            <span style="font-size:0.8rem;font-weight:700;color:var(--amber)">Historical heatmap coming soon</span>
-            <span style="font-size:0.7rem;color:var(--g300);text-align:center">Per-day breakdown not yet in public API</span>
+        <!-- MODULE 2: Live Staking Feed -->
+        <div class="analytics-card" id="sa-feed-card">
+          <h3>⟳ Live Staking Feed <span class="beta-pill">BETA</span></h3>
+          <div class="feed-header">
+            <span class="feed-live-dot" id="feedDot"></span>
+            <span style="font-size:0.68rem;color:var(--g400)" id="feedStatus">Connecting…</span>
+            <button class="btn-feed" id="feedBtn" onclick="saTogglePause()">⏸ Pause</button>
+            <span class="feed-count" id="feedCount">0 events</span>
           </div>
+          <div class="sa-feed" id="saFeed"><div class="sa-offline">Waiting for on-chain events…</div></div>
         </div>
       </div>
     </div>
@@ -1651,6 +1704,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div id="opt_detail" style="display:none"></div>
         </div>
       </div><!-- /calcSection_optimizer -->
+
+      <!-- MODULE 4: Rewards & Penalties Analytics -->
+      <div style="margin-top:1.5rem">
+        <div style="font-size:1rem;font-weight:700;color:var(--white);margin-bottom:0.75rem">
+          ◐ Staking Activity Analytics <span class="beta-pill">BETA</span>
+          <span style="font-size:0.72rem;font-weight:400;color:var(--g400);margin-left:0.5rem" id="saCalcAge"></span>
+        </div>
+        <div class="analytics-grid full" style="margin-top:0">
+          <!-- Rewards Claimed Timeline -->
+          <div class="analytics-card">
+            <h3>💰 Reward Claims <span class="beta-pill">BETA</span></h3>
+            <div id="sa-claims-content"><div class="sa-offline">Collecting claims data…</div></div>
+          </div>
+          <!-- Early Exit Penalties (real data) -->
+          <div class="analytics-card" style="border-color:rgba(239,68,68,0.15)">
+            <h3>⚠ Early Exit Penalties — Real Data <span class="beta-pill">BETA</span></h3>
+            <div id="sa-penalty-content"><div class="sa-offline">Collecting penalty data…</div></div>
+          </div>
+        </div>
+        <!-- Claim vs Withdraw Health -->
+        <div class="analytics-card" style="margin-top:0.75rem">
+          <h3>◐ Staking Health Indicator <span class="beta-pill">BETA</span></h3>
+          <div id="sa-health-content"><div class="sa-offline">Waiting for data…</div></div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
@@ -2240,8 +2318,13 @@ function renderTable(cid,data,clickable=true){
   <th>Commission <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Network Share <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
+  <th style="white-space:nowrap">Activity <span class="beta-pill">BETA</span></th>
 </tr></thead>
-<tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
+<tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';
+const _flow=v.fullAddress?stakingCollector.getValidatorFlow(v.fullAddress):{in:0,out:0,claims:0};
+const _hasFl=_flow.in>0||_flow.out>0||_flow.claims>0;
+const _flowCell=_hasFl?`<div style="display:flex;flex-direction:column;gap:2px">${_flow.in>0?`<span class="flow-badge up">⬆ ${(_flow.in/1000).toFixed(1)}K</span>`:''} ${_flow.out>0?`<span class="flow-badge down">⬇ ${(_flow.out/1000).toFixed(1)}K</span>`:''} ${_flow.claims>0?`<span class="flow-badge" style="color:var(--amber)">💰 ${_flow.claims}</span>`:''}</div>`:'<span style="color:var(--g500);font-size:0.65rem">—</span>';
+return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
 <td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr" style="display:flex;align-items:center;gap:0.3rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:0.55rem;color:var(--teal);text-decoration:none;opacity:0.7" title="View on AsterScan">⊞</a>`:''}
 </div></div></div></td>
@@ -2252,6 +2335,7 @@ function renderTable(cid,data,clickable=true){
 <td class="cell-mono ${v.commission>10?'':'dim'}" ${v.commission>10?'style="color:var(--amber)"':''}>${v.commission}%</td>
 <td class="cell-mono">${v.networkShare}%</td>
 <td><div class="cell-uptime"><span style="font-family:var(--mono);font-size:0.75rem;font-weight:700;color:${uptimeCol}">${v.uptime.toFixed(1)}%</span>${ubHTML(v.uptimeBlocks.slice(-7))}</div></td>
+<td>${_flowCell}</td>
 </tr>`;}).join('')}</tbody></table>`;}
 
 // ─── DETAIL PANEL ───
@@ -2398,7 +2482,7 @@ function renderAnalyticsCharts(){
   const d=Array.from({length:30},(_,i)=>2200+i*7+rng(-30,30));
   const mn=Math.min(...d)-50,mx=Math.max(...d)+50;
   const pts=d.map((v,i)=>`${(i/29)*w},${h-((v-mn)/(mx-mn))*h}`);
-  document.getElementById('stakeTimeChart').innerHTML=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/><line x1="0" y1="${h*.5}" x2="${w}" y2="${h*.5}" class="chart-grid-line"/><text x="0" y="${h+14}" class="chart-label">30d ago</text><text x="${w-30}" y="${h+14}" class="chart-label">Today</text><text x="${w+4}" y="8" class="chart-label">${(mx/1000).toFixed(1)}B</text><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${h} ${pts.join(' ')} ${w},${h}" fill="url(#g1)" opacity="0.15"/><polyline points="${pts.join(' ')}" class="chart-line" stroke="var(--teal)"/>`;
+  const _stc=document.getElementById('stakeTimeChart');if(_stc)_stc.innerHTML=`<line x1="0" y1="${h}" x2="${w}" y2="${h}" class="chart-grid-line"/><line x1="0" y1="${h*.5}" x2="${w}" y2="${h*.5}" class="chart-grid-line"/><text x="0" y="${h+14}" class="chart-label">30d ago</text><text x="${w-30}" y="${h+14}" class="chart-label">Today</text><text x="${w+4}" y="8" class="chart-label">${(mx/1000).toFixed(1)}B</text><defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--teal)"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs><polygon points="0,${h} ${pts.join(' ')} ${w},${h}" fill="url(#g1)" opacity="0.15"/><polyline points="${pts.join(' ')}" class="chart-line" stroke="var(--teal)"/>`;
 
   // Score distribution
   const bk=Array(10).fill(0);validators.forEach(v=>{const idx=Math.min(9,Math.floor((v.score-20)/8));if(idx>=0)bk[idx]++;});
@@ -2413,7 +2497,7 @@ function renderAnalyticsCharts(){
   t20.forEach((v,row)=>{hm+=`<text x="0" y="${row*(cH+gp)+cH-1}" class="chart-label" style="font-size:7px">${v.name.slice(0,10)}</text>`;
   v.uptimeBlocks.forEach((b,col)=>{const cl=b==='ok'?'var(--teal-dim)':b==='miss'?'var(--red)':'var(--g500)';hm+=`<rect x="${lW+col*(cW+gp)}" y="${row*(cH+gp)}" width="${cW}" height="${cH}" rx="2" fill="${cl}" opacity="${b==='ok'?0.6:1}"/>`;});});
   for(let dd=0;dd<30;dd+=5)hm+=`<text x="${lW+dd*(cW+gp)+cW/2}" y="${20*(cH+gp)+12}" text-anchor="middle" class="chart-label" style="font-size:7px">D${dd+1}</text>`;
-  document.getElementById('uptimeHeatmap').innerHTML=hm;
+  const _uhm=document.getElementById('uptimeHeatmap');if(_uhm)_uhm.innerHTML=hm;
 
   // Decentralization
   const srt=[...validators].sort((a,b)=>b.totalStake-a.totalStake),totS=srt.reduce((s,v)=>s+Number(v.totalStake),0);
@@ -2886,6 +2970,243 @@ function closeSidebar(){
   document.getElementById('sidebarOverlay').classList.remove('visible');
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// MODULE 1: Staking Activity Collector (singleton, ring buffer 5000)
+// ═══════════════════════════════════════════════════════════════════
+const stakingCollector=(function(){
+  const MAX=5000,POLL=5000;
+  const _seen=new Set(),_buf=[],_subs=[];
+  let _timer=null,_paused=false,_lastPoll=null;
+  const _m={totalStake:0,totalWithdraw:0,totalClaims:0,totalSwitches:0,
+    totalExtend:0,encryptedCount:0,perValidator:{},
+    lockDist:{w52:0,w104:0,w156:0,w208:0}};
+
+  function _cls(tx){
+    if(tx.cipher)return{type:'encrypted',icon:'🔒',label:'Encrypted Tx',color:'c-switch'};
+    const s=(tx.data&&tx.data.subType)||tx.subType||'';
+    if(s==='Stake')return{type:'stake',icon:'⬆',label:'Stake',color:'c-stake'};
+    if(s==='AddStake')return{type:'stake',icon:'⬆',label:'Add Stake',color:'c-add'};
+    if(s==='Withdraw')return{type:'withdraw',icon:'⬇',label:'Withdraw',color:'c-withdraw'};
+    if(s==='ClaimRewards')return{type:'claim',icon:'💰',label:'Claim Rewards',color:'c-claim'};
+    if(s==='SwitchValidator')return{type:'switch',icon:'⟳',label:'Switch Validator',color:'c-switch'};
+    if(s==='ExtendStakingTime')return{type:'extend',icon:'⏱',label:'Extend Lock',color:'c-extend'};
+    if(tx.action==='TokenDelegate')return{type:'stake',icon:'⬆',label:'Delegate',color:'c-stake'};
+    return{type:'other',icon:'◈',label:s||tx.action||'Tx',color:'c-other'};
+  }
+
+  function _add(tx){
+    const id=tx.hash||tx.id||(tx.action+JSON.stringify(tx.data||{}).slice(0,30));
+    if(_seen.has(id))return false;
+    _seen.add(id);
+    const c=_cls(tx);
+    const e={...tx,_type:c.type,_icon:c.icon,_label:c.label,_color:c.color,_ts:tx.timestamp||(tx.time?tx.time*1000:Date.now())};
+    _buf.unshift(e);
+    if(_buf.length>MAX){const old=_buf.pop();_seen.delete(old.hash||old.id||(old.action+JSON.stringify(old.data||{}).slice(0,30)));}
+    _upd(e);return true;
+  }
+
+  function _upd(tx){
+    const amt=parseFloat((tx.data&&(tx.data.amount||tx.data.value))||tx.amount||0);
+    const addr=(tx.data&&tx.data.validatorAddress)||tx.validatorAddress||'';
+    if(!_m.perValidator[addr])_m.perValidator[addr]={in:0,out:0,claims:0};
+    if(tx.cipher){_m.encryptedCount++;return;}
+    switch(tx._type){
+      case'stake':   _m.totalStake+=amt;if(addr)_m.perValidator[addr].in+=amt;break;
+      case'withdraw':_m.totalWithdraw+=amt;if(addr)_m.perValidator[addr].out+=amt;break;
+      case'claim':   _m.totalClaims++;if(addr)_m.perValidator[addr].claims++;break;
+      case'switch':  _m.totalSwitches++;break;
+      case'extend':  _m.totalExtend++;break;
+    }
+    if(tx._type==='stake'){
+      const wks=(tx.data&&tx.data.lockPeriodWeeks)||0;
+      if(wks<=52)_m.lockDist.w52++;
+      else if(wks<=104)_m.lockDist.w104++;
+      else if(wks<=156)_m.lockDist.w156++;
+      else _m.lockDist.w208++;
+    }
+  }
+
+  async function _poll(){
+    if(_paused)return;
+    try{
+      const r=await fetch('https://explorer.asterdex.com/explorer',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({type:'latestTxs'}),signal:AbortSignal.timeout(4500)
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const d=await r.json();
+      const txs=(d.latestTxs||d.data||d.txs||[]).filter(t=>
+        t.cipher||(t.action==='TokenDelegate')||
+        (t.data&&['Stake','AddStake','ExtendStakingTime','Withdraw','ClaimRewards','SwitchValidator'].includes(t.data.subType))
+      );
+      let added=0;txs.forEach(t=>{if(_add(t))added++;});
+      _lastPoll=Date.now();
+      _subs.forEach(fn=>fn({type:added>0?'txs':'poll',count:added,buf:_buf,metrics:_m}));
+    }catch(e){
+      _lastPoll=_lastPoll||null;
+      _subs.forEach(fn=>fn({type:'error',err:e,buf:_buf,metrics:_m}));
+    }
+  }
+
+  return{
+    start(){if(_timer)return;_poll();_timer=setInterval(_poll,POLL);},
+    stop(){clearInterval(_timer);_timer=null;},
+    pause(){_paused=true;},resume(){_paused=false;},isPaused(){return _paused;},
+    getBuf(){return _buf;},getMetrics(){return _m;},getLastPoll(){return _lastPoll;},
+    subscribe(fn){_subs.push(fn);},
+    getValidatorFlow(addr){return _m.perValidator[addr]||{in:0,out:0,claims:0};}
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+// MODULE 2: Live Staking Feed
+// ═══════════════════════════════════════════════════════════════════
+let _feedPaused=false;
+function saTogglePause(){
+  _feedPaused=!_feedPaused;
+  const btn=document.getElementById('feedBtn'),dot=document.getElementById('feedDot');
+  if(btn)btn.textContent=_feedPaused?'▶ Resume':'⏸ Pause';
+  if(dot)dot.classList.toggle('paused',_feedPaused);
+  if(_feedPaused)stakingCollector.pause();else{stakingCollector.resume();}
+}
+function _saAge(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<5)return'now';if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h';
+}
+function renderActivityFeed(buf,metrics){
+  const el=document.getElementById('saFeed'),statusEl=document.getElementById('feedStatus');
+  const countEl=document.getElementById('feedCount'),dotEl=document.getElementById('feedDot');
+  if(!el||_feedPaused)return;
+  if(!buf.length){
+    el.innerHTML='<div class="sa-offline">Waiting for on-chain events…</div>';
+    if(statusEl)statusEl.textContent='Waiting…';return;
+  }
+  if(dotEl){dotEl.style.background='';dotEl.classList.remove('paused');}
+  if(statusEl)statusEl.textContent='Live · '+buf.length+' collected';
+  if(countEl)countEl.textContent=buf.length+' events';
+  el.innerHTML=buf.slice(0,40).map(tx=>{
+    const amt=parseFloat((tx.data&&(tx.data.amount||tx.data.value))||tx.amount||0);
+    const addr=(tx.data&&tx.data.validatorAddress)||tx.validatorAddress||'';
+    const vName=validators.find(v=>v.fullAddress===addr)?.name||(addr?addr.slice(0,8)+'…':'—');
+    const amtStr=amt>0?`<span style="font-family:var(--mono);color:var(--white);font-weight:600">${amt.toLocaleString('en-US',{maximumFractionDigits:0})} ASTER</span>`:'';
+    const sub=tx.cipher?'Encrypted — details hidden':`${vName}${amtStr?' · ':''}${amtStr}`;
+    return`<div class="sa-item"><div class="sa-icon ${tx._color}">${tx._icon}</div><div class="sa-body"><div class="sa-body-main">${tx._label}</div><div class="sa-body-sub">${sub}</div></div><div class="sa-time">${_saAge(tx._ts)}</div></div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MODULE 3: Staking Flow Dashboard
+// ═══════════════════════════════════════════════════════════════════
+function renderStakingFlow(buf,metrics){
+  const el=document.getElementById('sa-flow-content'),ageEl=document.getElementById('saFlowAge');
+  if(!el)return;
+  if(!buf.length){el.innerHTML='<div class="sa-offline">Connecting to on-chain data…</div>';return;}
+  const lp=stakingCollector.getLastPoll();
+  if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
+  const netFlow=metrics.totalStake-metrics.totalWithdraw;
+  const netC=netFlow>=0?'#22c55e':'var(--red)';
+  const fmtA=n=>n>0?n.toLocaleString('en-US',{maximumFractionDigits:0})+' ASTER':'—';
+  const cards=[
+    {label:'Staked In',val:fmtA(metrics.totalStake),color:'#22c55e'},
+    {label:'Withdrawn',val:fmtA(metrics.totalWithdraw),color:'var(--red)'},
+    {label:'Net Flow',val:metrics.totalStake>0||metrics.totalWithdraw>0?(netFlow>=0?'+':'')+fmtA(Math.abs(netFlow)):'—',color:netC},
+    {label:'Claim Events',val:metrics.totalClaims>0?metrics.totalClaims:'—',color:'var(--amber)'},
+  ];
+  let html=`<div class="sa-metric-row">${cards.map(c=>`<div class="metric-card"><div class="metric-label">${c.label}</div><div class="metric-value" style="color:${c.color};font-size:0.82rem">${c.val}</div></div>`).join('')}</div>`;
+
+  // per-validator flow bars
+  const pve=Object.entries(metrics.perValidator).filter(([,d])=>d.in>0||d.out>0)
+    .sort((a,b)=>(b[1].in+b[1].out)-(a[1].in+a[1].out)).slice(0,8);
+  if(pve.length){
+    const mxF=Math.max(...pve.map(([,d])=>Math.max(d.in,d.out)),1);
+    html+=`<div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--g400);text-transform:uppercase;margin:0.75rem 0 0.35rem">⟷ Per-Validator Flow</div><div class="sa-flow-bars">`;
+    pve.forEach(([addr,d])=>{
+      const name=validators.find(v=>v.fullAddress===addr)?.name||(addr.slice(0,8)+'…');
+      const inW=Math.min(48,(d.in/mxF)*48),outW=Math.min(48,(d.out/mxF)*48);
+      const net=d.in-d.out,nc=net>=0?'#22c55e':'var(--red)';
+      html+=`<div class="sa-flow-row"><div class="sa-flow-label">${name}</div><div class="sa-flow-track"><div class="sa-flow-mid"></div><div class="sa-flow-in" style="width:${inW}%"></div><div class="sa-flow-out" style="width:${outW}%"></div></div><div class="sa-flow-net" style="color:${nc}">${net>=0?'+':''}${(net/1000).toFixed(1)}K</div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // lock period bars
+  const ld=metrics.lockDist,ldArr=[{l:'1yr',v:ld.w52,c:'rgba(216,90,48,0.6)'},{l:'2yr',v:ld.w104,c:'rgba(216,90,48,0.75)'},{l:'3yr',v:ld.w156,c:'#d85a30'},{l:'4yr',v:ld.w208,c:'#f97316'}].filter(b=>b.v>0);
+  if(ldArr.length){
+    const mxL=Math.max(...ldArr.map(b=>b.v),1);
+    html+=`<div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--g400);text-transform:uppercase;margin:0.75rem 0 0.35rem">🔒 Lock Period Distribution</div><div class="sa-lock-cols">`;
+    ldArr.forEach(b=>{
+      const bh=Math.max(4,Math.round((b.v/mxL)*56));
+      html+=`<div class="sa-lock-col"><div style="font-size:0.6rem;color:var(--g300);font-family:var(--mono)">${b.v}</div><div style="width:100%;height:${bh}px;background:${b.c};border-radius:3px 3px 0 0"></div><div style="font-size:0.6rem;color:var(--g400)">${b.l}</div></div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<div style="font-size:0.6rem;color:var(--g500);margin-top:0.5rem;text-align:right">Based on ${buf.length} on-chain txs</div>`;
+  el.innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// MODULE 4: Rewards & Penalties Analytics
+// ═══════════════════════════════════════════════════════════════════
+function renderClaimsContent(buf,metrics){
+  const el=document.getElementById('sa-claims-content');if(!el)return;
+  const claims=buf.filter(t=>t._type==='claim');
+  if(!claims.length){el.innerHTML='<div class="sa-offline">No reward claims detected yet…</div>';return;}
+  const byVal={};
+  claims.forEach(t=>{const a=(t.data&&t.data.validatorAddress)||t.validatorAddress||'?';
+    const n=validators.find(v=>v.fullAddress===a)?.name||(a.slice(0,8)+'…');
+    byVal[n]=(byVal[n]||0)+1;});
+  const rows=Object.entries(byVal).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const mx=Math.max(...rows.map(r=>r[1]),1);
+  el.innerHTML=`<div style="font-size:0.65rem;color:var(--g400);margin-bottom:0.5rem">${metrics.totalClaims} claim events collected</div>`+
+    rows.map(([n,c])=>`<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:4px;font-size:0.7rem"><div style="width:80px;color:var(--g300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0">${n}</div><div style="flex:1;background:var(--bg-elevated);border-radius:3px;height:8px;overflow:hidden"><div style="width:${(c/mx)*100}%;height:100%;background:var(--amber);border-radius:3px"></div></div><div style="font-family:var(--mono);color:var(--amber);min-width:24px;text-align:right">${c}</div></div>`).join('')+
+    `<div style="font-size:0.6rem;color:var(--g500);margin-top:0.4rem">${claims.slice(0,20).length} recent shown</div>`;
+}
+function renderPenaltyContent(buf,metrics){
+  const el=document.getElementById('sa-penalty-content');if(!el)return;
+  const ws=buf.filter(t=>t._type==='withdraw');
+  if(!ws.length){el.innerHTML='<div class="sa-offline">No withdrawal events detected yet…</div>';return;}
+  const early=ws.filter(t=>{const lk=(t.data&&t.data.lockPeriodWeeks)||0,el2=(t.data&&t.data.stakedWeeks)||0;return lk>0&&el2<lk;});
+  const pct=Math.round(early.length/ws.length*100);
+  const pctC=pct>20?'var(--red)':pct>10?'var(--amber)':'var(--teal)';
+  el.innerHTML=`<div class="sa-metric-row" style="grid-template-columns:repeat(3,1fr)">
+    <div class="metric-card"><div class="metric-label">Withdrawals</div><div class="metric-value" style="color:var(--g200)">${ws.length}</div></div>
+    <div class="metric-card"><div class="metric-label">Early Exits</div><div class="metric-value" style="color:var(--red)">${early.length}</div></div>
+    <div class="metric-card"><div class="metric-label">Early Exit %</div><div class="metric-value" style="color:${pctC}">${pct}%</div></div>
+  </div>
+  <div style="font-size:0.68rem;color:var(--g300);padding:0.5rem 0.65rem;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:0.5rem">
+    ${early.length>0?`⚠ ${early.length} potential early exit${early.length>1?'s':''} — penalty may apply`:'✓ No early exit penalties detected in current window'}
+  </div>
+  <div style="font-size:0.6rem;color:var(--g500);margin-top:0.4rem">Real on-chain withdrawal data · ${ws.length} events</div>`;
+}
+function renderHealthContent(buf,metrics){
+  const el=document.getElementById('sa-health-content'),ageEl=document.getElementById('saCalcAge');if(!el)return;
+  const lp=stakingCollector.getLastPoll();if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
+  if(!buf.length){el.innerHTML='<div class="sa-offline">Waiting for on-chain data…</div>';return;}
+  const stakes=buf.filter(t=>t._type==='stake').length,ws=buf.filter(t=>t._type==='withdraw').length;
+  const claims=buf.filter(t=>t._type==='claim').length,enc=metrics.encryptedCount;
+  const nr=(stakes+ws)>0?(stakes-ws)/Math.max(stakes+ws,1):0;
+  const score=Math.min(100,Math.max(0,Math.round(50+nr*50)));
+  const sc=score>=70?'var(--teal)':score>=40?'var(--amber)':'var(--red)';
+  const sl=score>=70?'Healthy':score>=40?'Moderate':'Bearish';
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem">
+    <div style="text-align:center;min-width:52px"><div style="font-size:1.8rem;font-weight:800;color:${sc};font-family:var(--mono)">${score}</div><div style="font-size:0.62rem;color:${sc};font-weight:700">${sl}</div></div>
+    <div style="flex:1"><div class="sa-gauge-bar"><div class="sa-gauge-fill" style="width:${score}%;background:${sc}"></div></div><div style="font-size:0.65rem;color:var(--g300);margin-top:0.3rem">Sentiment index · ${buf.length} events</div></div>
+  </div>
+  <div class="sa-metric-row" style="grid-template-columns:repeat(4,1fr)">
+    <div class="metric-card"><div class="metric-label">Stakes</div><div class="metric-value" style="color:#22c55e">${stakes}</div></div>
+    <div class="metric-card"><div class="metric-label">Withdrawals</div><div class="metric-value" style="color:var(--red)">${ws}</div></div>
+    <div class="metric-card"><div class="metric-label">Claims</div><div class="metric-value" style="color:var(--amber)">${claims}</div></div>
+    <div class="metric-card"><div class="metric-label">Encrypted</div><div class="metric-value" style="color:var(--g300)">${enc}</div></div>
+  </div>`;
+}
+
+// ─── SA master dispatcher ───
+function renderStakingActivity(){
+  const buf=stakingCollector.getBuf(),m=stakingCollector.getMetrics();
+  if(_activeTab==='analytics'){renderActivityFeed(buf,m);renderStakingFlow(buf,m);}
+  if(_activeTab==='calculator'){renderClaimsContent(buf,m);renderPenaltyContent(buf,m);renderHealthContent(buf,m);}
+}
+
 // ─── TAB SWITCHING ───
 function switchTab(t){
   _activeTab=t;
@@ -2895,9 +3216,9 @@ function switchTab(t){
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
   document.querySelectorAll('.mobile-bnav-item[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
-  if(t==='analytics')setTimeout(renderAnalyticsCharts,50);
+  if(t==='analytics'){setTimeout(renderAnalyticsCharts,50);setTimeout(renderStakingActivity,80);}
   if(t==='explorer')renderExplorerBlocks();
-  if(t==='calculator')initCalculatorTab();
+  if(t==='calculator'){initCalculatorTab();setTimeout(renderStakingActivity,80);}
   if(window.innerWidth<=800)closeSidebar();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
@@ -2997,6 +3318,8 @@ loadData();
 fetchPrice();
 startAutoRefresh();
 startEpochCountdown();
+stakingCollector.subscribe(()=>renderStakingActivity());
+stakingCollector.start();
 </script>
 </body>
 </html>
