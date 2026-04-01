@@ -858,6 +858,7 @@ tr:last-child td{border-bottom:none;}
 @media(max-width:800px){
   .sa-metric-row{grid-template-columns:repeat(2,1fr);}
   .sa-flow-label{width:60px;}
+  .sa-activity-grid{grid-template-columns:1fr!important;}
 }
 </style>
 </head>
@@ -1232,26 +1233,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
 
-      <!-- Coming soon row (blurred) -->
-      <div class="analytics-grid full">
-        <!-- COMING SOON: Network Stake Over Time -->
-        <!-- MODULE 3: Staking Flow Dashboard -->
-        <div class="analytics-card" id="sa-flow-card">
-          <h3>⚡ Staking Flow <span class="beta-pill">BETA</span>
-            <span style="font-size:0.62rem;font-weight:400;color:var(--g400);margin-left:0.5rem" id="saFlowAge"></span>
-          </h3>
-          <div id="sa-flow-content"><div class="sa-offline">Connecting to on-chain data…</div></div>
+      <!-- On-Chain Activity -->
+      <div style="margin-top:0.25rem">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.65rem">
+          <span style="font-size:0.65rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--g400)">⟳ On-Chain Staking Activity</span>
+          <span class="beta-pill">BETA</span>
+          <span class="feed-live-dot" id="feedDot" style="margin-left:0.25rem"></span>
+          <span style="font-size:0.65rem;color:var(--g400)" id="feedStatus">Connecting…</span>
+          <span style="margin-left:auto;font-size:0.62rem;color:var(--g500)" id="saFlowAge"></span>
         </div>
-        <!-- MODULE 2: Live Staking Feed -->
-        <div class="analytics-card" id="sa-feed-card">
-          <h3>⟳ Live Staking Feed <span class="beta-pill">BETA</span></h3>
-          <div class="feed-header">
-            <span class="feed-live-dot" id="feedDot"></span>
-            <span style="font-size:0.68rem;color:var(--g400)" id="feedStatus">Connecting…</span>
-            <button class="btn-feed" id="feedBtn" onclick="saTogglePause()">⏸ Pause</button>
-            <span class="feed-count" id="feedCount">0 events</span>
+        <div class="sa-activity-grid" style="display:grid;grid-template-columns:1fr 300px;gap:0.75rem;align-items:start">
+          <!-- Feed -->
+          <div class="analytics-card" style="padding:0.75rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
+              <span style="font-size:0.75rem;font-weight:600;color:var(--white)">Live Feed</span>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <span class="feed-count" id="feedCount">0 events</span>
+                <button class="btn-feed" id="feedBtn" onclick="saTogglePause()">⏸ Pause</button>
+              </div>
+            </div>
+            <div class="sa-feed" id="saFeed"><div class="sa-offline">Waiting for on-chain events…</div></div>
           </div>
-          <div class="sa-feed" id="saFeed"><div class="sa-offline">Waiting for on-chain events…</div></div>
+          <!-- Metrics -->
+          <div style="display:flex;flex-direction:column;gap:0.6rem">
+            <div id="sa-flow-content"><div class="sa-offline" style="font-size:0.7rem">Connecting…</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1705,30 +1711,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div><!-- /calcSection_optimizer -->
 
-      <!-- MODULE 4: Rewards & Penalties Analytics -->
-      <div style="margin-top:1.5rem">
-        <div style="font-size:1rem;font-weight:700;color:var(--white);margin-bottom:0.75rem">
-          ◐ Staking Activity Analytics <span class="beta-pill">BETA</span>
-          <span style="font-size:0.72rem;font-weight:400;color:var(--g400);margin-left:0.5rem" id="saCalcAge"></span>
-        </div>
-        <div class="analytics-grid full" style="margin-top:0">
-          <!-- Rewards Claimed Timeline -->
-          <div class="analytics-card">
-            <h3>💰 Reward Claims <span class="beta-pill">BETA</span></h3>
-            <div id="sa-claims-content"><div class="sa-offline">Collecting claims data…</div></div>
-          </div>
-          <!-- Early Exit Penalties (real data) -->
-          <div class="analytics-card" style="border-color:rgba(239,68,68,0.15)">
-            <h3>⚠ Early Exit Penalties — Real Data <span class="beta-pill">BETA</span></h3>
-            <div id="sa-penalty-content"><div class="sa-offline">Collecting penalty data…</div></div>
-          </div>
-        </div>
-        <!-- Claim vs Withdraw Health -->
-        <div class="analytics-card" style="margin-top:0.75rem">
-          <h3>◐ Staking Health Indicator <span class="beta-pill">BETA</span></h3>
-          <div id="sa-health-content"><div class="sa-offline">Waiting for data…</div></div>
-        </div>
-      </div>
     </div>
 
     <!-- ═══════ TAB: PROPOSALS ═══════ -->
@@ -3035,10 +3017,7 @@ const stakingCollector=(function(){
       });
       if(!r.ok)throw new Error('HTTP '+r.status);
       const d=await r.json();
-      const txs=(d.latestTxs||d.data||d.txs||[]).filter(t=>
-        t.cipher||(t.action==='TokenDelegate')||
-        (t.data&&['Stake','AddStake','ExtendStakingTime','Withdraw','ClaimRewards','SwitchValidator'].includes(t.data.subType))
-      );
+      const txs=(d.latestTxs||d.data||d.txs||[]);
       let added=0;txs.forEach(t=>{if(_add(t))added++;});
       _lastPoll=Date.now();
       _subs.forEach(fn=>fn({type:added>0?'txs':'poll',count:added,buf:_buf,metrics:_m}));
@@ -3095,53 +3074,29 @@ function renderActivityFeed(buf,metrics){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// MODULE 3: Staking Flow Dashboard
+// MODULE 3: Staking Metrics Sidebar
 // ═══════════════════════════════════════════════════════════════════
 function renderStakingFlow(buf,metrics){
   const el=document.getElementById('sa-flow-content'),ageEl=document.getElementById('saFlowAge');
   if(!el)return;
-  if(!buf.length){el.innerHTML='<div class="sa-offline">Connecting to on-chain data…</div>';return;}
   const lp=stakingCollector.getLastPoll();
   if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
+  if(!buf.length){el.innerHTML='<div class="sa-offline" style="font-size:0.7rem;padding:1rem 0">Connecting…</div>';return;}
   const netFlow=metrics.totalStake-metrics.totalWithdraw;
   const netC=netFlow>=0?'#22c55e':'var(--red)';
-  const fmtA=n=>n>0?n.toLocaleString('en-US',{maximumFractionDigits:0})+' ASTER':'—';
-  const cards=[
-    {label:'Staked In',val:fmtA(metrics.totalStake),color:'#22c55e'},
-    {label:'Withdrawn',val:fmtA(metrics.totalWithdraw),color:'var(--red)'},
-    {label:'Net Flow',val:metrics.totalStake>0||metrics.totalWithdraw>0?(netFlow>=0?'+':'')+fmtA(Math.abs(netFlow)):'—',color:netC},
-    {label:'Claim Events',val:metrics.totalClaims>0?metrics.totalClaims:'—',color:'var(--amber)'},
+  const fmtK=n=>n>=1000?(n/1000).toFixed(1)+'K ASTER':n>0?n.toFixed(0)+' ASTER':'—';
+  const stats=[
+    {label:'Staked In',val:fmtK(metrics.totalStake),color:'#22c55e',icon:'⬆'},
+    {label:'Withdrawn',val:fmtK(metrics.totalWithdraw),color:'var(--red)',icon:'⬇'},
+    {label:'Net Flow',val:metrics.totalStake>0||metrics.totalWithdraw>0?(netFlow>=0?'+':'')+fmtK(Math.abs(netFlow)):'—',color:netC,icon:'⟷'},
+    {label:'Claims',val:metrics.totalClaims>0?metrics.totalClaims+'×':'—',color:'var(--amber)',icon:'💰'},
+    {label:'Switches',val:metrics.totalSwitches>0?metrics.totalSwitches+'×':'—',color:'var(--teal)',icon:'⟳'},
+    {label:'Txs collected',val:buf.length,color:'var(--g300)',icon:'◈'},
   ];
-  let html=`<div class="sa-metric-row">${cards.map(c=>`<div class="metric-card"><div class="metric-label">${c.label}</div><div class="metric-value" style="color:${c.color};font-size:0.82rem">${c.val}</div></div>`).join('')}</div>`;
-
-  // per-validator flow bars
-  const pve=Object.entries(metrics.perValidator).filter(([,d])=>d.in>0||d.out>0)
-    .sort((a,b)=>(b[1].in+b[1].out)-(a[1].in+a[1].out)).slice(0,8);
-  if(pve.length){
-    const mxF=Math.max(...pve.map(([,d])=>Math.max(d.in,d.out)),1);
-    html+=`<div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--g400);text-transform:uppercase;margin:0.75rem 0 0.35rem">⟷ Per-Validator Flow</div><div class="sa-flow-bars">`;
-    pve.forEach(([addr,d])=>{
-      const name=validators.find(v=>v.fullAddress===addr)?.name||(addr.slice(0,8)+'…');
-      const inW=Math.min(48,(d.in/mxF)*48),outW=Math.min(48,(d.out/mxF)*48);
-      const net=d.in-d.out,nc=net>=0?'#22c55e':'var(--red)';
-      html+=`<div class="sa-flow-row"><div class="sa-flow-label">${name}</div><div class="sa-flow-track"><div class="sa-flow-mid"></div><div class="sa-flow-in" style="width:${inW}%"></div><div class="sa-flow-out" style="width:${outW}%"></div></div><div class="sa-flow-net" style="color:${nc}">${net>=0?'+':''}${(net/1000).toFixed(1)}K</div></div>`;
-    });
-    html+=`</div>`;
-  }
-
-  // lock period bars
-  const ld=metrics.lockDist,ldArr=[{l:'1yr',v:ld.w52,c:'rgba(216,90,48,0.6)'},{l:'2yr',v:ld.w104,c:'rgba(216,90,48,0.75)'},{l:'3yr',v:ld.w156,c:'#d85a30'},{l:'4yr',v:ld.w208,c:'#f97316'}].filter(b=>b.v>0);
-  if(ldArr.length){
-    const mxL=Math.max(...ldArr.map(b=>b.v),1);
-    html+=`<div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;color:var(--g400);text-transform:uppercase;margin:0.75rem 0 0.35rem">🔒 Lock Period Distribution</div><div class="sa-lock-cols">`;
-    ldArr.forEach(b=>{
-      const bh=Math.max(4,Math.round((b.v/mxL)*56));
-      html+=`<div class="sa-lock-col"><div style="font-size:0.6rem;color:var(--g300);font-family:var(--mono)">${b.v}</div><div style="width:100%;height:${bh}px;background:${b.c};border-radius:3px 3px 0 0"></div><div style="font-size:0.6rem;color:var(--g400)">${b.l}</div></div>`;
-    });
-    html+=`</div>`;
-  }
-  html+=`<div style="font-size:0.6rem;color:var(--g500);margin-top:0.5rem;text-align:right">Based on ${buf.length} on-chain txs</div>`;
-  el.innerHTML=html;
+  el.innerHTML=stats.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.6rem;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border)">
+    <span style="font-size:0.68rem;color:var(--g400)">${s.icon} ${s.label}</span>
+    <span style="font-size:0.72rem;font-weight:700;font-family:var(--mono);color:${s.color}">${s.val}</span>
+  </div>`).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -3204,7 +3159,6 @@ function renderHealthContent(buf,metrics){
 function renderStakingActivity(){
   const buf=stakingCollector.getBuf(),m=stakingCollector.getMetrics();
   if(_activeTab==='analytics'){renderActivityFeed(buf,m);renderStakingFlow(buf,m);}
-  if(_activeTab==='calculator'){renderClaimsContent(buf,m);renderPenaltyContent(buf,m);renderHealthContent(buf,m);}
 }
 
 // ─── TAB SWITCHING ───
@@ -3218,7 +3172,7 @@ function switchTab(t){
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
   if(t==='analytics'){setTimeout(renderAnalyticsCharts,50);setTimeout(renderStakingActivity,80);}
   if(t==='explorer')renderExplorerBlocks();
-  if(t==='calculator'){initCalculatorTab();setTimeout(renderStakingActivity,80);}
+  if(t==='calculator')initCalculatorTab();
   if(window.innerWidth<=800)closeSidebar();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
