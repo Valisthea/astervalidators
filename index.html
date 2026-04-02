@@ -1208,6 +1208,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- ═══════ TAB: ANALYTICS ═══════ -->
     <div class="tab-content" id="tc-analytics">
+
+      <!-- Chain stats bar -->
+      <div id="chainStatsBar" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:1rem"></div>
+
       <!-- Live data row -->
       <div class="analytics-grid full" style="margin-bottom:1rem">
         <!-- LIVE: Stake distribution (real data) -->
@@ -1711,6 +1715,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div id="opt_detail" style="display:none"></div>
         </div>
       </div><!-- /calcSection_optimizer -->
+
+      <!-- APY Boost Info (from boost-config API) -->
+      <div style="margin-top:1.25rem" id="boostSection">
+        <div style="font-size:0.65rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--g400);margin-bottom:0.6rem">⚡ Trading Volume APY Boost — Real data from AsterDex</div>
+        <div class="analytics-card" style="padding:0.85rem">
+          <div style="font-size:0.78rem;color:var(--g300);margin-bottom:0.75rem;line-height:1.6">Your staking APY is multiplied by a boost factor based on your <strong style="color:var(--white)">30-day trading volume</strong> on AsterDex. The more you trade, the higher your staking rewards.</div>
+          <div id="boostTiersContent" style="display:flex;flex-direction:column;gap:0.4rem">
+            <div class="sa-offline">Loading boost tiers…</div>
+          </div>
+          <div style="font-size:0.62rem;color:var(--g500);margin-top:0.65rem">Boost applies to base APY only. veASTER loyalty rewards calculated separately.</div>
+        </div>
+      </div>
 
     </div>
 
@@ -2959,10 +2975,13 @@ function closeSidebar(){
 // BLOCK COLLECTOR — polls latestBlocks every 5s (real on-chain data)
 // ═══════════════════════════════════════════════════════════════════
 const blockCollector=(function(){
-  const POLL=5000;
+  // Chain produces ~20 blocks/sec — poll every 5s gets ~100 new blocks each time
+  const POLL=5000,MAX_BUF=500;
   const _seen=new Set(),_buf=[],_subs=[];
   let _timer=null,_lastPoll=null;
-  const _byValidator={}; // addr -> count
+  const _byValidator={};
+  // TPS tracking: sliding window
+  const _tpsWindow=[];
 
   async function _poll(){
     try{
@@ -2973,17 +2992,24 @@ const blockCollector=(function(){
       if(!r.ok)throw new Error('HTTP '+r.status);
       const d=await r.json();
       const blocks=(d.latestBlocks||[]);
-      let added=0;
+      let added=0,addedTxs=0;
       blocks.forEach(b=>{
         if(_seen.has(b.blockNumber))return;
         _seen.add(b.blockNumber);
         _buf.unshift(b);
-        if(_buf.length>200)_buf.pop();
+        if(_buf.length>MAX_BUF)_buf.pop();
         const va=(b.validator||'').toLowerCase();
         _byValidator[va]=(_byValidator[va]||0)+1;
-        added++;
+        added++;addedTxs+=b.txCount||0;
       });
       _lastPoll=Date.now();
+      if(added>0&&_buf.length>=2){
+        const ts=_buf.map(b=>b.timestamp);
+        const range=(Math.max(...ts)-Math.min(...ts))/1000||1;
+        const totalTxs=_buf.reduce((s,b)=>s+(b.txCount||0),0);
+        _tpsWindow.push({tps:totalTxs/range,blocks:_buf.length,blockTime:range*1000/_buf.length});
+        if(_tpsWindow.length>10)_tpsWindow.shift();
+      }
       _subs.forEach(fn=>fn({added,buf:_buf,byValidator:_byValidator}));
     }catch(e){
       _subs.forEach(fn=>fn({added:0,buf:_buf,byValidator:_byValidator,err:e}));
@@ -2994,6 +3020,11 @@ const blockCollector=(function(){
     getBuf(){return _buf;},
     getByValidator(){return _byValidator;},
     getLastPoll(){return _lastPoll;},
+    getChainStats(){
+      if(!_tpsWindow.length||!_buf.length)return null;
+      const last=_tpsWindow[_tpsWindow.length-1];
+      return{tps:Math.round(last.tps),blockTime:Math.round(last.blockTime),totalBlocks:_buf[0]?.blockNumber||0,totalBufBlocks:_buf.length};
+    },
     subscribe(fn){_subs.push(fn);}
   };
 })();
@@ -3092,11 +3123,65 @@ function renderBlockProducers(byValidator){
   }).join('')+`<div style="font-size:0.6rem;color:var(--g500);margin-top:0.35rem">${total} blocks analysed</div>`;
 }
 
+// ─── Chain stats bar ───
+function renderChainStats(){
+  const el=document.getElementById('chainStatsBar');if(!el)return;
+  const cs=blockCollector.getChainStats();
+  const netStake=validators.length?validators.reduce((s,v)=>s+v.totalStake,0):0;
+  const avgApy=validators.length?validators.reduce((s,v)=>s+v.estimatedApy,0)/validators.length:0;
+  const aktiv=validators.filter(v=>v.status==='active').length;
+  const stats=[
+    {label:'Block Time',val:cs?cs.blockTime+'ms':'—',sub:'avg per block',color:'var(--teal)'},
+    {label:'TPS',val:cs?cs.tps.toLocaleString():'—',sub:'txs per second',color:'var(--teal)'},
+    {label:'Network Stake',val:netStake>=1e6?(netStake/1e6).toFixed(2)+'M ASTER':'—',sub:'total delegated',color:'var(--white)'},
+    {label:'Avg APY',val:avgApy>0?(avgApy*100).toFixed(2)+'%':'—',sub:aktiv+' active validators',color:'#22c55e'},
+  ];
+  el.innerHTML=stats.map(s=>`<div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.55rem 0.75rem">
+    <div style="font-size:0.6rem;color:var(--g400);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.2rem">${s.label}</div>
+    <div style="font-size:1rem;font-weight:800;color:${s.color};font-family:var(--mono)">${s.val}</div>
+    <div style="font-size:0.58rem;color:var(--g500);margin-top:0.1rem">${s.sub}</div>
+  </div>`).join('');
+}
+
+// ─── Boost config render ───
+let _boostCache=null;
+async function renderBoostTiers(){
+  const el=document.getElementById('boostTiersContent');if(!el)return;
+  if(!_boostCache){
+    try{
+      const r=await fetch('/api/staking/boost-config');
+      const d=await r.json();
+      _boostCache=d.data||[];
+    }catch(e){_boostCache=[];}
+  }
+  if(!_boostCache.length){el.innerHTML='<div class="sa-offline">Unavailable</div>';return;}
+  const baseApy=validators.length?Math.max(...validators.map(v=>v.estimatedApy))*100:0;
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(${_boostCache.length+1},1fr);gap:0.5rem;margin-bottom:0.5rem">
+    <div style="padding:0.55rem;background:var(--bg-surface);border-radius:var(--radius-sm);border:1px solid var(--border);text-align:center">
+      <div style="font-size:0.6rem;color:var(--g400);margin-bottom:0.25rem">No Boost</div>
+      <div style="font-size:0.95rem;font-weight:800;font-family:var(--mono);color:var(--g200)">${baseApy>0?baseApy.toFixed(2)+'%':'—'}</div>
+      <div style="font-size:0.58rem;color:var(--g500);margin-top:0.15rem">Base APY</div>
+    </div>
+    ${_boostCache.map((t,i)=>{
+      const boostedApy=baseApy*t.boost;
+      const vol=t.volume>=1e6?(t.volume/1e6).toFixed(0)+'M':(t.volume/1e3).toFixed(0)+'K';
+      const colors=['rgba(216,90,48,0.8)','rgba(216,90,48,0.9)','#d85a30'];
+      return`<div style="padding:0.55rem;background:rgba(216,90,48,0.06);border-radius:var(--radius-sm);border:1px solid rgba(216,90,48,0.2);text-align:center">
+        <div style="font-size:0.6rem;color:var(--g400);margin-bottom:0.25rem">Tier ${t.tier} · ×${t.boost}</div>
+        <div style="font-size:0.95rem;font-weight:800;font-family:var(--mono);color:${colors[i]}">${baseApy>0?boostedApy.toFixed(2)+'%':'—'}</div>
+        <div style="font-size:0.58rem;color:var(--g500);margin-top:0.15rem">>$${vol} vol/30d</div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div style="font-size:0.68rem;color:var(--g300)">Trading volume boost is applied on top of the best validator APY. Active traders can earn up to <strong style="color:var(--teal)">${baseApy>0?(baseApy*(_boostCache[_boostCache.length-1]?.boost||1)).toFixed(2)+'%':''}</strong> APY.</div>`;
+}
+
 // ─── Block activity master dispatcher ───
 function renderBlockActivity(){
   if(_activeTab!=='analytics')return;
   const buf=blockCollector.getBuf();
   const byV=blockCollector.getByValidator();
+  renderChainStats();
   renderBlockFeed(buf);
   renderBlockProducers(byV);
   renderEpochSidebar();
@@ -3113,7 +3198,7 @@ function switchTab(t){
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
   if(t==='analytics'){setTimeout(renderAnalyticsCharts,50);setTimeout(renderBlockActivity,80);}
   if(t==='explorer')renderExplorerBlocks();
-  if(t==='calculator')initCalculatorTab();
+  if(t==='calculator'){initCalculatorTab();setTimeout(renderBoostTiers,100);}
   if(window.innerWidth<=800)closeSidebar();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
