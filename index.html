@@ -1233,30 +1233,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
 
-      <!-- On-Chain Activity -->
+      <!-- Live Block Activity -->
       <div style="margin-top:0.25rem">
         <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.65rem">
-          <span style="font-size:0.65rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--g400)">⟳ On-Chain Staking Activity</span>
-          <span class="beta-pill">BETA</span>
-          <span class="feed-live-dot" id="feedDot" style="margin-left:0.25rem"></span>
+          <span style="font-size:0.65rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--g400)">⬡ Live Block Activity</span>
+          <span class="feed-live-dot" id="feedDot"></span>
           <span style="font-size:0.65rem;color:var(--g400)" id="feedStatus">Connecting…</span>
-          <span style="margin-left:auto;font-size:0.62rem;color:var(--g500)" id="saFlowAge"></span>
+          <span style="margin-left:auto;font-size:0.62rem;color:var(--g500)" id="blockFeedAge"></span>
         </div>
-        <div class="sa-activity-grid" style="display:grid;grid-template-columns:1fr 300px;gap:0.75rem;align-items:start">
-          <!-- Feed -->
+        <div class="sa-activity-grid" style="display:grid;grid-template-columns:1fr 290px;gap:0.75rem;align-items:start">
+          <!-- Block feed -->
           <div class="analytics-card" style="padding:0.75rem">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem">
-              <span style="font-size:0.75rem;font-weight:600;color:var(--white)">Live Feed</span>
-              <div style="display:flex;align-items:center;gap:0.5rem">
-                <span class="feed-count" id="feedCount">0 events</span>
-                <button class="btn-feed" id="feedBtn" onclick="saTogglePause()">⏸ Pause</button>
-              </div>
-            </div>
-            <div class="sa-feed" id="saFeed"><div class="sa-offline">Waiting for on-chain events…</div></div>
+            <div class="sa-feed" id="blockFeed" style="max-height:320px"><div class="sa-offline">Loading blocks…</div></div>
           </div>
-          <!-- Metrics -->
+          <!-- Sidebar: epoch + validator block share -->
           <div style="display:flex;flex-direction:column;gap:0.6rem">
-            <div id="sa-flow-content"><div class="sa-offline" style="font-size:0.7rem">Connecting…</div></div>
+            <!-- Epoch -->
+            <div class="analytics-card" style="padding:0.75rem">
+              <div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g400);margin-bottom:0.5rem">⏳ Current Epoch</div>
+              <div id="epochSidebarContent"><div class="sa-offline" style="font-size:0.7rem;padding:0.5rem 0">Loading…</div></div>
+            </div>
+            <!-- Block producers share (derived from latestBlocks) -->
+            <div class="analytics-card" style="padding:0.75rem">
+              <div style="font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g400);margin-bottom:0.5rem">⬡ Block Producers (last 100)</div>
+              <div id="blockProducerContent"><div class="sa-offline" style="font-size:0.7rem;padding:0.5rem 0">Loading…</div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2300,12 +2301,14 @@ function renderTable(cid,data,clickable=true){
   <th>Commission <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Network Share <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
   <th>Uptime (30d) <span style="font-size:0.55rem;background:rgba(216,90,48,0.15);color:var(--teal);padding:1px 4px;border-radius:3px;vertical-align:middle">Live</span></th>
-  <th style="white-space:nowrap">Activity <span class="beta-pill">BETA</span></th>
+  <th style="white-space:nowrap">Blocks (last 100)</th>
 </tr></thead>
 <tbody>${data.map(v=>{const uptimeCol=v.uptime>=99?'var(--teal)':v.uptime>=97?'var(--amber)':'var(--red)';
-const _flow=v.fullAddress?stakingCollector.getValidatorFlow(v.fullAddress):{in:0,out:0,claims:0};
-const _hasFl=_flow.in>0||_flow.out>0||_flow.claims>0;
-const _flowCell=_hasFl?`<div style="display:flex;flex-direction:column;gap:2px">${_flow.in>0?`<span class="flow-badge up">⬆ ${(_flow.in/1000).toFixed(1)}K</span>`:''} ${_flow.out>0?`<span class="flow-badge down">⬇ ${(_flow.out/1000).toFixed(1)}K</span>`:''} ${_flow.claims>0?`<span class="flow-badge" style="color:var(--amber)">💰 ${_flow.claims}</span>`:''}</div>`:'<span style="color:var(--g500);font-size:0.65rem">—</span>';
+const _byV=blockCollector.getByValidator();
+const _bCount=v.fullAddress?(_byV[v.fullAddress.toLowerCase()]||0):0;
+const _total=Object.values(_byV).reduce((s,c)=>s+c,0)||1;
+const _bPct=Math.round(_bCount/_total*100);
+const _flowCell=_bCount>0?`<span style="font-family:var(--mono);font-size:0.7rem;color:var(--teal)">${_bCount}</span><span style="font-size:0.6rem;color:var(--g400);margin-left:3px">(${_bPct}%)</span>`:'<span style="color:var(--g500);font-size:0.65rem">—</span>';
 return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-rank ${v.rank<=3?'top3':''}">${v.rank<=3?'★':''} ${v.rank}</td>
 <td><div class="cell-validator">${avatarHTML(v)}<div><div class="val-name">${v.name}</div><div class="val-addr" style="display:flex;align-items:center;gap:0.3rem">${v.address}${v.fullAddress?`<a href="https://asterscan-gamma.vercel.app/address/${v.fullAddress}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:0.55rem;color:var(--teal);text-decoration:none;opacity:0.7" title="View on AsterScan">⊞</a>`:''}
@@ -2317,7 +2320,7 @@ return`<tr ${clickable?`onclick="showDetail(${v.id})"`:''}>
 <td class="cell-mono ${v.commission>10?'':'dim'}" ${v.commission>10?'style="color:var(--amber)"':''}>${v.commission}%</td>
 <td class="cell-mono">${v.networkShare}%</td>
 <td><div class="cell-uptime"><span style="font-family:var(--mono);font-size:0.75rem;font-weight:700;color:${uptimeCol}">${v.uptime.toFixed(1)}%</span>${ubHTML(v.uptimeBlocks.slice(-7))}</div></td>
-<td>${_flowCell}</td>
+<td style="white-space:nowrap">${_flowCell}</td>
 </tr>`;}).join('')}</tbody></table>`;}
 
 // ─── DETAIL PANEL ───
@@ -2953,212 +2956,150 @@ function closeSidebar(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// MODULE 1: Staking Activity Collector (singleton, ring buffer 5000)
+// BLOCK COLLECTOR — polls latestBlocks every 5s (real on-chain data)
 // ═══════════════════════════════════════════════════════════════════
-const stakingCollector=(function(){
-  const MAX=5000,POLL=5000;
+const blockCollector=(function(){
+  const POLL=5000;
   const _seen=new Set(),_buf=[],_subs=[];
-  let _timer=null,_paused=false,_lastPoll=null;
-  const _m={totalStake:0,totalWithdraw:0,totalClaims:0,totalSwitches:0,
-    totalExtend:0,encryptedCount:0,perValidator:{},
-    lockDist:{w52:0,w104:0,w156:0,w208:0}};
-
-  function _cls(tx){
-    if(tx.cipher)return{type:'encrypted',icon:'🔒',label:'Encrypted Tx',color:'c-switch'};
-    const s=(tx.data&&tx.data.subType)||tx.subType||'';
-    if(s==='Stake')return{type:'stake',icon:'⬆',label:'Stake',color:'c-stake'};
-    if(s==='AddStake')return{type:'stake',icon:'⬆',label:'Add Stake',color:'c-add'};
-    if(s==='Withdraw')return{type:'withdraw',icon:'⬇',label:'Withdraw',color:'c-withdraw'};
-    if(s==='ClaimRewards')return{type:'claim',icon:'💰',label:'Claim Rewards',color:'c-claim'};
-    if(s==='SwitchValidator')return{type:'switch',icon:'⟳',label:'Switch Validator',color:'c-switch'};
-    if(s==='ExtendStakingTime')return{type:'extend',icon:'⏱',label:'Extend Lock',color:'c-extend'};
-    if(tx.action==='TokenDelegate')return{type:'stake',icon:'⬆',label:'Delegate',color:'c-stake'};
-    return{type:'other',icon:'◈',label:s||tx.action||'Tx',color:'c-other'};
-  }
-
-  function _add(tx){
-    const id=tx.hash||tx.id||(tx.action+JSON.stringify(tx.data||{}).slice(0,30));
-    if(_seen.has(id))return false;
-    _seen.add(id);
-    const c=_cls(tx);
-    const e={...tx,_type:c.type,_icon:c.icon,_label:c.label,_color:c.color,_ts:tx.timestamp||(tx.time?tx.time*1000:Date.now())};
-    _buf.unshift(e);
-    if(_buf.length>MAX){const old=_buf.pop();_seen.delete(old.hash||old.id||(old.action+JSON.stringify(old.data||{}).slice(0,30)));}
-    _upd(e);return true;
-  }
-
-  function _upd(tx){
-    const amt=parseFloat((tx.data&&(tx.data.amount||tx.data.value))||tx.amount||0);
-    const addr=(tx.data&&tx.data.validatorAddress)||tx.validatorAddress||'';
-    if(!_m.perValidator[addr])_m.perValidator[addr]={in:0,out:0,claims:0};
-    if(tx.cipher){_m.encryptedCount++;return;}
-    switch(tx._type){
-      case'stake':   _m.totalStake+=amt;if(addr)_m.perValidator[addr].in+=amt;break;
-      case'withdraw':_m.totalWithdraw+=amt;if(addr)_m.perValidator[addr].out+=amt;break;
-      case'claim':   _m.totalClaims++;if(addr)_m.perValidator[addr].claims++;break;
-      case'switch':  _m.totalSwitches++;break;
-      case'extend':  _m.totalExtend++;break;
-    }
-    if(tx._type==='stake'){
-      const wks=(tx.data&&tx.data.lockPeriodWeeks)||0;
-      if(wks<=52)_m.lockDist.w52++;
-      else if(wks<=104)_m.lockDist.w104++;
-      else if(wks<=156)_m.lockDist.w156++;
-      else _m.lockDist.w208++;
-    }
-  }
+  let _timer=null,_lastPoll=null;
+  const _byValidator={}; // addr -> count
 
   async function _poll(){
-    if(_paused)return;
     try{
       const r=await fetch('https://explorer.asterdex.com/explorer',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({type:'latestTxs'}),signal:AbortSignal.timeout(4500)
+        body:JSON.stringify({type:'latestBlocks'}),signal:AbortSignal.timeout(4500)
       });
       if(!r.ok)throw new Error('HTTP '+r.status);
       const d=await r.json();
-      const txs=(d.latestTxs||d.data||d.txs||[]);
-      let added=0;txs.forEach(t=>{if(_add(t))added++;});
+      const blocks=(d.latestBlocks||[]);
+      let added=0;
+      blocks.forEach(b=>{
+        if(_seen.has(b.blockNumber))return;
+        _seen.add(b.blockNumber);
+        _buf.unshift(b);
+        if(_buf.length>200)_buf.pop();
+        const va=(b.validator||'').toLowerCase();
+        _byValidator[va]=(_byValidator[va]||0)+1;
+        added++;
+      });
       _lastPoll=Date.now();
-      _subs.forEach(fn=>fn({type:added>0?'txs':'poll',count:added,buf:_buf,metrics:_m}));
+      _subs.forEach(fn=>fn({added,buf:_buf,byValidator:_byValidator}));
     }catch(e){
-      _lastPoll=_lastPoll||null;
-      _subs.forEach(fn=>fn({type:'error',err:e,buf:_buf,metrics:_m}));
+      _subs.forEach(fn=>fn({added:0,buf:_buf,byValidator:_byValidator,err:e}));
     }
   }
-
   return{
     start(){if(_timer)return;_poll();_timer=setInterval(_poll,POLL);},
-    stop(){clearInterval(_timer);_timer=null;},
-    pause(){_paused=true;},resume(){_paused=false;},isPaused(){return _paused;},
-    getBuf(){return _buf;},getMetrics(){return _m;},getLastPoll(){return _lastPoll;},
-    subscribe(fn){_subs.push(fn);},
-    getValidatorFlow(addr){return _m.perValidator[addr]||{in:0,out:0,claims:0};}
+    getBuf(){return _buf;},
+    getByValidator(){return _byValidator;},
+    getLastPoll(){return _lastPoll;},
+    subscribe(fn){_subs.push(fn);}
   };
 })();
 
-// ═══════════════════════════════════════════════════════════════════
-// MODULE 2: Live Staking Feed
-// ═══════════════════════════════════════════════════════════════════
-let _feedPaused=false;
-function saTogglePause(){
-  _feedPaused=!_feedPaused;
-  const btn=document.getElementById('feedBtn'),dot=document.getElementById('feedDot');
-  if(btn)btn.textContent=_feedPaused?'▶ Resume':'⏸ Pause';
-  if(dot)dot.classList.toggle('paused',_feedPaused);
-  if(_feedPaused)stakingCollector.pause();else{stakingCollector.resume();}
-}
+// ─── shared age formatter ───
 function _saAge(ts){
   const s=Math.floor((Date.now()-ts)/1000);
   if(s<5)return'now';if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m';return Math.floor(s/3600)+'h';
 }
-function renderActivityFeed(buf,metrics){
-  const el=document.getElementById('saFeed'),statusEl=document.getElementById('feedStatus');
-  const countEl=document.getElementById('feedCount'),dotEl=document.getElementById('feedDot');
-  if(!el||_feedPaused)return;
-  if(!buf.length){
-    el.innerHTML='<div class="sa-offline">Waiting for on-chain events…</div>';
-    if(statusEl)statusEl.textContent='Waiting…';return;
-  }
+
+// ─── Block feed ───
+function renderBlockFeed(buf){
+  const el=document.getElementById('blockFeed');
+  const dotEl=document.getElementById('feedDot');
+  const statusEl=document.getElementById('feedStatus');
+  const ageEl=document.getElementById('blockFeedAge');
+  if(!el)return;
+  const lp=blockCollector.getLastPoll();
+  if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
+  if(!buf.length){el.innerHTML='<div class="sa-offline">Loading blocks…</div>';return;}
   if(dotEl){dotEl.style.background='';dotEl.classList.remove('paused');}
-  if(statusEl)statusEl.textContent='Live · '+buf.length+' collected';
-  if(countEl)countEl.textContent=buf.length+' events';
-  el.innerHTML=buf.slice(0,40).map(tx=>{
-    const amt=parseFloat((tx.data&&(tx.data.amount||tx.data.value))||tx.amount||0);
-    const addr=(tx.data&&tx.data.validatorAddress)||tx.validatorAddress||'';
-    const vName=validators.find(v=>v.fullAddress===addr)?.name||(addr?addr.slice(0,8)+'…':'—');
-    const amtStr=amt>0?`<span style="font-family:var(--mono);color:var(--white);font-weight:600">${amt.toLocaleString('en-US',{maximumFractionDigits:0})} ASTER</span>`:'';
-    const sub=tx.cipher?'Encrypted — details hidden':`${vName}${amtStr?' · ':''}${amtStr}`;
-    return`<div class="sa-item"><div class="sa-icon ${tx._color}">${tx._icon}</div><div class="sa-body"><div class="sa-body-main">${tx._label}</div><div class="sa-body-sub">${sub}</div></div><div class="sa-time">${_saAge(tx._ts)}</div></div>`;
+  if(statusEl)statusEl.textContent='Live · block #'+buf[0].blockNumber.toLocaleString();
+  el.innerHTML=buf.slice(0,30).map(b=>{
+    const valAddr=(b.validator||'').toLowerCase();
+    const v=validators.find(x=>x.fullAddress&&x.fullAddress.toLowerCase()===valAddr);
+    const vName=v?v.name:(b.validator?b.validator.slice(0,8)+'…':'—');
+    const vColor=v?v.color:'var(--g400)';
+    const ago=_saAge(b.timestamp);
+    const txLabel=b.txCount+' tx'+(b.txCount!==1?'s':'');
+    return`<div class="sa-item" style="animation:none">
+      <div class="sa-icon c-stake" style="font-size:0.6rem;font-family:var(--mono);font-weight:700;width:28px;font-size:0.58rem">⬡</div>
+      <div class="sa-body">
+        <div class="sa-body-main" style="display:flex;align-items:center;gap:0.4rem">
+          <span style="font-family:var(--mono);font-size:0.7rem">#${b.blockNumber.toLocaleString()}</span>
+          <span style="font-size:0.62rem;color:var(--g400)">${txLabel}</span>
+        </div>
+        <div class="sa-body-sub"><span style="color:${vColor}">${vName}</span></div>
+      </div>
+      <div class="sa-time">${ago}</div>
+    </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// MODULE 3: Staking Metrics Sidebar
-// ═══════════════════════════════════════════════════════════════════
-function renderStakingFlow(buf,metrics){
-  const el=document.getElementById('sa-flow-content'),ageEl=document.getElementById('saFlowAge');
-  if(!el)return;
-  const lp=stakingCollector.getLastPoll();
-  if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
-  if(!buf.length){el.innerHTML='<div class="sa-offline" style="font-size:0.7rem;padding:1rem 0">Connecting…</div>';return;}
-  const netFlow=metrics.totalStake-metrics.totalWithdraw;
-  const netC=netFlow>=0?'#22c55e':'var(--red)';
-  const fmtK=n=>n>=1000?(n/1000).toFixed(1)+'K ASTER':n>0?n.toFixed(0)+' ASTER':'—';
-  const stats=[
-    {label:'Staked In',val:fmtK(metrics.totalStake),color:'#22c55e',icon:'⬆'},
-    {label:'Withdrawn',val:fmtK(metrics.totalWithdraw),color:'var(--red)',icon:'⬇'},
-    {label:'Net Flow',val:metrics.totalStake>0||metrics.totalWithdraw>0?(netFlow>=0?'+':'')+fmtK(Math.abs(netFlow)):'—',color:netC,icon:'⟷'},
-    {label:'Claims',val:metrics.totalClaims>0?metrics.totalClaims+'×':'—',color:'var(--amber)',icon:'💰'},
-    {label:'Switches',val:metrics.totalSwitches>0?metrics.totalSwitches+'×':'—',color:'var(--teal)',icon:'⟳'},
-    {label:'Txs collected',val:buf.length,color:'var(--g300)',icon:'◈'},
-  ];
-  el.innerHTML=stats.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.6rem;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border)">
-    <span style="font-size:0.68rem;color:var(--g400)">${s.icon} ${s.label}</span>
-    <span style="font-size:0.72rem;font-weight:700;font-family:var(--mono);color:${s.color}">${s.val}</span>
-  </div>`).join('');
+// ─── Epoch sidebar ───
+let _epochCache=null,_epochFetched=0;
+async function renderEpochSidebar(){
+  const el=document.getElementById('epochSidebarContent');if(!el)return;
+  const now=Date.now();
+  if(!_epochCache||now-_epochFetched>60000){
+    try{
+      const r=await fetch('/api/staking/epochs');
+      const d=await r.json();
+      _epochCache=d.data;_epochFetched=now;
+    }catch(e){_epochCache=null;}
+  }
+  if(!_epochCache){el.innerHTML='<div class="sa-offline" style="font-size:0.7rem;padding:0.5rem 0">Unavailable</div>';return;}
+  const cur=_epochCache.current||_epochCache.next;
+  const nxt=_epochCache.next;
+  const now2=Date.now();
+  const pct=Math.min(100,Math.max(0,Math.round((now2-cur.startDateTime)/(cur.endDateTime-cur.startDateTime)*100)));
+  const msLeft=cur.endDateTime-now2;
+  const dLeft=Math.max(0,Math.floor(msLeft/86400000));
+  const hLeft=Math.max(0,Math.floor((msLeft%86400000)/3600000));
+  el.innerHTML=`
+    <div style="font-size:0.72rem;color:var(--white);font-weight:600;margin-bottom:0.35rem">Epoch ${cur.epochNumber}</div>
+    <div style="background:var(--bg-elevated);border-radius:3px;height:6px;overflow:hidden;margin-bottom:0.4rem">
+      <div style="height:100%;width:${pct}%;background:var(--teal);border-radius:3px;transition:width 1s"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.62rem;color:var(--g400);margin-bottom:0.5rem">
+      <span>${pct}% complete</span>
+      <span>${dLeft}d ${hLeft}h left</span>
+    </div>
+    ${nxt&&nxt.epochNumber!==cur.epochNumber?`<div style="font-size:0.62rem;color:var(--g500)">Next: Epoch ${nxt.epochNumber} starts ${new Date(nxt.startDateTime).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>`:''}`;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// MODULE 4: Rewards & Penalties Analytics
-// ═══════════════════════════════════════════════════════════════════
-function renderClaimsContent(buf,metrics){
-  const el=document.getElementById('sa-claims-content');if(!el)return;
-  const claims=buf.filter(t=>t._type==='claim');
-  if(!claims.length){el.innerHTML='<div class="sa-offline">No reward claims detected yet…</div>';return;}
-  const byVal={};
-  claims.forEach(t=>{const a=(t.data&&t.data.validatorAddress)||t.validatorAddress||'?';
-    const n=validators.find(v=>v.fullAddress===a)?.name||(a.slice(0,8)+'…');
-    byVal[n]=(byVal[n]||0)+1;});
-  const rows=Object.entries(byVal).sort((a,b)=>b[1]-a[1]).slice(0,6);
-  const mx=Math.max(...rows.map(r=>r[1]),1);
-  el.innerHTML=`<div style="font-size:0.65rem;color:var(--g400);margin-bottom:0.5rem">${metrics.totalClaims} claim events collected</div>`+
-    rows.map(([n,c])=>`<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:4px;font-size:0.7rem"><div style="width:80px;color:var(--g300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0">${n}</div><div style="flex:1;background:var(--bg-elevated);border-radius:3px;height:8px;overflow:hidden"><div style="width:${(c/mx)*100}%;height:100%;background:var(--amber);border-radius:3px"></div></div><div style="font-family:var(--mono);color:var(--amber);min-width:24px;text-align:right">${c}</div></div>`).join('')+
-    `<div style="font-size:0.6rem;color:var(--g500);margin-top:0.4rem">${claims.slice(0,20).length} recent shown</div>`;
-}
-function renderPenaltyContent(buf,metrics){
-  const el=document.getElementById('sa-penalty-content');if(!el)return;
-  const ws=buf.filter(t=>t._type==='withdraw');
-  if(!ws.length){el.innerHTML='<div class="sa-offline">No withdrawal events detected yet…</div>';return;}
-  const early=ws.filter(t=>{const lk=(t.data&&t.data.lockPeriodWeeks)||0,el2=(t.data&&t.data.stakedWeeks)||0;return lk>0&&el2<lk;});
-  const pct=Math.round(early.length/ws.length*100);
-  const pctC=pct>20?'var(--red)':pct>10?'var(--amber)':'var(--teal)';
-  el.innerHTML=`<div class="sa-metric-row" style="grid-template-columns:repeat(3,1fr)">
-    <div class="metric-card"><div class="metric-label">Withdrawals</div><div class="metric-value" style="color:var(--g200)">${ws.length}</div></div>
-    <div class="metric-card"><div class="metric-label">Early Exits</div><div class="metric-value" style="color:var(--red)">${early.length}</div></div>
-    <div class="metric-card"><div class="metric-label">Early Exit %</div><div class="metric-value" style="color:${pctC}">${pct}%</div></div>
-  </div>
-  <div style="font-size:0.68rem;color:var(--g300);padding:0.5rem 0.65rem;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:0.5rem">
-    ${early.length>0?`⚠ ${early.length} potential early exit${early.length>1?'s':''} — penalty may apply`:'✓ No early exit penalties detected in current window'}
-  </div>
-  <div style="font-size:0.6rem;color:var(--g500);margin-top:0.4rem">Real on-chain withdrawal data · ${ws.length} events</div>`;
-}
-function renderHealthContent(buf,metrics){
-  const el=document.getElementById('sa-health-content'),ageEl=document.getElementById('saCalcAge');if(!el)return;
-  const lp=stakingCollector.getLastPoll();if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
-  if(!buf.length){el.innerHTML='<div class="sa-offline">Waiting for on-chain data…</div>';return;}
-  const stakes=buf.filter(t=>t._type==='stake').length,ws=buf.filter(t=>t._type==='withdraw').length;
-  const claims=buf.filter(t=>t._type==='claim').length,enc=metrics.encryptedCount;
-  const nr=(stakes+ws)>0?(stakes-ws)/Math.max(stakes+ws,1):0;
-  const score=Math.min(100,Math.max(0,Math.round(50+nr*50)));
-  const sc=score>=70?'var(--teal)':score>=40?'var(--amber)':'var(--red)';
-  const sl=score>=70?'Healthy':score>=40?'Moderate':'Bearish';
-  el.innerHTML=`<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem">
-    <div style="text-align:center;min-width:52px"><div style="font-size:1.8rem;font-weight:800;color:${sc};font-family:var(--mono)">${score}</div><div style="font-size:0.62rem;color:${sc};font-weight:700">${sl}</div></div>
-    <div style="flex:1"><div class="sa-gauge-bar"><div class="sa-gauge-fill" style="width:${score}%;background:${sc}"></div></div><div style="font-size:0.65rem;color:var(--g300);margin-top:0.3rem">Sentiment index · ${buf.length} events</div></div>
-  </div>
-  <div class="sa-metric-row" style="grid-template-columns:repeat(4,1fr)">
-    <div class="metric-card"><div class="metric-label">Stakes</div><div class="metric-value" style="color:#22c55e">${stakes}</div></div>
-    <div class="metric-card"><div class="metric-label">Withdrawals</div><div class="metric-value" style="color:var(--red)">${ws}</div></div>
-    <div class="metric-card"><div class="metric-label">Claims</div><div class="metric-value" style="color:var(--amber)">${claims}</div></div>
-    <div class="metric-card"><div class="metric-label">Encrypted</div><div class="metric-value" style="color:var(--g300)">${enc}</div></div>
-  </div>`;
+// ─── Block producers sidebar ───
+function renderBlockProducers(byValidator){
+  const el=document.getElementById('blockProducerContent');if(!el)return;
+  const entries=Object.entries(byValidator).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length){el.innerHTML='<div class="sa-offline" style="font-size:0.7rem;padding:0.5rem 0">Loading…</div>';return;}
+  const total=entries.reduce((s,[,c])=>s+c,0);
+  const maxC=entries[0][1];
+  el.innerHTML=entries.map(([addr,count])=>{
+    const v=validators.find(x=>x.fullAddress&&x.fullAddress.toLowerCase()===addr);
+    const name=v?v.name:(addr.slice(0,8)+'…');
+    const pct=Math.round(count/total*100);
+    const barW=Math.round(count/maxC*100);
+    const color=v?v.color:'var(--g400)';
+    return`<div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:5px">
+      <div style="width:72px;font-size:0.65rem;color:var(--g300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0">${name}</div>
+      <div style="flex:1;background:var(--bg-elevated);border-radius:2px;height:7px;overflow:hidden">
+        <div style="width:${barW}%;height:100%;background:${color};opacity:0.75;border-radius:2px"></div>
+      </div>
+      <div style="font-size:0.62rem;font-family:var(--mono);color:var(--g300);min-width:32px;text-align:right">${pct}%</div>
+    </div>`;
+  }).join('')+`<div style="font-size:0.6rem;color:var(--g500);margin-top:0.35rem">${total} blocks analysed</div>`;
 }
 
-// ─── SA master dispatcher ───
-function renderStakingActivity(){
-  const buf=stakingCollector.getBuf(),m=stakingCollector.getMetrics();
-  if(_activeTab==='analytics'){renderActivityFeed(buf,m);renderStakingFlow(buf,m);}
+// ─── Block activity master dispatcher ───
+function renderBlockActivity(){
+  if(_activeTab!=='analytics')return;
+  const buf=blockCollector.getBuf();
+  const byV=blockCollector.getByValidator();
+  renderBlockFeed(buf);
+  renderBlockProducers(byV);
+  renderEpochSidebar();
 }
 
 // ─── TAB SWITCHING ───
@@ -3170,7 +3111,7 @@ function switchTab(t){
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
   document.querySelectorAll('.mobile-bnav-item[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
   if(t==='leaderboard')renderTable('leaderboardTable',validators,false);
-  if(t==='analytics'){setTimeout(renderAnalyticsCharts,50);setTimeout(renderStakingActivity,80);}
+  if(t==='analytics'){setTimeout(renderAnalyticsCharts,50);setTimeout(renderBlockActivity,80);}
   if(t==='explorer')renderExplorerBlocks();
   if(t==='calculator')initCalculatorTab();
   if(window.innerWidth<=800)closeSidebar();
@@ -3272,8 +3213,8 @@ loadData();
 fetchPrice();
 startAutoRefresh();
 startEpochCountdown();
-stakingCollector.subscribe(()=>renderStakingActivity());
-stakingCollector.start();
+blockCollector.subscribe(()=>renderBlockActivity());
+blockCollector.start();
 </script>
 </body>
 </html>
