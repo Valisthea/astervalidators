@@ -2972,59 +2972,107 @@ function closeSidebar(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// BLOCK COLLECTOR — polls latestBlocks every 5s (real on-chain data)
+// BLOCK COLLECTOR — WebSocket real-time (wss://chainstream.asterdex.com)
+// Fallback: HTTP polling latestBlocks every 5s
+// Chain: 20 blocks/sec, 50ms block time, ~4K TPS
 // ═══════════════════════════════════════════════════════════════════
-const blockCollector=(function(){
-  // Chain produces ~20 blocks/sec — poll every 5s gets ~100 new blocks each time
-  const POLL=5000,MAX_BUF=500;
-  const _seen=new Set(),_buf=[],_subs=[];
-  let _timer=null,_lastPoll=null;
-  const _byValidator={};
-  // TPS tracking: sliding window
-  const _tpsWindow=[];
+const CHAIN_WS='wss://chainstream.asterdex.com/plain/ws';
 
-  async function _poll(){
+// Full address label map (from AsterScan source)
+const ADDR_LABELS={
+  '0x4ac7dca67dc81fae0ef7f13e5a8052e56231a752':{name:'Lista',tag:'Validator'},
+  '0x9aadf2d4826673a85b457254c7ef212d58ccbe7f':{name:'WLFI',tag:'Validator'},
+  '0x9aadf2d4826673a85b457254c7ef162d58ccbe7f':{name:'WLFI',tag:'Validator'},
+  '0x4dd9d0f2cd268bf4f445fff15efd73cfd4618ec8':{name:'Trust Wallet',tag:'Validator'},
+  '0x0f36a03a50296f076c937e8cc3c036e761f92ea1':{name:'Pancake',tag:'Validator'},
+  '0x8bc0a17b220ac0d7226a18d68dfd3132dc18d36f':{name:'BNB Chain',tag:'Validator'},
+  '0xf0f19cee7fde71a0ff8c70cfe79cfe4f37092798':{name:'Aster Validator 1',tag:'Validator'},
+  '0x69568b6eff76c5aff5bde503c6a6ce748472d757':{name:'Aster Validator 2',tag:'Validator'},
+  '0x664827c71193018d7843f0d0f41a5d0d6dcebe0f':{name:'Aster Buyback',tag:'Protocol'},
+  '0xa7e1a7b07bd888a69e4733361e912b3a138c8f45':{name:'Market Maker',tag:'Protocol'},
+  '0x128463a60784c4d3f46c23af3f65ed859ba87974':{name:'BSC Treasury',tag:'Bridge'},
+  '0x604dd02d620633ae427888d41bfd15e38483736e':{name:'ETH Bridge',tag:'Bridge'},
+  '0x9e36cb86a159d479ced94fa05036f235ac40e1d5':{name:'ARB Bridge',tag:'Bridge'},
+};
+
+const blockCollector=(function(){
+  const MAX_BUF=600;
+  const _seen=new Set(),_buf=[],_subs=[];
+  let _ws=null,_wsRetry=null,_pollTimer=null,_lastBlock=null,_wsConnected=false;
+  const _byValidator={};
+
+  function _addBlock(b){
+    if(_seen.has(b.blockNumber))return;
+    _seen.add(b.blockNumber);
+    _buf.unshift(b);
+    if(_buf.length>MAX_BUF)_buf.pop();
+    const va=(b.validator||'').toLowerCase();
+    _byValidator[va]=(_byValidator[va]||0)+1;
+    _lastBlock=Date.now();
+    _subs.forEach(fn=>fn({buf:_buf,byValidator:_byValidator}));
+  }
+
+  function _connectWS(){
+    if(_ws&&(_ws.readyState===0||_ws.readyState===1))return;
+    try{
+      _ws=new WebSocket(CHAIN_WS);
+      _ws.onopen=()=>{
+        _wsConnected=true;
+        _ws.send(JSON.stringify({method:'SUBSCRIBE',params:['block@explorer'],id:1}));
+      };
+      _ws.onmessage=e=>{
+        try{
+          const d=JSON.parse(e.data);
+          if(d.type==='block'&&d.data)_addBlock(d.data);
+        }catch(_){}
+      };
+      _ws.onclose=()=>{
+        _wsConnected=false;_ws=null;
+        _wsRetry&&clearTimeout(_wsRetry);
+        _wsRetry=setTimeout(_connectWS,3000);
+      };
+      _ws.onerror=()=>{_ws&&_ws.close();};
+    }catch(e){_wsConnected=false;}
+  }
+
+  async function _httpPoll(){
     try{
       const r=await fetch('https://explorer.asterdex.com/explorer',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({type:'latestBlocks'}),signal:AbortSignal.timeout(4500)
       });
-      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(!r.ok)return;
       const d=await r.json();
-      const blocks=(d.latestBlocks||[]);
-      let added=0,addedTxs=0;
-      blocks.forEach(b=>{
-        if(_seen.has(b.blockNumber))return;
-        _seen.add(b.blockNumber);
-        _buf.unshift(b);
-        if(_buf.length>MAX_BUF)_buf.pop();
-        const va=(b.validator||'').toLowerCase();
-        _byValidator[va]=(_byValidator[va]||0)+1;
-        added++;addedTxs+=b.txCount||0;
-      });
-      _lastPoll=Date.now();
-      if(added>0&&_buf.length>=2){
-        const ts=_buf.map(b=>b.timestamp);
-        const range=(Math.max(...ts)-Math.min(...ts))/1000||1;
-        const totalTxs=_buf.reduce((s,b)=>s+(b.txCount||0),0);
-        _tpsWindow.push({tps:totalTxs/range,blocks:_buf.length,blockTime:range*1000/_buf.length});
-        if(_tpsWindow.length>10)_tpsWindow.shift();
-      }
-      _subs.forEach(fn=>fn({added,buf:_buf,byValidator:_byValidator}));
-    }catch(e){
-      _subs.forEach(fn=>fn({added:0,buf:_buf,byValidator:_byValidator,err:e}));
-    }
+      (d.latestBlocks||[]).forEach(_addBlock);
+    }catch(_){}
   }
+
+  function _getStats(){
+    if(_buf.length<2)return null;
+    const recent=_buf.slice(0,Math.min(100,_buf.length));
+    const ts=recent.map(b=>b.timestamp);
+    const range=(Math.max(...ts)-Math.min(...ts))/1000||1;
+    const totalTxs=recent.reduce((s,b)=>s+(b.txCount||0),0);
+    return{
+      tps:Math.round(totalTxs/range),
+      blockTime:Math.round(range*1000/recent.length),
+      latestBlock:_buf[0]?.blockNumber||0,
+      wsConnected:_wsConnected
+    };
+  }
+
   return{
-    start(){if(_timer)return;_poll();_timer=setInterval(_poll,POLL);},
+    start(){
+      _connectWS();
+      // HTTP fallback: bootstrap immediately then every 10s (WS handles live)
+      _httpPoll();
+      _pollTimer=setInterval(()=>{if(!_wsConnected)_httpPoll();},10000);
+    },
     getBuf(){return _buf;},
     getByValidator(){return _byValidator;},
-    getLastPoll(){return _lastPoll;},
-    getChainStats(){
-      if(!_tpsWindow.length||!_buf.length)return null;
-      const last=_tpsWindow[_tpsWindow.length-1];
-      return{tps:Math.round(last.tps),blockTime:Math.round(last.blockTime),totalBlocks:_buf[0]?.blockNumber||0,totalBufBlocks:_buf.length};
-    },
+    getLastBlock(){return _lastBlock;},
+    getChainStats(){return _getStats();},
+    getAddrLabel(addr){return ADDR_LABELS[addr?.toLowerCase()]||null;},
     subscribe(fn){_subs.push(fn);}
   };
 })();
@@ -3042,16 +3090,21 @@ function renderBlockFeed(buf){
   const statusEl=document.getElementById('feedStatus');
   const ageEl=document.getElementById('blockFeedAge');
   if(!el)return;
-  const lp=blockCollector.getLastPoll();
+  const cs=blockCollector.getChainStats();
+  const lp=blockCollector.getLastBlock();
   if(ageEl&&lp)ageEl.textContent='updated '+_saAge(lp)+' ago';
   if(!buf.length){el.innerHTML='<div class="sa-offline">Loading blocks…</div>';return;}
-  if(dotEl){dotEl.style.background='';dotEl.classList.remove('paused');}
-  if(statusEl)statusEl.textContent='Live · block #'+buf[0].blockNumber.toLocaleString();
+  const wsOn=cs&&cs.wsConnected;
+  if(dotEl){dotEl.style.background=wsOn?'#22c55e':'#f59e0b';dotEl.classList.remove('paused');}
+  if(statusEl)statusEl.textContent=(wsOn?'WebSocket':'Polling')+' · block #'+buf[0].blockNumber.toLocaleString();
   el.innerHTML=buf.slice(0,30).map(b=>{
     const valAddr=(b.validator||'').toLowerCase();
+    // Try validator list first, then fallback to full ADDR_LABELS map
     const v=validators.find(x=>x.fullAddress&&x.fullAddress.toLowerCase()===valAddr);
-    const vName=v?v.name:(b.validator?b.validator.slice(0,8)+'…':'—');
-    const vColor=v?v.color:'var(--g400)';
+    const label=!v?blockCollector.getAddrLabel(valAddr):null;
+    const vName=v?v.name:label?label.name:(b.validator?b.validator.slice(0,8)+'…':'—');
+    const vTag=label&&!v?label.tag:null;
+    const vColor=v?v.color:vTag==='Bridge'?'#60a5fa':vTag==='Protocol'?'#a78bfa':'var(--g400)';
     const ago=_saAge(b.timestamp);
     const txLabel=b.txCount+' tx'+(b.txCount!==1?'s':'');
     return`<div class="sa-item" style="animation:none">
@@ -3061,7 +3114,7 @@ function renderBlockFeed(buf){
           <span style="font-family:var(--mono);font-size:0.7rem">#${b.blockNumber.toLocaleString()}</span>
           <span style="font-size:0.62rem;color:var(--g400)">${txLabel}</span>
         </div>
-        <div class="sa-body-sub"><span style="color:${vColor}">${vName}</span></div>
+        <div class="sa-body-sub"><span style="color:${vColor}">${vName}</span>${vTag?`<span style="font-size:0.55rem;color:var(--g500);margin-left:0.3rem">${vTag}</span>`:''}</div>
       </div>
       <div class="sa-time">${ago}</div>
     </div>`;
@@ -3109,12 +3162,17 @@ function renderBlockProducers(byValidator){
   const maxC=entries[0][1];
   el.innerHTML=entries.map(([addr,count])=>{
     const v=validators.find(x=>x.fullAddress&&x.fullAddress.toLowerCase()===addr);
-    const name=v?v.name:(addr.slice(0,8)+'…');
+    const label=!v?blockCollector.getAddrLabel(addr):null;
+    const name=v?v.name:label?label.name:(addr.slice(0,8)+'…');
+    const tag=label&&!v?label.tag:null;
     const pct=Math.round(count/total*100);
     const barW=Math.round(count/maxC*100);
-    const color=v?v.color:'var(--g400)';
+    const color=v?v.color:tag==='Bridge'?'#60a5fa':tag==='Protocol'?'#a78bfa':'var(--g400)';
     return`<div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:5px">
-      <div style="width:72px;font-size:0.65rem;color:var(--g300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0">${name}</div>
+      <div style="width:80px;flex-shrink:0">
+        <div style="font-size:0.65rem;color:var(--g300);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
+        ${tag?`<div style="font-size:0.52rem;color:var(--g500)">${tag}</div>`:''}
+      </div>
       <div style="flex:1;background:var(--bg-elevated);border-radius:2px;height:7px;overflow:hidden">
         <div style="width:${barW}%;height:100%;background:${color};opacity:0.75;border-radius:2px"></div>
       </div>
@@ -3130,14 +3188,15 @@ function renderChainStats(){
   const netStake=validators.length?validators.reduce((s,v)=>s+v.totalStake,0):0;
   const avgApy=validators.length?validators.reduce((s,v)=>s+v.estimatedApy,0)/validators.length:0;
   const aktiv=validators.filter(v=>v.status==='active').length;
+  const wsDot=cs&&cs.wsConnected?'<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:3px;vertical-align:middle"></span>':'<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#f59e0b;margin-right:3px;vertical-align:middle"></span>';
   const stats=[
-    {label:'Block Time',val:cs?cs.blockTime+'ms':'—',sub:'avg per block',color:'var(--teal)'},
+    {label:'Block Time',val:cs?cs.blockTime+'ms':'—',sub:'avg last 100 blocks',color:'var(--teal)'},
     {label:'TPS',val:cs?cs.tps.toLocaleString():'—',sub:'txs per second',color:'var(--teal)'},
     {label:'Network Stake',val:netStake>=1e6?(netStake/1e6).toFixed(2)+'M ASTER':'—',sub:'total delegated',color:'var(--white)'},
     {label:'Avg APY',val:avgApy>0?(avgApy*100).toFixed(2)+'%':'—',sub:aktiv+' active validators',color:'#22c55e'},
   ];
-  el.innerHTML=stats.map(s=>`<div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.55rem 0.75rem">
-    <div style="font-size:0.6rem;color:var(--g400);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.2rem">${s.label}</div>
+  el.innerHTML=stats.map((s,i)=>`<div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.55rem 0.75rem">
+    <div style="font-size:0.6rem;color:var(--g400);font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:0.2rem">${i===0?wsDot:''}${s.label}</div>
     <div style="font-size:1rem;font-weight:800;color:${s.color};font-family:var(--mono)">${s.val}</div>
     <div style="font-size:0.58rem;color:var(--g500);margin-top:0.1rem">${s.sub}</div>
   </div>`).join('');
