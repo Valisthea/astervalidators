@@ -43,27 +43,9 @@
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=600"
 
-# ─── Proxy API staking (évite les CORS + CSP) ───
+# ─── Redirect total → asterscan.com ───
 [[redirects]]
-  from = "/api/staking/*"
-  to = "https://www.asterdex.com/bapi/staking/v3/public/staking/:splat"
-  status = 200
-  force = true
-
-# ─── Proxy prix ASTER → AsterDex ticker ───
-[[redirects]]
-  from = "/api/price/aster"
-  to = "https://www.asterdex.com/bapi/future/v1/public/future/aster/ticker/pair"
-  status = 200
-  force = true
-
-# ─── Redirects ───
-[[redirects]]
-  from = "/dashboard"
-  to = "/"
+  from = "/*"
+  to   = "https://asterscan.com/:splat"
   status = 301
-
-[[redirects]]
-  from = "/validators"
-  to = "/#leaderboard"
-  status = 301
+  force  = true
