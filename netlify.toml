@@ -46,6 +46,6 @@
 # ─── Redirect total → asterscan.com ───
 [[redirects]]
   from = "/*"
-  to   = "https://asterscan.com/:splat"
+  to   = "https://aster-scan.com/:splat"
   status = 301
   force  = true
